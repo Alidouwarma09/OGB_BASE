@@ -1,0 +1,1109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OGB</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bs-stepper/css/bs-stepper.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/dropzone/min/dropzone.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed ">
+<div class="wrapper">
+    {% include 'preload.html' %}
+    {% include 'personnel_navbar.html' %}
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Enregistrement du pensionnaire</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Advanced Form</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <form method="post" action="{% url 'Personnel:enregistrer_pensionnaire_et_pere' %}">
+                    {% csrf_token %}
+                    <div class="bs-stepper">
+                        <div class="bs-stepper-header" role="tablist">
+                            <div class="step" data-target="#enfant-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger">
+                                    <span class="bs-stepper-circle">1</span>
+                                    <span class="bs-stepper-label">Indentification de l'enfant</span>
+                                </button>
+                            </div>
+                            <div class="line"></div>
+                            <div class="step" data-target="#pere-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger">
+                                    <span class="bs-stepper-circle">2</span>
+                                    <span class="bs-stepper-label">Indentification du pere</span>
+                                </button>
+                            </div>
+                            <div class="line"></div>
+                            <div class="step" data-target="#mere-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="mere-part" id="mere-part-trigger">
+                                    <span class="bs-stepper-circle">3</span>
+                                    <span class="bs-stepper-label">Indentification de la mere</span>
+                                </button>
+                            </div>
+                            <div class="line"></div>
+
+                            <div class="step" data-target="#repondant-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="repondant-part" id="repondant-part-trigger">
+                                    <span class="bs-stepper-circle">4</span>
+                                    <span class="bs-stepper-label">Indentification du repondant</span>
+                                </button>
+                            </div>
+                            <div class="line"></div>
+
+                            <div class="step" data-target="#confirmation-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="confirmation-part" id="confirmation-part-trigger">
+                                    <span class="bs-stepper-circle">5</span>
+                                    <span class="bs-stepper-label">Confirmation</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bs-stepper-content">
+
+                            <div id="enfant-part" class="content" role="tabpanel" aria-labelledby="enfant-part-trigger">
+                                <div class="col-md-12">
+                                    <div class="card card-info">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Identification du pensionnaire</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Quel est le matricule de l'enfant ?</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Entrer le matricule" name="matricule">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Nom et prenom de l'enfant</label>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Nom</span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="Nom" name="nom_enfant">
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Prenom</span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="Prenom" name="prenom_enfant">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Date de naissance du pensionnaire</label>
+                                                <input type="date" name="date_naissance_enfant" class="form-control" required />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Date d'ouverture du dossier du pensionnaire</label>
+                                                <input type="date" name="date_ouverture_dossier" class="form-control" required />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Quel est le lieu de naissance de l'enfant ?</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1" name="lieu_naissance_enfant" placeholder="Entrer le lieu de naissance">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quel est le statut de l'enfant ?</label>
+                                                <select class="form-control" name="statue">
+                                                    <option>Choisir ici</option>
+                                                    <option value="OP">Orphelin de pere</option>
+                                                    <option value="OM">Orphelin de mere</option>
+                                                    <option value="OC">Orphelin complet</option>
+                                                    <option value="CS">Cas sociaux</option>
+                                                    <option value="P">Poupon</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quelle est la nationalité de l'enfant ?</label>
+                                                <div class="autre-field"  id="nationalite_enfant-autre">
+                                                    <div class="input-group" >
+                                                        <input type="text" name="nationalite_enfant" required class="form-control" placeholder="Préciser la nationalité">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quel est la réligion de l'enfant ?</label>
+                                                <select class="form-control select-autre" name="religion_enfant" data-autre-id="religion_enfant-autre" >
+                                                    <option value="">Choisir ici</option>
+                                                    <option value="Chretienne">Chretienne</option>
+                                                    <option value="Musulmane">Musulmane</option>
+                                                    <option value="Animiste">Animiste</option>
+                                                    <option value="Autre">Autre</option>
+                                                </select>
+                                                <div class="autre-field"  id="religion_enfant-autre" style="display: none;">
+                                                    <div class="input-group">
+                                                        <input type="text" name="religion_enfant" class="form-control" placeholder="Préciser la religion">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="es_scolarise">L'enfant est-il scolarisé ?</label>
+                                                <div class="btn-group btn-group-toggle radio-group" data-message-id="selection-message-scolarise" data-toggle="buttons">
+                                                    <label class="btn btn-primary">
+                                                        <input type="radio" name="es_scolarise" value="True" autocomplete="off"> Oui
+                                                    </label>
+                                                    <label class="btn btn-danger">
+                                                        <input type="radio" name="es_scolarise" value="False" autocomplete="off"> Non
+                                                    </label>
+                                                </div>
+                                                <p id="selection-message-scolarise" class="mt-2 text-info" style="font-weight: bold;"></p>
+                                            </div>
+                                            <div id="es-scolarise" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Quel est le niveau d'étude anterieur de l'enfant ?</label>
+                                                    <select class="form-control" name="niveau_etude_anterieur">
+                                                        <option>Choisir ici</option>
+                                                        <option value="CP1">CP1</option>
+                                                        <option value="CP2">CP2</option>
+                                                        <option value="CE1">CE1</option>
+                                                        <option value="CE2">CE2</option>
+                                                        <option value="CM1">CM1</option>
+                                                        <option value="CM2">CM2</option>
+                                                        <option value="6e">6e</option>
+                                                        <option value="5e">5e</option>
+                                                        <option value="4e">4e</option>
+                                                        <option value="3e">3e</option>
+                                                        <option value="2nde">2nde</option>
+                                                        <option value="1ere">1ere</option>
+                                                        <option value="Tle">Tle</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>En quelle classe l'enfant est-il inscrit a l'OGB ?</label>
+                                                    <select class="form-control" name="classe_inscrit">
+                                                        <option value="">Choisir ici</option>
+                                                        <option value="CP1">CP1</option>
+                                                        <option value="CP2">CP2</option>
+                                                        <option value="">CE1</option>
+                                                        <option value="CE1">CE2</option>
+                                                        <option value="CM1">CM1</option>
+                                                        <option value="CM2">CM2</option>
+                                                        <option value="6e">6e</option>
+                                                        <option value="5e">5e</option>
+                                                        <option value="4e">4e</option>
+                                                        <option value="3e">3e</option>
+                                                        <option value="2nde">2nde</option>
+                                                        <option value="1ere">1ere</option>
+                                                        <option value="Tle">Tle</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="card-header" style="text-align: center; background-color: gray; color: #fff">
+                                                <h1 style="text-align: center" class="card-title">CARACTERISTIQUES DE LOGEMENT DE L'ENFANT</h1>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Chez qui l'enfant loge-t-il ?</label>
+                                                <select class="form-control select-autre" name="personne_loge_enfant" data-autre-id="personne_loge_enfant-autre">
+                                                    <option value="">Choisir ici</option>
+                                                    <option value="Mere">Mere</option>
+                                                    <option value="Pere">Pere</option>
+                                                    <option value="Adjame">Répondant</option>
+                                                    <option value="Parrain">Parrain</option>
+                                                </select>
+                                                <div class="autre-field"  id="personne_loge_enfant-autre" style="display: none;">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="personne_loge_enfant" placeholder="Préciser le lieu d'habitation">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quel est le lieu d'habitation de l'enfant ?</label>
+                                                <select class="form-control select-autre" name="lieu_habitation_enfant" data-autre-id="lieu_habitation_enfant-autre">
+                                                    <option  value="">Choisir ici</option>
+                                                    <option value="Plateau">Plateau</option>
+                                                    <option value="Cocody">Cocody</option>
+                                                    <option value="Adjame">Adjame</option>
+                                                    <option value="Marcory">Marcory</option>
+                                                    <option value="Treichville">Treichville</option>
+                                                    <option value="Grand-bassam">Grand-bassam</option>
+                                                    <option value="Alepé">Alepé</option>
+                                                    <option value="Dabou">Dabou</option>
+                                                    <option value="Attékoubé">Attékoubé</option>
+                                                    <option value="Koumassi">Koumassi</option>
+                                                    <option value="Port-bouet">Port-bouet</option>
+                                                    <option value="Yopougon">Yopougon</option>
+                                                    <option value="Bonoua">Bonoua</option>
+                                                    <option value="Azaguié">Azaguié</option>
+                                                    <option value="Jacqueville">Jacqueville</option>
+                                                    <option value="Autre">Interieur du pays</option>
+                                                </select>
+                                                <div class="autre-field"  id="lieu_habitation_enfant-autre" style="display: none;">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="lieu_habitation_enfant" required placeholder="Préciser le lieu d'habitation">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Quel est le type d'habitat de l'enfant  ?</label>
+                                                <select class="form-control" name="type_habitat_enfant">
+                                                    <option value="">Choisir ici</option>
+                                                    <option value="Villa">Villa</option>
+                                                    <option value="Appartement">Appartement</option>
+                                                    <option value="Cour commune">Cour commune</option>
+                                                    <option value="Studio">Studio</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Quel est le nombre de pieces de l'habitation de l'enfant ?</label>
+                                                <input type="number" name="nombre_piece_logement" class="form-control" id="exampleInputEmail1" placeholder="Entrer le nombre" min="0">
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label for="electrifie_enfant">La maison de l'enfant est-elle électrifiée ?</label>
+                                                <div class="btn-group btn-group-toggle radio-group" data-message-id="selection-message-electrifie_enfant" data-toggle="buttons">
+                                                    <label class="btn btn-primary">
+                                                        <input type="radio" name="electrifie_enfant" value="True" autocomplete="off"> Oui
+                                                    </label>
+                                                    <label class="btn btn-danger">
+                                                        <input type="radio" name="electrifie_enfant" value="False" autocomplete="off"> Non
+                                                    </label>
+                                                </div>
+                                                <p id="selection-message-electrifie_enfant" class="mt-2 text-info" style="font-weight: bold;"></p>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Quelle est le motif du deplacement de l'enfant ?</label>
+                                                <select class="form-control select-autre" name="motif_deplacement_enfant" data-autre-id="motif_deplacement_enfant-autre">
+                                                    <option value="">Choisir ici</option>
+                                                    <option value="Trouble du comportement">Trouble du comportement</option>
+                                                    <option value="Situation familiale précaire">Situation familiale précaire</option>
+                                                    <option value="Echec scrolaire">Echec scrolaire</option>
+                                                    <option value="Autre">Autres</option>
+                                                </select>
+                                                <div class="autre-field"  id="motif_deplacement_enfant-autre" style="display: none;">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="motif_deplacement_enfant" placeholder="préciser le motif">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Antécédents médicaux du pensionnaire</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="a_antecdents">L'enfant a-t-il des antécédents médicaux ?</label>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-info">
+                                                        <input type="radio" name="a_antecdents" value="True" autocomplete="off"> Oui
+                                                    </label>
+                                                    <label class="btn btn-danger">
+                                                        <input type="radio" name="a_antecdents" value="False" autocomplete="off"> Non
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Champs supplémentaires -->
+                                            <div id="antecedents-details" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Quels sont les antécédents médicaux de l'enfant ?</label>
+                                                    <select class="form-control">
+                                                        <option value="">Choisir ici</option>
+                                                        <option value="Epilepsie">Epilepsie</option>
+                                                        <option value="Diabète">Diabète</option>
+                                                        <option value="Séropositivité">Séropositivité</option>
+                                                        <option value="Hypertension">Hypertension</option>
+                                                        <option value="Psychopathologie">Psychopathologie</option>
+                                                        <option value="Troubles digestifs">Troubles digestifs</option>
+                                                        <option value="Dermatoses">Dermatoses</option>
+                                                        <option value="Drepanocytose">Drepanocytose</option>
+                                                        <option value="Antécédents d'opération">Antécédents d'opération</option>
+                                                        <option value="Hernie ombilicale">Hernie ombilicale</option>
+                                                        <option value="Anémie">Anémie</option>
+                                                        <option value="Carie dentaire">Carie dentaire</option>
+                                                        <option value="Handicap physique">Handicap physique</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="psychopathologie">Quelle est la psychopathologie de l'enfant ?</label>
+                                                    <input type="text" class="form-control" id="psychopathologie" placeholder="Décrivez la psychopathologie ici...">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="problemes-specifiques">Quels sont les problèmes spécifiques de l'enfant ?</label>
+                                                    <input type="text" class="form-control" id="problemes-specifiques" placeholder="Décrivez les problèmes ici...">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn btn-primary" style="width: 100%" onclick="stepper.next()">Suivant</button>
+                                </div>
+
+                            </div>
+                            <div id="pere-part" class="content" role="tabpanel" aria-labelledby="pere-part-trigger">
+                                <div class="col-md-12">
+
+                                    <div class="card card-primary">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Identification de du pere de l'enfant</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Nom et prenom du pere</label>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">@</span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="Nom" name="nom_pere">
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">@</span>
+                                                </div>
+                                                <input type="text" class="form-control" name="prenom_pere" placeholder="Prenom">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Date de naissance du pere</label>
+                                                <input type="date" name="date_naissance_pere" class="form-control" required />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Quel est le lieu de naissance du pere ?</label>
+                                                <input type="text" class="form-control" name="lieu_naissance_pere" id="exampleInputEmail1" placeholder="Entrer le lieu de naissance">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Quelle est la réligion du pere ?</label>
+                                                <select class="form-control select-autre" name="religion_pere" data-autre-id="religion_pere-autre">
+                                                    <option value="">Choisir ici</option>
+                                                    <option value="Chretienne">Chretienne</option>
+                                                    <option value="Musulmane">Musulmane</option>
+                                                    <option value="Animiste">Animiste</option>
+                                                    <option value="Autre">Autre</option>
+                                                </select>
+                                                <div class="autre-field"  id="religion_pere-autre"  style="display: none;">
+                                                    <div class="input-group">
+                                                        <input type="text" name="religion_pere" class="form-control" placeholder="Preciser la religion">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quel est la profession du pere ?</label>
+                                                <div class="input-group">
+                                                    <input type="text" name="profession_pere" class="form-control" placeholder="Entrer la profession">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quel est l'ethnie du pere ?</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="ethnie_pere" placeholder="Entrer l'ethnie">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Quel est le nombre de personnes a charge du  pere ?</label>
+                                                <input type="number" class="form-control" name="nombre_personne_charge_pere" id="exampleInputEmail1" placeholder="Entrer le nombre" min="0">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Quel est le contact telephonique du pere ?</label>
+                                                <input type="number" class="form-control" name="contact_pere" id="exampleInputEmail1" placeholder="Ex: 0102030405" maxlength="10" min="0">
+                                            </div>
+                                            <div class="card-header" style="text-align: center; background-color: gray; color: #fff">
+                                                <h1 style="text-align: center" class="card-title">CARACTERISTIQUES DE LOGEMENT DU PERE</h1>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quel est le lieu d'habitation du pere ?</label>
+                                                <select class="form-control select-autre" name="adresse_pere" data-autre-id="adresse_pere-autre">
+                                                    <option value="">Choisir ici</option>
+                                                    <option value="Plateau">Plateau</option>
+                                                    <option value="Cocody">Cocody</option>
+                                                    <option value="Adjame">Adjame</option>
+                                                    <option value="Marcory">Marcory</option>
+                                                    <option value="Treichville">Treichville</option>
+                                                    <option value="Grand-bassam">Grand-bassam</option>
+                                                    <option value="Alepé">Alepé</option>
+                                                    <option value="Dabou">Dabou</option>
+                                                    <option value="Attékoubé">Attékoubé</option>
+                                                    <option value="Koumassi">Koumassi</option>
+                                                    <option value="Port-bouet">Port-bouet</option>
+                                                    <option value="Yopougon">Yopougon</option>
+                                                    <option value="Bonoua">Bonoua</option>
+                                                    <option value="Azaguié">Azaguié</option>
+                                                    <option value="Jacqueville">Jacqueville</option>
+                                                    <option value="Autre">Interieur du pays</option>
+                                                </select>
+                                                <div class="autre-field"  id="adresse_pere-autre" style="display: none;">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="adresse_pere" placeholder="Préciser l'adresse">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Quel est le nombre de pieces de l'habitation du pere ?</label>
+                                                <input type="number" name="nombre_piece_pere" class="form-control" id="exampleInputEmail1" placeholder="Entrer le nombre" min="0">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="en_couple_pere">Le pere et la mere vivent-ils ensemble ?</label>
+                                                <div class="btn-group btn-group-toggle radio-group" data-message-id="selection-message-en_couple_pere" data-toggle="buttons">
+                                                    <label class="btn btn-primary">
+                                                        <input type="radio" name="en_couple_pere" value="True" autocomplete="off"> Oui
+                                                    </label>
+                                                    <label class="btn btn-danger">
+                                                        <input type="radio" name="en_couple_pere" value="False" autocomplete="off"> Non
+                                                    </label>
+                                                </div>
+                                                <p id="selection-message-en_couple_pere" class="mt-2 text-info" style="font-weight: bold;"></p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="en_vie_pere">Le pere est-il vivant ?</label>
+                                                <div class="btn-group btn-group-toggle radio-group" data-message-id="selection-message-en_vie_pere" data-toggle="buttons">
+                                                    <label class="btn btn-primary">
+                                                        <input type="radio" name="en_vie_pere" value="True" autocomplete="off"> Oui
+                                                    </label>
+                                                    <label class="btn btn-danger">
+                                                        <input type="radio" name="en_vie_pere" value="False" autocomplete="off"> Non
+                                                    </label>
+                                                </div>
+                                                <p id="selection-message-en_vie_pere" class="mt-2 text-info" style="font-weight: bold;"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-primary" style="width: 100%;  background-color:  #ff851b" onclick="stepper.previous()">Retour</button>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-primary" style="width: 100%" onclick="stepper.next()">Suivant</button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id="mere-part" class="content" role="tabpanel" aria-labelledby="mere-part-trigge">
+                                <div class="card card-warning">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Identification de la mere de l'enfant</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Nom et prenom de la mere</label>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Nom</span>
+                                            </div>
+                                            <input type="text" name="nom_mere" class="form-control" placeholder="Nom">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Prenom</span>
+                                            </div>
+                                            <input type="text" name="prenom_mere" class="form-control" placeholder="Prenom">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Date de naissance du de la mere</label>
+                                            <input type="date" name="date_naissance_mere" class="form-control" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Quel est le lieu de naissance de la mere ?</label>
+                                            <input type="text" class="form-control" name="lieu_naissance_mere" id="exampleInputEmail1" placeholder="Entrer le lieu de naissance">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quelle est la réligion de la mere ?</label>
+                                            <select class="form-control select-autre" name="religion_mere" data-autre-id="religion_mere-autre">
+                                                <option value="">Choisir ici</option>
+                                                <option value="Chretienne">Chretienne</option>
+                                                <option value="Musulmane">Musulmane</option>
+                                                <option value="Animiste">Animiste</option>
+                                                <option value="Autre">Autre</option>
+                                            </select>
+                                            <div class="autre-field"  id="religion_mere-autre"  style="display: none;">
+                                                <div class="input-group">
+                                                    <input type="text" name="religion_mere" class="form-control" placeholder="Preciser la religion">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label>Quel est la profession de la mere ?</label>
+                                            <div class="input-group">
+                                                <input type="text" name="profession_mere" class="form-control" placeholder="Entrer la profession">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quel est l'ethnie de la mere ?</label>
+                                            <div class="input-group">
+                                                <input type="text" name="ethnie_mere" class="form-control" placeholder="Entrer l'ethnie">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Quel est le nombre de personnes a charge de la mere  ?</label>
+                                            <input type="number" name="nombre_personne_charge_mere" class="form-control" id="exampleInputEmail1" placeholder="Entrer le nombre" min="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Quel est le contact telephonique de la mere ?</label>
+                                            <input type="number" name="contact_mere" class="form-control" id="exampleInputEmail1" placeholder="Ex: 0102030405" min="0">
+                                        </div>
+                                        <div class="card-header" style="text-align: center; background-color: gray; color: #fff">
+                                            <h1 style="text-align: center" class="card-title">CARACTERISTIQUES DE LOGEMENT DE LA MERE</h1>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quel est le lieu d'habitation de la mere ?</label>
+                                            <select class="form-control select-autre" name="adresse_mere" data-autre-id="adresse_mere-autre">
+                                                <option value="">Choisir ici</option>
+                                                <option value="Plateau">Plateau</option>
+                                                <option value="Cocody">Cocody</option>
+                                                <option value="Adjame">Adjame</option>
+                                                <option value="Marcory">Marcory</option>
+                                                <option value="Treichville">Treichville</option>
+                                                <option value="Grand-bassam">Grand-bassam</option>
+                                                <option value="Alepé">Alepé</option>
+                                                <option value="Dabou">Dabou</option>
+                                                <option value="Attékoubé">Attékoubé</option>
+                                                <option value="Koumassi">Koumassi</option>
+                                                <option value="Port-bouet">Port-bouet</option>
+                                                <option value="Yopougon">Yopougon</option>
+                                                <option value="Bonoua">Bonoua</option>
+                                                <option value="Azaguié">Azaguié</option>
+                                                <option value="Jacqueville">Jacqueville</option>
+                                                <option value="Autre">Interieur du pays</option>
+                                            </select>
+                                            <div class="autre-field"  id="adresse_mere-autre" style="display: none;">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="adresse_mere" placeholder="Préciser la charge fixes" required>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Quel est le nombre de pieces de l'habitation de la mere ?</label>
+                                            <input type="number" name="nombre_piece_mere" class="form-control" id="exampleInputEmail1" placeholder="Entrer le nombre" min="0">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="en_couple_mere">Le pere et la mere vivent-ils ensemble ?</label>
+                                            <div class="btn-group btn-group-toggle radio-group" data-message-id="selection-message-en_couple_mere" data-toggle="buttons">
+                                                <label class="btn btn-primary">
+                                                    <input type="radio" name="en_couple_mere" value="True" autocomplete="off"> Oui
+                                                </label>
+                                                <label class="btn btn-danger">
+                                                    <input type="radio" name="en_couple_mere" value="False" autocomplete="off"> Non
+                                                </label>
+                                            </div>
+                                            <p id="selection-message-en_couple_mere" class="mt-2 text-info" style="font-weight: bold;"></p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="en_vie_mere">La mere est-elle vivant ?</label>
+                                            <div class="btn-group btn-group-toggle radio-group" data-message-id="selection-message-en_vie_mere" data-toggle="buttons">
+                                                <label class="btn btn-primary">
+                                                    <input type="radio" name="en_vie_mere" value="True" autocomplete="off"> Oui
+                                                </label>
+                                                <label class="btn btn-danger">
+                                                    <input type="radio" name="en_vie_mere" value="False" autocomplete="off"> Non
+                                                </label>
+                                            </div>
+                                            <p id="selection-message-en_vie_mere" class="mt-2 text-info" style="font-weight: bold;"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-primary" style="width: 100%;  background-color:  #ff851b" onclick="stepper.previous()">Retour</button>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-primary" style="width: 100%" onclick="stepper.next()">Suivant</button>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div id="repondant-part" class="content" role="tabpanel" aria-labelledby="repondant-part-trigger">
+                                <div class="card card-success">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Identification du repondant de l'enfant</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Quel est le lien de parenté avec l'enfant?</label>
+                                            <select class="form-control" name="lien_parente">
+                                                <option value="">Choisir ici</option>
+                                                <option value="Oncle">Oncle</option>
+                                                <option value="Tante">Tante</option>
+                                                <option value="Grand-parent">Grand-parent</option>
+                                                <option value="Cousin">Cousin</option>
+                                                <option value="Cousin">Cousine</option>
+                                                <option value="Frere">Frere</option>
+                                                <option value="Soeur">Soeur</option>
+                                                <option value="Aucun">Aucun</option>
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Date de naissance du repondant</label>
+                                            <input type="date" name="date_naissance_repondant" class="form-control" required />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Quel est le lieu de naissance du repondant ?</label>
+                                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Entrer le lieu de naissance">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quel est le type de famille du repondant ?</label>
+                                            <select class="form-control select-autre" name="type_famille_repondant" data-autre-id="type_famille_repondant-autre">
+                                                <option value="">Choisir ici</option>
+                                                <option value="Uni">Uni</option>
+                                                <option value="Séparé">Séparé</option>
+                                                <option value="Polygamique">Polygamique</option>
+                                                <option value="Monoparental">Monoparental</option>
+                                                <option value="Recomposé">Recomposé</option>
+                                                <option value="Elargi">Elargi</option>
+                                                <option value="Autre">Autres</option>
+                                            </select>
+                                            <div class="autre-field"  id="type_famille_repondant-autre" style="display: none;">
+                                                <div class="input-group">
+                                                    <input type="text" name="type_famille_repondant" class="form-control" placeholder="Preciser le type de famille">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quel est la nationalité du repondant ?</label>
+                                            <select class="form-control select-autre" name="nationalite_repondant" data-autre-id="nationalite_repondant-autre">
+                                                <option value="">Choisir ici</option>
+                                                <option value="Ivoirienne">Ivoirienne</option>
+                                                <option value="Autre">Autre</option>
+                                            </select>
+                                            <div class="autre-field"  id="nationalite_repondant-autre" style="display: none;">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="nationalite_repondant" placeholder="préciser la nationalité">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quelle est la réligion du repondant ?</label>
+                                            <select class="form-control select-autre" name="religion_repondant" data-autre-id="religion_repondant-autre">
+                                                <option value="">Choisir ici</option>
+                                                <option value="Chretienne">Chretienne</option>
+                                                <option value="Musulmane">Musulmane</option>
+                                                <option value="Animiste">Animiste</option>
+                                                <option value="Autre">Autre</option>
+                                            </select>
+                                            <div class="autre-field"  id="religion_repondant-autre"  style="display: none;">
+                                                <div class="input-group">
+                                                    <input type="text" name="religion_repondant" class="form-control" placeholder="Preciser la religion">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quel est la profession du repondant ?</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="Entrer la profession">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quel est l'ethnie de la mere ?</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="Entrer l'ethnie">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quel est la situation matrimoniale du repondant ?</label>
+                                            <select class="form-control">
+                                                <option>Choisir ici</option>
+                                                <option>Marié</option>
+                                                <option>Celibataire</option>
+                                                <option>Concubinage</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Quel est le nombre de personnes a charge du repondant ?</label>
+                                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Entrer le nombre" min="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Quel est le contact telephonique du repondant ?</label>
+                                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Ex: 0102030405" min="0">
+                                        </div>
+                                        <div class="card-header" style="text-align: center; background-color: gray; color: #fff">
+                                            <h1 style="text-align: center" class="card-title">CARACTERISTIQUES DE LOGEMENT DU REPONDANT</h1>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quel est le lieu d'habitation du repondant ?</label>
+                                            <select class="form-control select-autre" name="adresse_repondant" data-autre-id="adresse_repondant-autre">
+                                                <option value="">Choisir ici</option>
+                                                <option value="Plateau">Plateau</option>
+                                                <option value="Cocody">Cocody</option>
+                                                <option value="Adjame">Adjame</option>
+                                                <option value="Marcory">Marcory</option>
+                                                <option value="Treichville">Treichville</option>
+                                                <option value="Grand-bassam">Grand-bassam</option>
+                                                <option value="Alepé">Alepé</option>
+                                                <option value="Dabou">Dabou</option>
+                                                <option value="Attékoubé">Attékoubé</option>
+                                                <option value="Koumassi">Koumassi</option>
+                                                <option value="Port-bouet">Port-bouet</option>
+                                                <option value="Yopougon">Yopougon</option>
+                                                <option value="Bonoua">Bonoua</option>
+                                                <option value="Azaguié">Azaguié</option>
+                                                <option value="Jacqueville">Jacqueville</option>
+                                                <option value="Autre">Interieur du pays</option>
+                                            </select>
+                                            <div class="autre-field"  id="adresse_repondant-autre" style="display: none;">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="adresse_repondant" placeholder="Préciser la charge fixes">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Quel est le type d'habitat du repondant ?</label>
+                                            <select class="form-control">
+                                                <option>Choisir ici</option>
+                                                <option>Villa</option>
+                                                <option>Appartement</option>
+                                                <option>Cour commune</option>
+                                                <option>Studio</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Quel est le nombre de pieces de l'habitation du repondant ?</label>
+                                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Entrer le nombre" min="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quelle est la source d'approvisionnement en eau du domicile du repondant ?</label>
+                                            <select class="form-control select-autre" name="type_eau_repondant" data-autre-id="type_eau_repondant-autre">
+                                                <option value="">Choisir ici</option>
+                                                <option value="Robinet dans logement/cour/concession">Robinet dans logement/cour/concession</option>
+                                                <option value="Robinet public/fontaine">Robinet public/fontaine</option>
+                                                <option value="Puits a pompe/forage">Puits a pompe/forage</option>
+                                                <option value="Puits creusé non protegé">Puits creusé non protegé</option>
+                                                <option value="Eau minerale">Eau minerale</option>
+                                                <option value="Eau de surface">Eau de surface</option>
+                                                <option value="Autre">Autres sources</option>
+                                            </select>
+                                            <div class="autre-field"  id="type_eau_repondant-autre" style="display: none;">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="type_eau_repondant" placeholder="préciser la nationalité">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="electrifie_repondant">La maison du repondant est-elle electrifiée ?</label>
+                                            <div class="btn-group btn-group-toggle radio-group" data-message-id="selection-message-electrifie_repondant" data-toggle="buttons">
+                                                <label class="btn btn-primary">
+                                                    <input type="radio" name="electrifie_repondant" value="True" autocomplete="off"> Oui
+                                                </label>
+                                                <label class="btn btn-danger">
+                                                    <input type="radio" name="electrifie_repondant" value="False" autocomplete="off"> Non
+                                                </label>
+                                            </div>
+                                            <p id="selection-message-electrifie_repondant" class="mt-2 text-info" style="font-weight: bold;"></p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="revenu_mensuel">Le repondant a t-il un revenu mensuel ?</label>
+                                            <div class="btn-group btn-group-toggle radio-group" data-message-id="selection-message-revenu_mensuel" data-toggle="buttons">
+                                                <label class="btn btn-primary">
+                                                    <input type="radio" name="revenu_mensuel" value="True" autocomplete="off"> Oui
+                                                </label>
+                                                <label class="btn btn-danger">
+                                                    <input type="radio" name="revenu_mensuel" value="False" autocomplete="off"> Non
+                                                </label>
+                                            </div>
+                                            <p id="selection-message-revenu_mensuel" class="mt-2 text-info" style="font-weight: bold;"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                               <div class="row">
+                                   <div class="col">
+                                       <button class="btn btn-primary" style="width: 100%;  background-color:  #ff851b" onclick="stepper.previous()">Retour</button>
+                                   </div>
+                                   <div class="col">
+                                       <button class="btn btn-primary" style="width: 100%" onclick="stepper.next()">Suivant</button>
+
+                                   </div>
+                               </div>
+                            </div>
+                            <div id="confirmation-part" class="content" role="tabpanel" aria-labelledby="confirmation-part-trigger">
+                                <div class="card-footer">
+                                    <button style="width: 100%; min-height: 60px; font-weight: bold; font-size: 30px" type="submit" class="btn btn-info">Enregistrer les informations</button>
+                                </div>
+
+                               <div class="row">
+                                   <div class="col">
+                                       <button class="btn btn-primary" style="width: 20%; background-color:  #ff851b" onclick="stepper.previous()">Retour</button>
+                                   </div>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+    <aside class="control-sidebar control-sidebar-dark">
+    </aside>
+</div>
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'plugins/select2/js/select2.full.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js' %}"></script>
+<script src="{% static 'plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'plugins/inputmask/jquery.inputmask.min.js' %}"></script>
+<script src="{% static 'plugins/daterangepicker/daterangepicker.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js' %}"></script>
+<script src="{% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-switch/js/bootstrap-switch.min.js' %}"></script>
+<script src="{% static 'plugins/bs-stepper/js/bs-stepper.min.js' %}"></script>
+<script src="{% static 'plugins/dropzone/min/dropzone.min.js' %}"></script>
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+
+<script>
+    document.querySelectorAll('.radio-group').forEach(group => {
+        const messageId = group.getAttribute('data-message-id');
+        const messageElement = document.getElementById(messageId);
+
+        group.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (this.value === "True") {
+                    messageElement.innerHTML = 'Vous avez sélectionné : <span style="color: blue;">Oui</span>';
+                } else if (this.value === "False") {
+                    messageElement.innerHTML = 'Vous avez sélectionné : <span style="color: red;">Non</span>';
+                }
+            });
+        });
+    });
+
+</script>
+<script>
+    // Récupérer les éléments nécessaires
+    const radioButtons = document.querySelectorAll('input[name="a_antecdents"]');
+    const antecedentsDetails = document.getElementById('antecedents-details');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.value === "True") {
+                antecedentsDetails.style.display = 'block';
+            } else if (this.value === "False") {
+                antecedentsDetails.style.display = 'none';
+            }
+        });
+    });
+
+</script>
+<script>
+    // Récupérer les éléments nécessaires
+    const radioButtons1 = document.querySelectorAll('input[name="es_scolarise"]');
+    const antecedentsDetails1 = document.getElementById('es-scolarise');
+    radioButtons1.forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.value === "True") {
+                antecedentsDetails1.style.display = 'block';
+            } else if (this.value === "False") {
+                antecedentsDetails1.style.display = 'none';
+            }
+        });
+    });
+
+</script>
+<script>
+    document.querySelectorAll('.select-autre').forEach(select => {
+        const autreFieldId = select.getAttribute('data-autre-id');
+        const autreField = document.getElementById(autreFieldId);
+        const autreInput = autreField.querySelector('input');
+
+        select.addEventListener('change', function () {
+            if (this.value === "Autre") {
+                autreField.style.display = 'block';
+                autreInput.required = true;
+                autreInput.setAttribute('name', select.getAttribute('name')); // Copier le `name` du select
+                select.removeAttribute('name'); // Supprimer le `name` du select
+            } else {
+                autreField.style.display = 'none';
+                autreInput.value = ''; // Réinitialiser le champ texte
+                autreInput.required = false;
+                autreInput.removeAttribute('name'); // Supprimer le `name` du champ input
+                select.setAttribute('name', autreInput.getAttribute('name')); // Restaurer le `name` du select
+            }
+        });
+
+        // Remplacer "Autre" par la valeur saisie lors de la soumission du formulaire
+        document.querySelector('form').addEventListener('submit', function () {
+            if (select.value === "Autre") {
+                select.value = autreInput.value.trim();
+            }
+        });
+    });
+
+</script>
+<script>
+    $(function () {
+        //Initialize Select2 Elements
+        $('.select2').select2()
+
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
+
+        //Datemask dd/mm/yyyy
+        $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+        //Datemask2 mm/dd/yyyy
+        $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+        //Money Euro
+        $('[data-mask]').inputmask()
+
+        //Date picker
+        $('#reservationdate').datetimepicker({
+            format: 'L'
+        });
+
+        //Date and time picker
+        $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+
+        //Date range picker
+        $('#reservation').daterangepicker()
+        //Date range picker with time picker
+        $('#reservationtime').daterangepicker({
+            timePicker: true,
+            timePickerIncrement: 30,
+            locale: {
+                format: 'MM/DD/YYYY hh:mm A'
+            }
+        })
+        //Date range as a button
+        $('#daterange-btn').daterangepicker(
+            {
+                ranges   : {
+                    'Today'       : [moment(), moment()],
+                    'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                startDate: moment().subtract(29, 'days'),
+                endDate  : moment()
+            },
+            function (start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            }
+        )
+
+        //Timepicker
+        $('#timepicker').datetimepicker({
+            format: 'LT'
+        })
+
+        //Bootstrap Duallistbox
+        $('.duallistbox').bootstrapDualListbox()
+
+        //Colorpicker
+        $('.my-colorpicker1').colorpicker()
+        //color picker with addon
+        $('.my-colorpicker2').colorpicker()
+
+        $('.my-colorpicker2').on('colorpickerChange', function(event) {
+            $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+        })
+
+        $("input[data-bootstrap-switch]").each(function(){
+            $(this).bootstrapSwitch('state', $(this).prop('checked'));
+        })
+
+    })
+    // BS-Stepper Init
+    document.addEventListener('DOMContentLoaded', function () {
+        window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+    })
+
+    // DropzoneJS Demo Code Start
+    Dropzone.autoDiscover = false
+
+    // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+    var previewNode = document.querySelector("#template")
+    previewNode.id = ""
+    var previewTemplate = previewNode.parentNode.innerHTML
+    previewNode.parentNode.removeChild(previewNode)
+
+    var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+        url: "/target-url", // Set the url
+        thumbnailWidth: 80,
+        thumbnailHeight: 80,
+        parallelUploads: 20,
+        previewTemplate: previewTemplate,
+        autoQueue: false, // Make sure the files aren't queued until manually added
+        previewsContainer: "#previews", // Define the container to display the previews
+        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+    })
+
+    myDropzone.on("addedfile", function(file) {
+        // Hookup the start button
+        file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file) }
+    })
+
+    // Update the total progress bar
+    myDropzone.on("totaluploadprogress", function(progress) {
+        document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
+    })
+
+    myDropzone.on("sending", function(file) {
+        // Show the total progress bar when upload starts
+        document.querySelector("#total-progress").style.opacity = "1"
+        // And disable the start button
+        file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
+    })
+
+    // Hide the total progress bar when nothing's uploading anymore
+    myDropzone.on("queuecomplete", function(progress) {
+        document.querySelector("#total-progress").style.opacity = "0"
+    })
+
+    // Setup the buttons for all transfers
+    // The "add files" button doesn't need to be setup because the config
+    // `clickable` has already been specified.
+    document.querySelector("#actions .start").onclick = function() {
+        myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
+    }
+    document.querySelector("#actions .cancel").onclick = function() {
+        myDropzone.removeAllFiles(true)
+    }
+    // DropzoneJS Demo Code End
+</script>
+
+</body>
+</html>

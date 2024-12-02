@@ -1,0 +1,80 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<body class="hold-transition login-page">
+<div class="login-box">
+    <style>
+        body {
+            background-image: url("{% static 'img.jpg' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .login-box {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    <!-- /.login-logo -->
+    <div class="card">
+        <div class="login-logo">
+            <a href=""><b>Connexion</b></a>
+        </div>
+        <div class="card-body login-card-body">
+            <p class="login-box-msg">Connecter vous a votre session</p>
+            {% if errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        {% for field, error_list in errors.items %}
+                            {% for error in error_list %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <form action="{% url 'Utilisateur:Connexion' %}" method="post">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="username" placeholder="Identifiant">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" name="password" placeholder="Mot de passe">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- /.social-auth-links -->
+
+            <p class="mb-1">
+                <a href="">Mot de pass oublié</a>
+            </p>
+            <p class="mb-0">
+                <a href="{% url 'Personnel:acceuil' %}" class="text-center">S'inscrire</a>
+            </p>
+        </div>
+        <!-- /.login-card-body -->
+    </div>
+</div>
+
+</body>
+
+{% endblock content %}
