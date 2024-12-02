@@ -3,7 +3,6 @@ from django.db import models
 from datetime import date  # Ajoute cette ligne en haut du fichier
 
 
-
 # Create your models here.
 class MyUserManager(BaseUserManager):
     def create_user(self, username, password=None):
@@ -153,33 +152,41 @@ class Pensionnnaire(models.Model):
                                   null=True, blank=True)
 
 
+class Classe(models.Model):
+    nom_classe = models.CharField(max_length=50)
+    annee_scolaire = models.CharField(max_length=9,
+                                      default=f"{date.today().year}-{date.today().year + 1}")
+
+    def __str__(self):
+        return f"{self.nom_classe} - {self.annee_scolaire}"
+
+class Inscription(models.Model):
+    pensionnaire = models.ForeignKey(Pensionnnaire, on_delete=models.CASCADE, related_name="inscriptions")
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, related_name="inscriptions")
+    date_inscription = models.DateField(auto_now_add=True)  # Date à laquelle l'élève est inscrit
+
+    def __str__(self):
+        return f"{self.pensionnaire.nom_enfant} inscrit en {self.classe.nom_classe} ({self.classe.annee_scolaire})"
+
 class Evaluation(models.Model):
-    # Relation vers le pensionnaire (élève)
-    pensionnaire = models.ForeignKey(Pensionnnaire, on_delete=models.CASCADE, related_name="evaluations")
-
-    # Date de l'évaluation (peut être la date de fin d'année scolaire)
-    annee_scolaire = models.CharField(max_length=9, default=f"{date.today().year}-{date.today().year + 1}")
-
-    # Notes de l'élève pendant l'année scolaire
+    inscription = models.ForeignKey(Inscription, on_delete=models.CASCADE, related_name="evaluations")
     evaluation1 = models.IntegerField(null=True, blank=True)  # 1ère évaluation
     evaluation2 = models.IntegerField(null=True, blank=True)  # 2ème évaluation
     evaluation3 = models.IntegerField(null=True, blank=True)  # 3ème évaluation
     evaluation4 = models.IntegerField(null=True, blank=True)  # 4ème évaluation
-
-    # Moyenne de l'année scolaire
     moyenne = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-
-    # Statut final de l'élève pour l'année (par exemple, "Admis" ou "Redoublant")
     statut_final = models.CharField(max_length=20, choices=[('Admis', 'Admis'), ('Redoublant', 'Redoublant')], default='Admis')
 
     def save(self, *args, **kwargs):
-        # Calcul de la moyenne des évaluations avant de sauvegarder
-        if all([self.evaluation1, self.evaluation2, self.evaluation3, self.evaluation4]):
-            self.moyenne = (self.evaluation1 + self.evaluation2 + self.evaluation3 + self.evaluation4) / 4
+        # Calcul automatique de la moyenne
+        notes = [self.evaluation1, self.evaluation2, self.evaluation3, self.evaluation4]
+        if all(notes):
+            self.moyenne = sum(notes) / len(notes)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Evaluation de {self.pensionnaire.nom_enfant} pour l'année {self.annee_scolaire}"
+        return f"Evaluation de {self.inscription.pensionnaire.nom_enfant} ({self.inscription.classe.nom_classe})"
+
 
 
 class Parrain(models.Model):
