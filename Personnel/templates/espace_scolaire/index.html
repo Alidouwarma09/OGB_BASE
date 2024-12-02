@@ -137,38 +137,29 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" id="formInscription" >
+                        <form method="post" id="formInscription" action="{% url 'Personnel:inscription_scolaire' %}">
                             {% csrf_token %}
                             <div class="form-group">
-                                <label for="nom_enfant">Nom de l'enfant</label>
-                                <input type="text" class="form-control" id="nom_enfant" name="nom_enfant" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="prenom_enfant">Prénom de l'enfant</label>
-                                <input type="text" class="form-control" id="prenom_enfant" name="prenom_enfant" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="statue">Statut</label>
-                                <select class="form-control" id="statue" name="statue" required>
-                                    <option value="">Choisir le statut</option>
-                                    <option value="OC">OC</option>
-                                    <option value="OM">OM</option>
-                                    <!-- Autres statuts selon besoin -->
+                                <label for="pensionnaire">Pensionnaire</label>
+                                <select class="form-control select2" id="pensionnaire" name="pensionnaire_id" style="width: 100%" required>
                                 </select>
+
+
+
                             </div>
+
                             <div class="form-group">
                                 <label for="classe_inscrit">Classe</label>
-                                <select class="form-control" id="classe_inscrit" name="classe_inscrit" required>
+                                <select class="form-control" id="classe_inscrit" name="classe_name" required>
                                     <option value="CP1">CP1</option>
                                     <option value="CP2">CP2</option>
                                     <option value="CE1">CE1</option>
                                     <option value="CE2">CE2</option>
                                     <option value="CM1">CM1</option>
                                     <option value="CM2">CM2</option>
-                                    <!-- Autres classes -->
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">Soumettre</button>
+                            <button style="width: 100%" type="submit" class="btn btn-primary">Soumettre</button>
                         </form>
                     </div>
                 </div>
@@ -177,6 +168,57 @@
     </div>
 
     </body>
+    <script>
+        $('#pensionnaire').select2({
+            placeholder: "Recherchez un pensionnaire",
+            minimumInputLength: 0, // Permet de charger les résultats dès l'ouverture
+            ajax: {
+                url: "{% url 'Personnel:pensionnaires_autocomplete' %}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        term: params.term || '' // Si aucun texte n'est saisi, renvoie tous les résultats
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.results
+                    };
+                },
+                cache: true
+            }
+        });
+
+
+
+    </script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!/^http:.*/.test(settings.url) && !/^https:.*/.test(settings.url)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    </script>
+
 
 {% endblock %}
 

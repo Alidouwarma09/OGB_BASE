@@ -11,7 +11,6 @@ class MyUserManager(BaseUserManager):
 
         user = self.model(
             username=username
-            # username = self.get_by_natural_key(username)
         )
         user.set_password(password)
         user.save()
@@ -163,7 +162,7 @@ class Classe(models.Model):
 class Inscription(models.Model):
     pensionnaire = models.ForeignKey(Pensionnnaire, on_delete=models.CASCADE, related_name="inscriptions")
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, related_name="inscriptions")
-    date_inscription = models.DateField(auto_now_add=True)  # Date à laquelle l'élève est inscrit
+    date_inscription = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.pensionnaire.nom_enfant} inscrit en {self.classe.nom_classe} ({self.classe.annee_scolaire})"

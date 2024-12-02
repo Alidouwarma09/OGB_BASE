@@ -1,11 +1,13 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from django.db import transaction
 from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.core.serializers import serialize
 
-from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant
+from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe
 from django.contrib import messages
 
 
@@ -189,3 +191,41 @@ def details_pensionnaire(request, pensionnaire_id):
 
 def espace_scolaire(request):
     return render(request, 'espace_scolaire/index.html')
+
+
+def inscription_scolaire(request):
+    if request.method == "GET":
+        pensionnaires = Pensionnnaire.objects.all()
+        return render(request, 'espace_scolaire.html', {'pensionnaires': pensionnaires})
+
+    if request.method == "POST":
+        classe_name = request.POST.get('classe_name', '').strip()
+        pensionnaire_id = request.POST.get('pensionnaire_id', '').strip()
+        pensionnaire = get_object_or_404(Pensionnnaire, id=pensionnaire_id)
+        try:
+            with transaction.atomic():
+                classe, created = Classe.objects.get_or_create(
+                    nom_classe=classe_name,
+                    annee_scolaire=f"{date.today().year}-{date.today().year + 1}"
+                )
+                Inscription.objects.create(
+                    pensionnaire=pensionnaire,
+                    classe=classe,
+                )
+            messages.success(request, "Enregistrement réussi.")
+            return redirect('Personnel:espace_scolaire')
+        except ValueError as ve:
+            messages.error(request, f"Erreur de validation : {ve}")
+        except Exception as e:
+            messages.error(request, "Une erreur inattendue s’est produite.")
+        return redirect('Personnel:espace_scolaire')
+
+def pensionnaires_autocomplete(request):
+    if 'term' in request.GET:
+        print("Recherche reçue :", request.GET['term'])  # Débogage
+        qs = Pensionnnaire.objects.filter(nom_enfant__icontains=request.GET['term'])
+        results = [{'id': p.id, 'text': f"{p.nom_enfant} {p.prenom_enfant}"} for p in qs]
+        print("Résultats renvoyés :", results)  # Débogage
+        return JsonResponse({'results': results})
+    return JsonResponse({'results': []})
+

@@ -143,7 +143,7 @@
                                                 <a style="color:#D2CFCFFF; background-color: {% if pensionnaire.statue == 'OP' %} #007bff {% elif pensionnaire.statue == 'OM' %} #ff851b {% else %} #dc3545 {% endif %}; width: 60px" class="btn  btn-block">{{ pensionnaire.statue }}</a>
                                             </td>
                                             <td style="text-align: center">
-                                                <a href="{% url 'Personnel:details_pensionnaire' pensionnaire.id %}" style="background-color: #001f3f; color: #fff" class="btn btn-block"><i class="fa fa-eye"></i>Voir le dossier</a>
+                                                <a href="{% url 'Personnel:details_pensionnaires' pensionnaire.id %}" style="background-color: #001f3f; color: #fff" class="btn btn-block"><i class="fa fa-eye"></i>Voir le dossier</a>
                                             </td>
                                         </tr>
                                         {% empty %}
