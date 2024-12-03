@@ -28,7 +28,6 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-4 col-6">
-                            <!-- small box -->
                             <div class="small-box bg-info">
                                 <div class="inner">
                                     <h3>{% if nombre_total %}{{ nombre_total }}{% endif %}</h3>
@@ -41,9 +40,7 @@
 
                             </div>
                         </div>
-                        <!-- ./col -->
                         <div class="col-lg-2 col-6">
-                            <!-- small box -->
                             <div class="small-box bg-success">
                                 <div class="inner">
                                     <h3>{% if oc_count %}{{ oc_count }}{% else %}0{% endif %}<sup style="font-size: 20px"></sup></h3>
@@ -55,9 +52,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- ./col -->
                         <div class="col-lg-2 col-6">
-                            <!-- small box -->
                             <div class="small-box bg-warning">
                                 <div class="inner">
                                     <h3>{% if om_count %}{{ om_count }}{% else %}0{% endif %}</h3>
@@ -69,9 +64,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- ./col -->
                         <div class="col-lg-2 col-6">
-                            <!-- small box -->
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <h3>{% if op_count %}{{ op_count }}{% else %}0{% endif %}</h3>
@@ -168,17 +161,16 @@
         document.getElementById('search').addEventListener('input', function() {
             var searchQuery = this.value;
 
-            // Envoi de la requête AJAX
             fetch("{% url 'Personnel:liste_pensionnaire' %}?search=" + encodeURIComponent(searchQuery), {
                 method: 'GET',
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest'  // Ajoutez cet en-tête pour garantir que c'est une requête AJAX
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
             })
                 .then(response => response.json())
                 .then(data => {
                     var tbody = document.getElementById('pensionnaires-list');
-                    tbody.innerHTML = ''; // Efface les résultats existants
+                    tbody.innerHTML = '';
 
                     if (data.results.length > 0) {
                         data.results.forEach(function(pensionnaire) {
@@ -210,7 +202,7 @@
         function getStatutColor(statut) {
             if (statut === 'OP') return '#007bff';
             if (statut === 'OM') return '#ff851b';
-            return '#dc3545'; // Par défaut
+            return '#dc3545';
         }
     </script>
 
