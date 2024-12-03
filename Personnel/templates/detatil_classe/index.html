@@ -63,6 +63,14 @@
                             <div class="card-header">
                                 <h3 class="card-title">Liste de tout les pensionnaire</h3>
                             </div>
+                            {% if messages %}
+                                <div class="alert alert-success" role="alert">
+                                    {% for message in messages %}
+                                        {{ message }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
                             <div class="card-body">
                                 <table class="table table-bordered table-striped" >
                                     <thead>
@@ -86,7 +94,13 @@
                                                 <a style="color:#D2CFCFFF; background-color: {% if pensionnaire.statue == 'OP' %} #007bff {% elif pensionnaire.statue == 'OM' %} #ff851b {% else %} #dc3545 {% endif %}; width: 60px" class="btn  btn-block">{{ pensionnaire.statue }}</a>
                                             </td>
                                             <td style="text-align: center">
-                                                <a href="{% url 'Personnel:details_pensionnaires' pensionnaire.id %}" style="background-color: #001f3f; color: #fff" class="btn btn-block"><i class="fa fa-eye"></i>Resultat de fin d'annee</a>
+                                                {% if pensionnaire.evaluation_exist %}
+                                                    <span class="badge badge-success">Déjà fait</span>
+                                                {% else %}
+                                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#evaluationModal{{ pensionnaire.id }}">
+                                                        <i class="fa fa-eye"></i> Évaluer
+                                                    </button>
+                                                {% endif %}
                                             </td>
                                         </tr>
                                         {% empty %}
@@ -130,7 +144,50 @@
                 </div>
             </div>
         </section>
+        <div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
+            <div id="toast-container"></div>
+        </div>
+
     </div>
+    {% for pensionnaire in pensionnaires %}
+        <div class="modal fade" id="evaluationModal{{ pensionnaire.id }}" tabindex="-1" role="dialog" aria-labelledby="evaluationModalLabel{{ pensionnaire.id }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="evaluationModalLabel{{ pensionnaire.id }}">Évaluer {{ pensionnaire.nom_enfant }} {{ pensionnaire.prenom_enfant }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="evaluationForm-{{ pensionnaire.id }}" action="{% url 'Personnel:evaluate_pensionnaire' pensionnaire.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="pensionnaire_id" value="{{ pensionnaire.id }}">
+                            <div class="form-group">
+                                <label for="evaluation1">Évaluation 1</label>
+                                <input type="number" name="evaluation1" class="form-control" min="0" max="20" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="evaluation2">Évaluation 2</label>
+                                <input type="number" name="evaluation2" class="form-control" min="0" max="20" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="evaluation3">Évaluation 3</label>
+                                <input type="number" name="evaluation3" class="form-control" min="0" max="20" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="moyenne">Moyenne</label>
+                                <input type="number" name="moyenne" class="form-control" min="0" max="20" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Enregistrer</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
     <div id="classeNam" style="display: none;" data-classe="{{ classe_nam }}"></div>
     <aside class="control-sidebar control-sidebar-dark">
     </aside>
@@ -219,4 +276,50 @@
     });
 
 </script>
+<script>
+    $(document).ready(function () {
+        $('form[id^="evaluationForm-"]').on('submit', function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var formData = form.serialize();
+            var modalId = form.closest('.modal').attr('id');
+
+            $.ajax({
+                url: form.attr('action'),
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        var toastHtml = `
+                        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <strong class="me-auto">Succès</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">
+                                ${response.message}
+                            </div>
+                        </div>
+                    `;
+
+                        $('#toast-container').append(toastHtml);
+                        $('.toast').toast({ delay: 3000 });
+                        $('.toast').toast('show');
+
+                        $('#' + modalId).modal('hide');
+                    } else {
+                        alert("Erreur: " + response.message);
+                    }
+                },
+                error: function (xhr) {
+                    alert("Une erreur est survenue.");
+                }
+            });
+        });
+    });
+
+
+</script>
+
 </html>

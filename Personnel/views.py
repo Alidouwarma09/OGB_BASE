@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.core.serializers import serialize
 
-from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe
+from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe, Evaluation
 from django.contrib import messages
 
 
@@ -322,11 +322,14 @@ def detatil_classe(request, classe=None):
 
     pensionnaires_details = []
     for index, pensionnaire in enumerate(pensionnaires, start=1):
-        inscription = Inscription.objects.filter(pensionnaire=pensionnaire, classe__annee_scolaire=annee_scolaire).first()
+        inscription = Inscription.objects.filter(pensionnaire=pensionnaire,
+                                                 classe__annee_scolaire=annee_scolaire).first()
         if inscription:
             classe_enfant = inscription.classe.nom_classe
+            evaluation_exist = Evaluation.objects.filter(inscription=inscription).exists()
         else:
             classe_enfant = None
+            evaluation_exist = False
 
         pensionnaires_details.append({
             'numero': index,
@@ -337,6 +340,7 @@ def detatil_classe(request, classe=None):
             'statue': pensionnaire.statue,
             'id': pensionnaire.id,
             'classe': classe_enfant,
+            'evaluation_exist': evaluation_exist,
         })
 
     nombre_total = len(pensionnaires_details)
@@ -351,3 +355,24 @@ def detatil_classe(request, classe=None):
     })
 
 
+
+def evaluate_pensionnaire(request, pensionnaire_id):
+    if request.method == 'POST':
+        pensionnaire = get_object_or_404(Pensionnnaire, id=pensionnaire_id)
+        inscription = Inscription.objects.filter(pensionnaire=pensionnaire).first()
+
+        if not inscription:
+            return JsonResponse({'success': False, 'message': "L'élève n'est pas inscrit dans une classe."}, status=400)
+
+        evaluation, created = Evaluation.objects.get_or_create(inscription=inscription)
+        evaluation.evaluation1 = request.POST.get('evaluation1')
+        evaluation.evaluation2 = request.POST.get('evaluation2')
+        evaluation.evaluation3 = request.POST.get('evaluation3')
+        evaluation.moyenne = request.POST.get('moyenne')
+        evaluation.save()
+
+        return JsonResponse({'success': True, 'message': "Évaluation enregistrée avec succès."})
+
+
+def resultats_scolaire(request):
+    return render('resultats/index.html')

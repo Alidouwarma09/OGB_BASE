@@ -181,16 +181,22 @@ class Evaluation(models.Model):
     evaluation1 = models.IntegerField(null=True, blank=True)
     evaluation2 = models.IntegerField(null=True, blank=True)
     evaluation3 = models.IntegerField(null=True, blank=True)
-    evaluation4 = models.IntegerField(null=True, blank=True)
     moyenne = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     statut_final = models.CharField(max_length=20, choices=[('Admis', 'Admis'), ('Redoublant', 'Redoublant')],
                                     default='Admis')
 
-    def save(self, *args, **kwargs):
-        notes = [self.evaluation1, self.evaluation2, self.evaluation3, self.evaluation4]
-        if all(notes):
-            self.moyenne = sum(notes) / len(notes)
-        super().save(*args, **kwargs)
+
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['inscription'], name='unique_evaluation_per_inscription')
+        ]
+
+    #def save(self, *args, **kwargs):
+     #   notes = [self.evaluation1, self.evaluation2, self.evaluation3]
+     #   if all(notes):
+      #      self.moyenne = sum(notes) / len(notes)
+      #  super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Evaluation de {self.inscription.pensionnaire.nom_enfant} ({self.inscription.classe.nom_classe})"
