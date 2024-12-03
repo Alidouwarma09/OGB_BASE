@@ -131,6 +131,7 @@
             </div>
         </section>
     </div>
+    <div id="classeNam" style="display: none;" data-classe="{{ classe_nam }}"></div>
     <aside class="control-sidebar control-sidebar-dark">
     </aside>
 </div>
@@ -197,6 +198,7 @@
 <script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
 
 <script>
+    var classeNam = $('#classeNam').data('classe');
     $(document).ready(function () {
         var table = $("#example1").DataTable({
             "responsive": true,
@@ -207,8 +209,8 @@
             "buttons": [
                 {
                     extend: 'pdfHtml5',
-                    text: '<i class="fa fa-file-pdf"></i> Exporter en PDF', // Ajout de l'icône PDF
-                    title: 'Liste des Pensionnaires',
+                    text: '<i class="fa fa-file-pdf"></i> Exporter la liste en en PDF',
+                    title: 'Liste des Pensionnaires ' + classeNam,
                     className: 'export-btn'
                 }
             ]
