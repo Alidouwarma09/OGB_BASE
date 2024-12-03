@@ -355,7 +355,6 @@ def detatil_classe(request, classe=None):
     })
 
 
-
 def evaluate_pensionnaire(request, pensionnaire_id):
     if request.method == 'POST':
         pensionnaire = get_object_or_404(Pensionnnaire, id=pensionnaire_id)
