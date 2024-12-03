@@ -286,6 +286,7 @@ def rechercher_pensionnaires(request):
 
 
 def detatil_classe(request, classe=None):
+    classe_nam = classe
     current_date = date.today()
     if current_date.month >= 9:
         annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
@@ -322,4 +323,5 @@ def detatil_classe(request, classe=None):
     return render(request, 'detatil_classe/index.html', {
         'pensionnaires': pensionnaires,
         'nombre_total': nombre_total,
+        'classe_nam': classe_nam,
     })

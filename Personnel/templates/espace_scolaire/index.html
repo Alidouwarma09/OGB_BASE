@@ -72,8 +72,6 @@
 
                             </a>
                         </div>
-
-                        <!-- ./col -->
                         <div class="col-lg-4 col-6">
                             <a href="{% url 'Personnel:detatil_classe' 'CP2' %}">
                                 <div class="small-box bg-success text-white">
@@ -90,7 +88,6 @@
 
                             </a>
                         </div>
-                        <!-- ./col -->
                         <div class="col-lg-4 col-6">
                             <a href="{% url 'Personnel:detatil_classe' 'CE1' %}">
                                 <div class="small-box text-white" style="background-color: darkblue">
@@ -107,7 +104,6 @@
 
                             </a>
                         </div>
-                        <!-- ./col -->
                         <div class="col-lg-4 col-6">
                             <a href="{% url 'Personnel:detatil_classe' 'CE2' %}">
                                 <div class="small-box bg-danger text-white">
@@ -145,6 +141,20 @@
                                 <div class="small-box bg-warning text-white">
                                     <div class="inner">
                                         <h3>CM2</h3>
+
+                                        <p>{{ nombre_eleve_cm2 }} inscrit</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-person-add"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-4 col-6">
+                            <a href="{% url 'Personnel:detatil_classe' 'COLLEGE' %}">
+                                <div class="small-box text-white" style="background-color: gray">
+                                    <div class="inner">
+                                        <h3>COLLEGE</h3>
 
                                         <p>{{ nombre_eleve_cm2 }} inscrit</p>
                                     </div>
@@ -208,15 +218,6 @@
 
     </body>
     <style>
-        .alert-container {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
 
         .alert {
             display: flex;

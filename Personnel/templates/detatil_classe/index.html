@@ -110,7 +110,6 @@
         document.getElementById('search').addEventListener('input', function() {
             var searchQuery = this.value;
 
-            // Envoi de la requête AJAX
             fetch("{% url 'Personnel:liste_pensionnaire' %}?search=" + encodeURIComponent(searchQuery), {
                 method: 'GET',
                 headers: {
@@ -120,7 +119,7 @@
                 .then(response => response.json())
                 .then(data => {
                     var tbody = document.getElementById('pensionnaires-list');
-                    tbody.innerHTML = ''; tants
+                    tbody.innerHTML = '';
 
                     if (data.results.length > 0) {
                         data.results.forEach(function(pensionnaire) {
@@ -152,7 +151,7 @@
         function getStatutColor(statut) {
             if (statut === 'OP') return '#007bff';
             if (statut === 'OM') return '#ff851b';
-            return '#dc3545';
+            return '#dc3545'; // Par défaut
         }
     </script>
 
