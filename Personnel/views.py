@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -187,45 +187,98 @@ def liste_pensionnaire(request):
 def details_pensionnaire(request, pensionnaire_id):
     details_pensionnaires = get_object_or_404(Pensionnnaire, id=pensionnaire_id)
     return render(request, 'details_pensionnaire/index.html', {'details_pensionnaires': details_pensionnaires})
-
-
 def espace_scolaire(request):
-    return render(request, 'espace_scolaire/index.html')
+    current_date = date.today()
+    if current_date.month >= 9:
+        annee_scolaire = f"{current_date.year}-{current_date.year + }"
+    else:
+        annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
+
+    nombre_eleve_cp1 = Classe.objects.filter(nom_classe='CP1', annee_scolaire=annee_scolaire).count()
+    nombre_eleve_cp2 = Classe.objects.filter(nom_classe='CP2', annee_scolaire=annee_scolaire).count()
+    nombre_eleve_ce1 = Classe.objects.filter(nom_classe='CE1', annee_scolaire=annee_scolaire).count()
+    nombre_eleve_ce2 = Classe.objects.filter(nom_classe='CE2', annee_scolaire=annee_scolaire).count()
+    nombre_eleve_cm1 = Classe.objects.filter(nom_classe='CM1', annee_scolaire=annee_scolaire).count()
+    nombre_eleve_cm2 = Classe.objects.filter(nom_classe='CM2', annee_scolaire=annee_scolaire).count()
+    nombre_eleve = Classe.objects.filter(annee_scolaire=annee_scolaire).count()
+
+    # Filtrer les pensionnaires non inscrits pour l'année scolaire
+    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
+    pensionnaires = Pensionnnaire.objects.exclude(id__in=inscrits_ids)
+
+    return render(request, 'espace_scolaire/index.html', {
+        'pensionnaires': pensionnaires,
+        'annee_scolaire': annee_scolaire,
+        'nombre_eleve_cp1': nombre_eleve_cp1,
+        'nombre_eleve_cp2': nombre_eleve_cp2,
+        'nombre_eleve_ce1': nombre_eleve_ce1,
+        'nombre_eleve_ce2': nombre_eleve_ce2,
+        'nombre_eleve_cm1': nombre_eleve_cm1,
+        'nombre_eleve_cm2': nombre_eleve_cm2,
+        'nombre_eleve': nombre_eleve,
+    })
+
 
 
 def inscription_scolaire(request):
-    if request.method == "GET":
-        pensionnaires = Pensionnnaire.objects.all()
-        return render(request, 'espace_scolaire.html', {'pensionnaires': pensionnaires})
-
     if request.method == "POST":
         classe_name = request.POST.get('classe_name', '').strip()
         pensionnaire_id = request.POST.get('pensionnaire_id', '').strip()
         pensionnaire = get_object_or_404(Pensionnnaire, id=pensionnaire_id)
         try:
             with transaction.atomic():
+                annee_scolaire = f"{date.today().year}-{date.today().year + 1}"
+
+                if Inscription.objects.filter(
+                        pensionnaire=pensionnaire,
+                        classe__annee_scolaire=annee_scolaire
+                ).exists():
+                    messages.error(
+                        request,
+                        f"{pensionnaire.nom_enfant} est déjà inscrit dans une autre classe pour l'année {annee_scolaire}."
+                    )
+                    return redirect('Personnel:espace_scolaire')
+
                 classe, created = Classe.objects.get_or_create(
                     nom_classe=classe_name,
-                    annee_scolaire=f"{date.today().year}-{date.today().year + 1}"
+                    annee_scolaire=annee_scolaire
                 )
+
                 Inscription.objects.create(
                     pensionnaire=pensionnaire,
                     classe=classe,
                 )
+
             messages.success(request, "Enregistrement réussi.")
             return redirect('Personnel:espace_scolaire')
-        except ValueError as ve:
-            messages.error(request, f"Erreur de validation : {ve}")
+        except IntegrityError:
+            messages.error(
+                request,
+                f"{pensionnaire.nom_enfant} est déjà inscrit en {classe.nom_classe} pour cette année."
+            )
         except Exception as e:
             messages.error(request, "Une erreur inattendue s’est produite.")
         return redirect('Personnel:espace_scolaire')
 
-def pensionnaires_autocomplete(request):
-    if 'term' in request.GET:
-        print("Recherche reçue :", request.GET['term'])  # Débogage
-        qs = Pensionnnaire.objects.filter(nom_enfant__icontains=request.GET['term'])
-        results = [{'id': p.id, 'text': f"{p.nom_enfant} {p.prenom_enfant}"} for p in qs]
-        print("Résultats renvoyés :", results)  # Débogage
-        return JsonResponse({'results': results})
-    return JsonResponse({'results': []})
 
+def rechercher_pensionnaires(request):
+    current_date = date.today()
+    if current_date.month >= 9:
+        annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
+    else:
+        annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
+
+    inscrits_ids = Classe.objects.filter(annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
+    query = request.GET.get('q', '')
+
+    pensionnaires = Pensionnnaire.objects.exclude(id__in=inscrits_ids)
+    if query:
+        pensionnaires = pensionnaires.filter(nom_enfant__icontains=query)
+
+    data = {
+        "results": [
+            {"id": pensionnaire.id, "text": f"{pensionnaire.nom_enfant} {pensionnaire.prenom_enfant}"}
+            for pensionnaire in pensionnaires
+        ]
+    }
+    return JsonResponse(data)
