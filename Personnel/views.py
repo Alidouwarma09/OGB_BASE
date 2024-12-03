@@ -297,31 +297,44 @@ def detatil_classe(request, classe=None):
         classe__nom_classe=classe,
         classe__annee_scolaire=annee_scolaire
     ).values_list('pensionnaire_id', flat=True)
+
     inscrits_total_ids = Inscription.objects.filter(
         classe__annee_scolaire=annee_scolaire
     ).values_list('pensionnaire_id', flat=True)
 
-    if classe!="TOTAL":
+    if classe != "TOTAL":
         pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_ids)
     else:
         pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_total_ids)
-    nombre_total = pensionnaires.count()
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        results = [
-            {
-                'nom_enfant': pensionnaire.nom_enfant,
-                'prenom_enfant': pensionnaire.prenom_enfant,
-                'matricule': pensionnaire.matricule,
-                'date_naissance_enfant': pensionnaire.date_naissance_enfant,
-                'statue': pensionnaire.statue,
-                'id': pensionnaire.id,
-            }
-            for pensionnaire in pensionnaires
-        ]
-        return JsonResponse({'results': results})
 
+    pensionnaires_details = []
+    for index, pensionnaire in enumerate(pensionnaires, start=1):
+        inscription = Inscription.objects.filter(pensionnaire=pensionnaire, classe__annee_scolaire=annee_scolaire).first()
+        if inscription:
+            classe_enfant = inscription.classe.nom_classe
+        else:
+            classe_enfant = None
+
+        # Ajouter le numéro de l'élément dans la liste des détails
+        pensionnaires_details.append({
+            'numero': index,
+            'nom_enfant': pensionnaire.nom_enfant,
+            'prenom_enfant': pensionnaire.prenom_enfant,
+            'matricule': pensionnaire.matricule,
+            'date_naissance_enfant': pensionnaire.date_naissance_enfant,
+            'statue': pensionnaire.statue,
+            'id': pensionnaire.id,
+            'classe': classe_enfant,
+        })
+
+    nombre_total = len(pensionnaires_details)
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({'results': pensionnaires_details})
     return render(request, 'detatil_classe/index.html', {
-        'pensionnaires': pensionnaires,
+        'pensionnaires': pensionnaires_details,
         'nombre_total': nombre_total,
         'classe_nam': classe_nam,
     })
+
+

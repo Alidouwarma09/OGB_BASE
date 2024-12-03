@@ -1,161 +1,220 @@
-{% extends 'base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OGB</title>
 
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
 
-{% block content %}
-    <body class="hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse layout-navbar-fixed ">
-    <div class="wrapper">
-        {% include 'preload.html' %}
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../">
+</head>
+<body class="hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse layout-navbar-fixed">
+<div class="wrapper">
+    {% include 'preload.html' %}
 
-        {% include 'personnel_navbar.html' %}
+    {% include 'personnel_navbar.html' %}
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Liste des pensionnaires</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Liste des pensionnaires</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row" style="text-align: center; align-items: center; justify-content: center">
+                    <div class="col-lg-10 col-6">
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>{% if nombre_total %}{{ nombre_total }}{% endif %}</h3>
 
-        <div class="content-wrapper">
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Liste des pensionnaires</h1>
+                                <p>Tatal enfant</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+
                         </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Liste des pensionnaires</a></li>
-                            </ol>
+                    </div>
+                </div>
+ <div id="exportButtonContainer"></div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Liste de tout les pensionnaire</h3>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered table-striped" >
+                                    <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Prenom</th>
+                                        <th>Matricule</th>
+                                        <th>Classe</th>
+                                        <th>Statut</th>
+                                        <th>Dossier</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for pensionnaire in pensionnaires %}
+                                        <tr>
+                                            <td>{{ pensionnaire.nom_enfant }}</td>
+                                            <td>{{ pensionnaire.prenom_enfant }}</td>
+                                            <td>{{ pensionnaire.matricule }}</td>
+                                            <td>{{ pensionnaire.classe }}</td>
+                                            <td>
+                                                <a style="color:#D2CFCFFF; background-color: {% if pensionnaire.statue == 'OP' %} #007bff {% elif pensionnaire.statue == 'OM' %} #ff851b {% else %} #dc3545 {% endif %}; width: 60px" class="btn  btn-block">{{ pensionnaire.statue }}</a>
+                                            </td>
+                                            <td style="text-align: center">
+                                                <a href="{% url 'Personnel:details_pensionnaires' pensionnaire.id %}" style="background-color: #001f3f; color: #fff" class="btn btn-block"><i class="fa fa-eye"></i>Resultat de fin d'annee</a>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="6">Aucun pensionnaire trouvé.</td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                                <table id="example1" class="table table-bordered table-striped" style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Matricule</th>
+                                            <th>Nom</th>
+                                            <th>Prenom</th>
+                                            <th>Date de naissance</th>
+                                            <th>Classe</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for pensionnaire in pensionnaires %}
+                                        <tr>
+                                            <td>{{ pensionnaire.numero }}</td>
+                                            <td>{{ pensionnaire.matricule }}</td>
+                                            <td>{{ pensionnaire.nom_enfant }}</td>
+                                            <td>{{ pensionnaire.prenom_enfant }}</td>
+                                            <td>{{ pensionnaire.date_naissance_enfant }}</td>
+                                            <td>{{ pensionnaire.classe }}</td>
+                                            <td>{{ pensionnaire.statue }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="row" style="text-align: center; align-items: center; justify-content: center">
-                        <div class="col-lg-4 col-6">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>{% if nombre_total %}{{ nombre_total }}{% endif %}</h3>
-
-                                    <p>Tatal enfant</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container-fluid" style="margin-bottom: 20px">
-                        <h2 class="text-center display-5">Effectuer une recherche sur un pensionnaire</h2>
-                        <div class="row">
-                            <div class="col-md-8 offset-md-2">
-                                <div class="input-group">
-                                    <input type="search" id="search" class="form-control form-control-lg" placeholder="Rechercher par le: Nom, prenom ou Matricule de l'enfant">
-                                    <div class="input-group-append">
-                                        <button type="button" id="search-button" class="btn btn-lg btn-default">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Liste de tout les pensionnaire</h3>
-                                </div>
-                                <div class="card-body">
-                                    <table id="example2" class="table table-bordered table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>Nom</th>
-                                            <th>Prenom</th>
-                                            <th>Matricule</th>
-                                            <th>Date de naissance</th>
-                                            <th>Statut</th>
-                                            <th>Dossier</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="pensionnaires-list">
-                                        {% for pensionnaire in pensionnaires %}
-                                            <tr>
-                                                <td>{{ pensionnaire.nom_enfant }}</td>
-                                                <td>{{ pensionnaire.prenom_enfant }}</td>
-                                                <td>{{ pensionnaire.matricule }}</td>
-                                                <td>{{ pensionnaire.date_naissance_enfant }}</td>
-                                                <td>
-                                                    <a style="color:#D2CFCFFF; background-color: {% if pensionnaire.statue == 'OP' %} #007bff {% elif pensionnaire.statue == 'OM' %} #ff851b {% else %} #dc3545 {% endif %}; width: 60px" class="btn  btn-block">{{ pensionnaire.statue }}</a>
-                                                </td>
-                                                <td style="text-align: center">
-                                                    <a href="{% url 'Personnel:details_pensionnaires' pensionnaire.id %}" style="background-color: #001f3f; color: #fff" class="btn btn-block"><i class="fa fa-eye"></i>Resultat de fin d'annee</a>
-                                                </td>
-                                            </tr>
-                                            {% empty %}
-                                            <tr>
-                                                <td colspan="6">Aucun pensionnaire trouvé.</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-        <aside class="control-sidebar control-sidebar-dark">
-        </aside>
+        </section>
     </div>
-    <script>
-        let timeout;
-        document.getElementById('search').addEventListener('input', function() {
-            var searchQuery = this.value;
+    <aside class="control-sidebar control-sidebar-dark">
+    </aside>
+</div>
+<style>
+    #exportButtonContainer {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
 
-            fetch("{% url 'Personnel:liste_pensionnaire' %}?search=" + encodeURIComponent(searchQuery), {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    var tbody = document.getElementById('pensionnaires-list');
-                    tbody.innerHTML = '';
+    .export-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 30px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-                    if (data.results.length > 0) {
-                        data.results.forEach(function(pensionnaire) {
-                            var row = document.createElement('tr');
-                            row.innerHTML = `
-                            <td>${pensionnaire.nom_enfant}</td>
-                            <td>${pensionnaire.prenom_enfant}</td>
-                            <td>${pensionnaire.matricule}</td>
-                            <td>${pensionnaire.date_naissance_enfant}</td>
-                            <td>
-                                <a style="color:#D2CFCFFF; background-color: ${getStatutColor(pensionnaire.statue)}; width: 60px" class="btn btn-block">${pensionnaire.statue}</a>
-                            </td>
-                            <td style="text-align: center">
-                                <a href="/details/${pensionnaire.id}" style="background-color: #001f3f; color: #fff" class="btn btn-block"><i class="fa fa-eye"></i>Voir le dossier</a>
-                            </td>
-                        `;
-                            tbody.appendChild(row);
-                        });
-                    } else {
-                        tbody.innerHTML = '<tr><td colspan="6">Aucun pensionnaire trouvé.</td></tr>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur AJAX:', error);
-                });
+    .export-btn:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .export-btn:active {
+        transform: translateY(1px);
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .export-btn i {
+        margin-right: 10px;
+    }
+</style>
+
+
+</body>
+
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+<script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts.js"></script>
+
+<script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+<script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+
+<script>
+    $(document).ready(function () {
+        var table = $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "searching": false,
+            "paging": false,
+            "info": false,
+            "buttons": [
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa fa-file-pdf"></i> Exporter en PDF', // Ajout de l'icône PDF
+                    title: 'Liste des Pensionnaires',
+                    className: 'export-btn'
+                }
+            ]
         });
+        table.buttons().container().appendTo('#exportButtonContainer');
+    });
 
-
-        function getStatutColor(statut) {
-            if (statut === 'OP') return '#007bff';
-            if (statut === 'OM') return '#ff851b';
-            return '#dc3545'; // Par défaut
-        }
-    </script>
-
-    </body>
-
-{% endblock %}
-
+</script>
+</html>
