@@ -187,6 +187,8 @@ def liste_pensionnaire(request):
 def details_pensionnaire(request, pensionnaire_id):
     details_pensionnaires = get_object_or_404(Pensionnnaire, id=pensionnaire_id)
     return render(request, 'details_pensionnaire/index.html', {'details_pensionnaires': details_pensionnaires})
+
+
 def espace_scolaire(request):
     current_date = date.today()
     if current_date.month >= 9:
@@ -202,7 +204,8 @@ def espace_scolaire(request):
     nombre_eleve_cm2 = Classe.objects.filter(nom_classe='CM2', annee_scolaire=annee_scolaire).count()
     nombre_eleve = Classe.objects.filter(annee_scolaire=annee_scolaire).count()
 
-    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
+    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id',
+                                                                                                 flat=True)
     pensionnaires = Pensionnnaire.objects.exclude(id__in=inscrits_ids)
 
     return render(request, 'espace_scolaire/index.html', {
@@ -216,7 +219,6 @@ def espace_scolaire(request):
         'nombre_eleve_cm2': nombre_eleve_cm2,
         'nombre_eleve': nombre_eleve,
     })
-
 
 
 def inscription_scolaire(request):
@@ -281,3 +283,43 @@ def rechercher_pensionnaires(request):
         ]
     }
     return JsonResponse(data)
+
+
+def detatil_classe(request, classe=None):
+    current_date = date.today()
+    if current_date.month >= 9:
+        annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
+    else:
+        annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
+
+    inscrits_ids = Inscription.objects.filter(
+        classe__nom_classe=classe,
+        classe__annee_scolaire=annee_scolaire
+    ).values_list('pensionnaire_id', flat=True)
+    inscrits_total_ids = Inscription.objects.filter(
+        classe__annee_scolaire=annee_scolaire
+    ).values_list('pensionnaire_id', flat=True)
+
+    if classe!="TOTAL":
+        pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_ids)
+    else:
+        pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_total_ids)
+    nombre_total = pensionnaires.count()
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        results = [
+            {
+                'nom_enfant': pensionnaire.nom_enfant,
+                'prenom_enfant': pensionnaire.prenom_enfant,
+                'matricule': pensionnaire.matricule,
+                'date_naissance_enfant': pensionnaire.date_naissance_enfant,
+                'statue': pensionnaire.statue,
+                'id': pensionnaire.id,
+            }
+            for pensionnaire in pensionnaires
+        ]
+        return JsonResponse({'results': results})
+
+    return render(request, 'detatil_classe/index.html', {
+        'pensionnaires': pensionnaires,
+        'nombre_total': nombre_total,
+    })

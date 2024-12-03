@@ -41,106 +41,118 @@
 
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-black">
-                                <div class="inner">
-                                    <h3>TOTAL PENSIONNAIRE<sup style="font-size: 20px"></sup></h3>
+                        <div class="col-lg-4 col-6" >
+                            <a href="{% url 'Personnel:detatil_classe' 'TOTAL'%}">
+                                <div class="small-box bg-black">
+                                    <div class="inner">
+                                        <h3>TOTAL PENSIONNAIRE<sup style="font-size: 20px"></sup></h3>
 
-                                    <p style="font-size: 20px">{{ nombre_eleve }} inscrit</p>
+                                        <p style="font-size: 20px">{{ nombre_eleve }} inscrit</p>
 
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-stats-bars"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box text-white" style="background-color: blueviolet">
-                                <div class="inner">
-                                    <h3>CP1<sup style="font-size: 20px"></sup></h3>
+                            <a href="{% url 'Personnel:detatil_classe' 'CP1' %}">
+                                <div class="small-box text-white" style="background-color: blueviolet">
+                                    <div class="inner">
+                                        <h3>CP1<sup style="font-size: 20px"></sup></h3>
 
-                                    <p>{{ nombre_eleve_cp1 }} inscrit</p>
+                                        <p>{{ nombre_eleve_cp1 }} inscrit</p>
 
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-stats-bars"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                            </div>
+
+                            </a>
                         </div>
 
                         <!-- ./col -->
                         <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-success text-white">
-                                <div class="inner">
-                                    <h3>CP2<sup style="font-size: 20px"></sup></h3>
+                            <a href="{% url 'Personnel:detatil_classe' 'CP2' %}">
+                                <div class="small-box bg-success text-white">
+                                    <div class="inner">
+                                        <h3>CP2<sup style="font-size: 20px"></sup></h3>
 
-                                    <p>{{ nombre_eleve_cp2 }} inscrit</p>
+                                        <p>{{ nombre_eleve_cp2 }} inscrit</p>
 
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-stats-bars"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                            </div>
+
+                            </a>
                         </div>
                         <!-- ./col -->
                         <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box text-white" style="background-color: darkblue">
-                                <div class="inner">
-                                    <h3>CE1</h3>
+                            <a href="{% url 'Personnel:detatil_classe' 'CE1' %}">
+                                <div class="small-box text-white" style="background-color: darkblue">
+                                    <div class="inner">
+                                        <h3>CE1</h3>
 
-                                    <p>{{ nombre_eleve_ce1 }} inscrit</p>
+                                        <p>{{ nombre_eleve_ce1 }} inscrit</p>
 
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-person-add"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-person-add"></i>
-                                </div>
-                            </div>
+
+                            </a>
                         </div>
                         <!-- ./col -->
                         <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-danger text-white">
-                                <div class="inner">
-                                    <h3>CE2</h3>
+                            <a href="{% url 'Personnel:detatil_classe' 'CE2' %}">
+                                <div class="small-box bg-danger text-white">
+                                    <div class="inner">
+                                        <h3>CE2</h3>
 
-                                    <p>{{ nombre_eleve_ce2 }} inscrit</p>
+                                        <p>{{ nombre_eleve_ce2 }} inscrit</p>
 
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-pie-graph"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-pie-graph"></i>
-                                </div>
-                            </div>
+
+                            </a>
                         </div>
                         <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box text-white" style="background-color: orange">
-                                <div class="inner">
-                                    <h3>CM1</h3>
+                            <a href="{% url 'Personnel:detatil_classe' 'CM1' %}">
+                                <div class="small-box text-white" style="background-color: orange">
+                                    <div class="inner">
+                                        <h3>CM1</h3>
 
-                                    <p>{{ nombre_eleve_cm1 }} inscrit</p>
+                                        <p>{{ nombre_eleve_cm1 }} inscrit</p>
 
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-person-add"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-person-add"></i>
-                                </div>
-                            </div>
+
+                            </a>
                         </div>
                         <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-warning text-white">
-                                <div class="inner">
-                                    <h3>CM2</h3>
+                            <a href="{% url 'Personnel:detatil_classe' 'CM2' %}">
+                                <div class="small-box bg-warning text-white">
+                                    <div class="inner">
+                                        <h3>CM2</h3>
 
-                                    <p>{{ nombre_eleve_cm2 }} inscrit</p>
+                                        <p>{{ nombre_eleve_cm2 }} inscrit</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-person-add"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-person-add"></i>
-                                </div>
-                            </div>
+                            </a>
                         </div>
 
                     </div>
@@ -196,7 +208,6 @@
 
     </body>
     <style>
-        /* Conteneur des alertes */
         .alert-container {
             position: fixed;
             top: 10px;
@@ -207,11 +218,10 @@
             gap: 10px;
         }
 
-        /* Style de l'alerte */
         .alert {
             display: flex;
             align-items: center;
-            background-color: #28a745; /* Couleur verte pour l'alerte de succès */
+            background-color: #28a745;
             color: white;
             padding: 15px;
             border-radius: 10px;
@@ -219,19 +229,16 @@
             animation: slideIn 0.5s ease-out, fadeOut 3s 4s forwards;
         }
 
-        /* Icône de l'alerte */
         .alert-icon {
             font-size: 24px;
             margin-right: 10px;
         }
 
-        /* Texte de l'alerte */
         .alert-text {
             font-size: 16px;
             font-weight: 600;
         }
 
-        /* Animation de l'apparition */
         @keyframes slideIn {
             0% {
                 transform: translateX(100%);
@@ -243,7 +250,6 @@
             }
         }
 
-        /* Animation de la disparition */
         @keyframes fadeOut {
             0% {
                 opacity: 1;
@@ -254,21 +260,8 @@
             }
         }
 
-        /* Style personnalisé pour d'autres types d'alertes (erreur, info, etc.) */
         .alert-success {
-            background-color: #28a745; /* Couleur pour les succès */
-        }
-
-        .alert-warning {
-            background-color: #ffc107; /* Couleur pour les avertissements */
-        }
-
-        .alert-danger {
-            background-color: #dc3545; /* Couleur pour les erreurs */
-        }
-
-        .alert-info {
-            background-color: #17a2b8; /* Couleur pour les informations */
+            background-color: #28a745;
         }
     </style>
 
