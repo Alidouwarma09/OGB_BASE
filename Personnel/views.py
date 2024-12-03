@@ -195,7 +195,11 @@ def espace_scolaire(request):
         annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
     else:
         annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
+    classes_college = ['6e', '5e', '4e', '3e', '2nd', '1ere', 'Tle']
 
+    nombre_eleve_college = Classe.objects.filter(
+        nom_classe__in=classes_college, annee_scolaire=annee_scolaire
+    ).count()
     nombre_eleve_cp1 = Classe.objects.filter(nom_classe='CP1', annee_scolaire=annee_scolaire).count()
     nombre_eleve_cp2 = Classe.objects.filter(nom_classe='CP2', annee_scolaire=annee_scolaire).count()
     nombre_eleve_ce1 = Classe.objects.filter(nom_classe='CE1', annee_scolaire=annee_scolaire).count()
@@ -218,6 +222,7 @@ def espace_scolaire(request):
         'nombre_eleve_cm1': nombre_eleve_cm1,
         'nombre_eleve_cm2': nombre_eleve_cm2,
         'nombre_eleve': nombre_eleve,
+        'nombre_eleve_college': nombre_eleve_college,
     })
 
 
@@ -288,15 +293,23 @@ def rechercher_pensionnaires(request):
 def detatil_classe(request, classe=None):
     classe_nam = classe
     current_date = date.today()
+
     if current_date.month >= 9:
         annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
     else:
         annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
 
-    inscrits_ids = Inscription.objects.filter(
-        classe__nom_classe=classe,
-        classe__annee_scolaire=annee_scolaire
-    ).values_list('pensionnaire_id', flat=True)
+    if classe == 'COLLEGE':
+        classes_college = ['6e', '5e', '4e', '3e', '2nd', '1ere', 'Tle']
+        inscrits_ids = Inscription.objects.filter(
+            classe__nom_classe__in=classes_college,
+            classe__annee_scolaire=annee_scolaire
+        ).values_list('pensionnaire_id', flat=True)
+    else:
+        inscrits_ids = Inscription.objects.filter(
+            classe__nom_classe=classe,
+            classe__annee_scolaire=annee_scolaire
+        ).values_list('pensionnaire_id', flat=True)
 
     inscrits_total_ids = Inscription.objects.filter(
         classe__annee_scolaire=annee_scolaire
@@ -315,7 +328,6 @@ def detatil_classe(request, classe=None):
         else:
             classe_enfant = None
 
-        # Ajouter le numéro de l'élément dans la liste des détails
         pensionnaires_details.append({
             'numero': index,
             'nom_enfant': pensionnaire.nom_enfant,
@@ -331,6 +343,7 @@ def detatil_classe(request, classe=None):
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return JsonResponse({'results': pensionnaires_details})
+
     return render(request, 'detatil_classe/index.html', {
         'pensionnaires': pensionnaires_details,
         'nombre_total': nombre_total,

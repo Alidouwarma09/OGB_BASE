@@ -46,7 +46,7 @@
                             <div class="inner">
                                 <h3>{% if nombre_total %}{{ nombre_total }}{% endif %}</h3>
 
-                                <p>Tatal enfant</p>
+                                <p>TOTAL PENSIONNAIRE DU {{ classe_nam }}</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-bag"></i>
@@ -210,7 +210,7 @@
                 {
                     extend: 'pdfHtml5',
                     text: '<i class="fa fa-file-pdf"></i> Exporter la liste en en PDF',
-                    title: 'Liste des Pensionnaires ' + classeNam,
+                    title: 'LISTE DES PENSIONNAIRES: ' + classeNam,
                     className: 'export-btn'
                 }
             ]
