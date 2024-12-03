@@ -190,7 +190,7 @@ def details_pensionnaire(request, pensionnaire_id):
 def espace_scolaire(request):
     current_date = date.today()
     if current_date.month >= 9:
-        annee_scolaire = f"{current_date.year}-{current_date.year + }"
+        annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
     else:
         annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
 
@@ -202,7 +202,6 @@ def espace_scolaire(request):
     nombre_eleve_cm2 = Classe.objects.filter(nom_classe='CM2', annee_scolaire=annee_scolaire).count()
     nombre_eleve = Classe.objects.filter(annee_scolaire=annee_scolaire).count()
 
-    # Filtrer les pensionnaires non inscrits pour l'année scolaire
     inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
     pensionnaires = Pensionnnaire.objects.exclude(id__in=inscrits_ids)
 

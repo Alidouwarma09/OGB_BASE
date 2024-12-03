@@ -3,7 +3,7 @@
 
 
 {% block content %}
-    <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed ">
+    <body class="hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse   swal2-toast-shown swal2-shown">
     <div class="wrapper">
         {% include 'preload.html' %}
 
@@ -12,19 +12,17 @@
         <div class="content-wrapper">
             <div class="content-header">
                 <div class="container-fluid">
+                    {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success" role="alert">
+                            <i class="alert-icon fas fa-check-circle"></i>
+                            <span class="alert-text">{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1 class="m-0">Espace scolaire</h1>
-                            {% if messages %}
-                                <div class="container mt-3">
-                                    {% for message in messages %}
-                                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                            {{ message }}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -197,12 +195,86 @@
     </div>
 
     </body>
+    <style>
+        /* Conteneur des alertes */
+        .alert-container {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Style de l'alerte */
+        .alert {
+            display: flex;
+            align-items: center;
+            background-color: #28a745; /* Couleur verte pour l'alerte de succès */
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-out, fadeOut 3s 4s forwards;
+        }
+
+        /* Icône de l'alerte */
+        .alert-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        /* Texte de l'alerte */
+        .alert-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Animation de l'apparition */
+        @keyframes slideIn {
+            0% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Animation de la disparition */
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        /* Style personnalisé pour d'autres types d'alertes (erreur, info, etc.) */
+        .alert-success {
+            background-color: #28a745; /* Couleur pour les succès */
+        }
+
+        .alert-warning {
+            background-color: #ffc107; /* Couleur pour les avertissements */
+        }
+
+        .alert-danger {
+            background-color: #dc3545; /* Couleur pour les erreurs */
+        }
+
+        .alert-info {
+            background-color: #17a2b8; /* Couleur pour les informations */
+        }
+    </style>
 
     <script>
         $(document).ready(function() {
             $('#pensionnaire').selectpicker();
-
-            // Exemple : Charger les options dynamiquement
             $('#pensionnaire').on('show.bs.select', function() {
                 $.ajax({
                     url: "{% url 'Personnel:rechercher_pensionnaires' %}",
@@ -223,6 +295,8 @@
             $('.selectpicker').selectpicker();
         });
     </script>
+
+
 
 {% endblock %}
 
