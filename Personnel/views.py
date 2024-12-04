@@ -374,4 +374,4 @@ def evaluate_pensionnaire(request, pensionnaire_id):
 
 
 def resultats_scolaire(request):
-    return render('resultats/index.html')
+    return render(request, 'resultats/index.html')
