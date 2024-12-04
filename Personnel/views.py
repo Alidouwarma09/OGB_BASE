@@ -370,12 +370,14 @@ def evaluate_pensionnaire(request, pensionnaire_id):
         evaluation.save()
 
         return JsonResponse({'success': True, 'message': "Évaluation enregistrée avec succès."})
-
-
 def resultats_scolaire(request):
     annee_scolaire = request.GET.get('annee_scolaire', f"{date.today().year}-{date.today().year + 1}")
 
-    classes = Classe.objects.filter(annee_scolaire=annee_scolaire)
+    selected_class = request.GET.get('classe', None)
+    if selected_class:
+        classes = Classe.objects.filter(annee_scolaire=annee_scolaire, nom_classe=selected_class)
+    else:
+        classes = Classe.objects.filter(annee_scolaire=annee_scolaire)
 
     inscriptions = Inscription.objects.filter(classe__in=classes)
 
@@ -395,17 +397,19 @@ def resultats_scolaire(request):
         admis=Count('id', filter=F('statut_final') == 'Admis')
     )
 
-    taux_reussite = Evaluation.objects.filter(inscription__classe__annee_scolaire=annee_scolaire, statut_final='Admis').count()
-    taux_echec = Evaluation.objects.filter(inscription__classe__annee_scolaire=annee_scolaire, statut_final='Redoublant').count()
-    total_evaluations = Evaluation.objects.filter(inscription__classe__annee_scolaire=annee_scolaire).count()
+    taux_reussite = Evaluation.objects.filter(inscription__classe__in=classes, statut_final='Admis').count()
+    taux_echec = Evaluation.objects.filter(inscription__classe__in=classes, statut_final='Redoublant').count()
+    total_evaluations = Evaluation.objects.filter(inscription__classe__in=classes).count()
     taux_reussite_global = (taux_reussite / total_evaluations) * 100 if total_evaluations > 0 else 0
     taux_echec = (taux_echec / total_evaluations) * 100 if total_evaluations > 0 else 0
+    moyenne_classe = resultats.aggregate(Avg('moyenne'))['moyenne__avg']
 
     context = {
         'classes': classes,
         'resultats': resultats,
         'taux_reussite_global': taux_reussite_global,
         'taux_echec': taux_echec,
+        'moyenne_classe': moyenne_classe,
     }
 
     return render(request, 'resultats/index.html', context)
