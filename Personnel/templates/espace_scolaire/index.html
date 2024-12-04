@@ -3,7 +3,7 @@
 
 
 {% block content %}
-    <body class="hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse   swal2-toast-shown swal2-shown">
+    <body class="hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse   {% if request.user.dark_mode %}dark-mode{% endif %}">
     <div class="wrapper">
         {% include 'preload.html' %}
 

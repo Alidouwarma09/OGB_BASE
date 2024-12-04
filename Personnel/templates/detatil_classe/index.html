@@ -15,12 +15,8 @@
     <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
-
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../../">
 </head>
-<body class="hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse layout-navbar-fixed">
+<body class="hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse layout-navbar-fixed {% if request.user.dark_mode %}dark-mode{% endif %}">
 <div class="wrapper">
     {% include 'preload.html' %}
 

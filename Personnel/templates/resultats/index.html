@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
-<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed hold-transition sidebar-closed sidebar-collapse  ">
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed hold-transition sidebar-closed sidebar-collapse  {% if request.user.dark_mode %}dark-mode{% endif %}">
 <div class="wrapper">
     {% include 'preload.html' %}
     {% include 'personnel_navbar.html' %}

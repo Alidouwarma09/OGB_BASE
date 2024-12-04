@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{% static 'plugins/dropzone/min/dropzone.min.css' %}">
     <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
 </head>
-<body class="hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse layout-navbar-fixed ">
+<body class="hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse layout-navbar-fixed {% if request.user.dark_mode %}dark-mode{% endif %}">
 <div class="wrapper">
     {% include 'preload.html' %}
     {% include 'personnel_navbar.html' %}

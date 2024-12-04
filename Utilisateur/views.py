@@ -1,8 +1,11 @@
+import json
+
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView, LogoutView
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
 from .forms import ConnexionForm, UserRegistrationForm
 
@@ -28,3 +31,16 @@ class Connexion(LoginView):
 def Deconnexion(request):
     logout(request)
     return redirect(reverse('Utilisateur:Connexion'))
+
+
+@csrf_exempt
+def toggle_dark_mode(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        try:
+            data = json.loads(request.body)
+            request.user.dark_mode = data.get('dark_mode', False)
+            request.user.save()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    return JsonResponse({'success': False}, status=403)
