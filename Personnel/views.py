@@ -402,7 +402,10 @@ def resultats_scolaire(request):
     total_evaluations = Evaluation.objects.filter(inscription__classe__in=classes).count()
     taux_reussite_global = (taux_reussite / total_evaluations) * 100 if total_evaluations > 0 else 0
     taux_echec = (taux_echec / total_evaluations) * 100 if total_evaluations > 0 else 0
-    moyenne_classe = resultats.aggregate(Avg('moyenne'))['moyenne__avg']
+    moyenne_classe = resultats.aggregate(Avg('moyenne'))['moyenne__avg'] or 0
+    print(f"Moyenne de la classe: {moyenne_classe}")
+
+
 
     context = {
         'classes': classes,
