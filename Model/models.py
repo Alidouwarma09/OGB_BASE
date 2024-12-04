@@ -4,7 +4,7 @@ from datetime import date  # Ajoute cette ligne en haut du fichier
 
 from django.db.models import UniqueConstraint
 
-
+from decimal import Decimal
 # Create your models here.
 class MyUserManager(BaseUserManager):
     def create_user(self, username, password=None):
@@ -176,27 +176,31 @@ class Inscription(models.Model):
         return f"{self.pensionnaire.nom_enfant} inscrit en {self.classe.nom_classe} ({self.classe.annee_scolaire})"
 
 
+
+
+
 class Evaluation(models.Model):
     inscription = models.ForeignKey(Inscription, on_delete=models.CASCADE, related_name="evaluations")
     evaluation1 = models.IntegerField(null=True, blank=True)
     evaluation2 = models.IntegerField(null=True, blank=True)
     evaluation3 = models.IntegerField(null=True, blank=True)
     moyenne = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    statut_final = models.CharField(max_length=20, choices=[('Admis', 'Admis'), ('Redoublant', 'Redoublant')],
-                                    default='Admis')
+    statut_final = models.CharField(max_length=20)
 
+    def save(self, *args, **kwargs):
+        if self.moyenne is not None:
+            try:
+                self.moyenne = Decimal(self.moyenne)
+                self.statut_final = 'Admis' if self.moyenne >= 10 else 'Redoublant'
+            except (ValueError, TypeError):
+                self.statut_final = 'Invalide'
 
+        super().save(*args, **kwargs)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['inscription'], name='unique_evaluation_per_inscription')
         ]
-
-    #def save(self, *args, **kwargs):
-     #   notes = [self.evaluation1, self.evaluation2, self.evaluation3]
-     #   if all(notes):
-      #      self.moyenne = sum(notes) / len(notes)
-      #  super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Evaluation de {self.inscription.pensionnaire.nom_enfant} ({self.inscription.classe.nom_classe})"

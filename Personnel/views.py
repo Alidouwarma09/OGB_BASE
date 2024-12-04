@@ -2,10 +2,9 @@ from datetime import datetime, date
 
 from django.db import transaction, IntegrityError
 from django.db.models import Count
-from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.core.serializers import serialize
+from django.db.models import Avg, Count, F
 
 from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe, Evaluation
 from django.contrib import messages
@@ -374,4 +373,39 @@ def evaluate_pensionnaire(request, pensionnaire_id):
 
 
 def resultats_scolaire(request):
-    return render(request, 'resultats/index.html')
+    annee_scolaire = request.GET.get('annee_scolaire', f"{date.today().year}-{date.today().year + 1}")
+
+    classes = Classe.objects.filter(annee_scolaire=annee_scolaire)
+
+    inscriptions = Inscription.objects.filter(classe__in=classes)
+
+    resultats = Evaluation.objects.filter(inscription__in=inscriptions).values(
+        'inscription__pensionnaire__nom_enfant',
+        'inscription__pensionnaire__prenom_enfant',
+        'inscription__classe__nom_classe',
+        'inscription__pensionnaire__matricule',
+        'inscription__pensionnaire__statue',
+        'inscription__pensionnaire__date_naissance_enfant',
+        'inscription__pensionnaire__lieu_naissance_enfant',
+        'inscription__pensionnaire__nationalite_enfant',
+        'inscription__pensionnaire__religion_enfant',
+        'statut_final'
+    ).annotate(
+        moyenne=Avg(F('evaluation1') + F('evaluation2') + F('evaluation3')),
+        admis=Count('id', filter=F('statut_final') == 'Admis')
+    )
+
+    taux_reussite = Evaluation.objects.filter(inscription__classe__annee_scolaire=annee_scolaire, statut_final='Admis').count()
+    taux_echec = Evaluation.objects.filter(inscription__classe__annee_scolaire=annee_scolaire, statut_final='Redoublant').count()
+    total_evaluations = Evaluation.objects.filter(inscription__classe__annee_scolaire=annee_scolaire).count()
+    taux_reussite_global = (taux_reussite / total_evaluations) * 100 if total_evaluations > 0 else 0
+    taux_echec = (taux_echec / total_evaluations) * 100 if total_evaluations > 0 else 0
+
+    context = {
+        'classes': classes,
+        'resultats': resultats,
+        'taux_reussite_global': taux_reussite_global,
+        'taux_echec': taux_echec,
+    }
+
+    return render(request, 'resultats/index.html', context)
