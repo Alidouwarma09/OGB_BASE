@@ -18,14 +18,13 @@ class Connexion(LoginView):
         elif role == 'GESTIONNAIRE':
             return reverse('Accueil')
         else:
-            return reverse('utilisateur:connexion_user')
+            return reverse('Utilisateur:Connexion')
 
     def form_invalid(self, form):
-        """Méthode appelée si le formulaire est invalide."""
-        errors = form.errors  # Récupération des erreurs de validation du formulaire
+        errors = form.errors
         return self.render_to_response(self.get_context_data(form=form, errors=errors))
 
 
-def deconnexion(request):
+def Deconnexion(request):
     logout(request)
-    return redirect(reverse('utilisateur:connexion_user'))
+    return redirect(reverse('Utilisateur:Connexion'))

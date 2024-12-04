@@ -66,6 +66,7 @@ class Utilisateur(AbstractBaseUser):
     nom = models.CharField(max_length=250, verbose_name='nom')
     prenom = models.CharField(max_length=250)
     is_active = models.BooleanField(default=True)
+    dark_mode = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     roles = models.CharField(max_length=20, choices=ROLES_CHOICES, default='UTILISATEUR')
