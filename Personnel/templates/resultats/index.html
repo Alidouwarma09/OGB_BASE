@@ -72,8 +72,8 @@
                     <div class="clearfix hidden-md-up"></div>
 
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
                         <form method="get" id="filterForm">
                             <div class="row mb-3">
                                 <div class="col-md-6">
@@ -102,7 +102,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="card">
                             <div class="card-header border-transparent">
                                 Tableau des resultats
@@ -155,6 +155,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-4">
                         <h1><i class="fas fa-chart-line"></i> Statistique de {{ request.GET.classe|default:"Toutes les classes" }}</h1>
                         <div class="info-box mb-3 bg-warning">
@@ -182,10 +183,22 @@
                             <span class="info-box-icon"><i class="fas fa-calculator"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Moyenne de la classe</span>
-                                <span class="info-box-number">{{ moyenne_classe|floatformat:2 }}</span>
+                                <span class="info-box-number">{{ moyenne_classe|default:0|floatformat:2 }}</span>
 
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h1><i class="fas fa-chart-bar"></i> Graphique des résultats de {{ request.GET.classe|default:"Toutes les classes" }}</h1>
+
+                            </div>
+                            <div class="card-body">
+                                <canvas id="barChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+
                     </div>
 
 
@@ -212,6 +225,8 @@
 <script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
 <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
 <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
     $(function () {
         /*
@@ -512,26 +527,57 @@
                 }
             ]
         });
-
-        // Filtrage par classe
         $('#classeFilter').on('change', function() {
             var selectedClass = $(this).val();
 
-            // Si "COLLEGE" est sélectionné
             if (selectedClass === 'COLLEGE') {
-                // Affiche toutes les classes de collège
                 table.column(4).search('6e|5e|4e|3e|2nde|1ere|Tle', true, false).draw();
             } else if (selectedClass) {
-                // Si une classe spécifique est sélectionnée, filtre par cette classe
                 table.column(4).search(selectedClass).draw();
             } else {
-                // Si "Toutes les classes" est sélectionné, réinitialiser le filtre
                 table.column(4).search('').draw();
             }
         });
     });
-
-
+</script>
+<script>
+    // Données du graphique
+    var ctx = document.getElementById('barChart').getContext('2d');
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Total', 'Admis', 'Echec', 'Moyenne'],
+            datasets: [{
+                label: 'Statistiques',
+                data: [
+                    {{ resultats|length }},
+                    {{ taux_reussite_global|floatformat:2 }},
+                    {{ taux_echec|floatformat:2 }},
+                    {{ moyenne_classe|default:0|floatformat:2 }}
+                ],
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.2)', // Total
+                    'rgba(40, 167, 69, 0.2)',  // Admis
+                    'rgba(220, 53, 69, 0.2)',  // Echec
+                    'rgba(23, 162, 184, 0.2)'  // Moyenne
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(23, 162, 184, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 </script>
 
 </body>
