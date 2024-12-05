@@ -1,6 +1,8 @@
 # Personnel/urls.py
 from django.urls import path
 from . import views
+from .views import details_pensionnaire
+
 app_name = 'Personnel'
 urlpatterns = [
     path('acceuil/', views.acceuil, name='acceuil'),
@@ -13,5 +15,5 @@ urlpatterns = [
     path('detatil_classe/<str:classe>/', views.detatil_classe, name='detatil_classe'),
     path('evaluate/<int:pensionnaire_id>/', views.evaluate_pensionnaire, name='evaluate_pensionnaire'),
     path('enregistrer_pensionnaire_et_pere/', views.enregistrer_pensionnaire_et_pere, name='enregistrer_info'),
-    path('details_pensionnaire/<int:pensionnaire_id>/', views.details_pensionnaire, name='details_pensionnaires'),
+    path('details/<int:pensionnaire_id>/', details_pensionnaire, name='details_pensionnaires'),
 ]
