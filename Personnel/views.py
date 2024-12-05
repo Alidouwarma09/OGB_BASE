@@ -33,7 +33,11 @@ def enregistrer_pensionnaire_et_pere(request):
         a_antecdents = request.POST.get('es_scolarise', '').strip()
         niveau_etude_anterieur = request.POST.get('niveau_etude_anterieur', '').strip()
         classe_inscrit = request.POST.get('classe_inscrit', '').strip()
+
         religion_enfant = request.POST.get('religion_enfant', '').strip()
+        autre_religion_enfant = request.POST.get('autre_religion_enfant', '').strip()
+        if religion_enfant == "Autre":
+            religion_enfant = autre_religion_enfant
         type_habitat_enfant = request.POST.get('type_habitat_enfant', '').strip()
         personne_loge_enfant = request.POST.get('personne_loge_enfant', '').strip()
 
@@ -43,7 +47,12 @@ def enregistrer_pensionnaire_et_pere(request):
             lieu_habitation_enfant = autre_lieu_habitation_enfant
 
         nombre_piece_logement = request.POST.get('nombre_piece_logement', '').strip()
+
         motif_deplacement_enfant = request.POST.get('motif_deplacement_enfant', '').strip()
+        autre_motif_deplacement_enfant = request.POST.get('autre_motif_deplacement_enfant', '').strip()
+        if motif_deplacement_enfant == "Autre":
+            motif_deplacement_enfant = autre_motif_deplacement_enfant
+
         electrifie_enfant = request.POST.get('electrifie_enfant', '').strip()
 
         nom_pere = request.POST.get('nom_pere', '').strip()
@@ -51,10 +60,20 @@ def enregistrer_pensionnaire_et_pere(request):
         date_naissance_pere = request.POST.get('date_naissance_pere', '').strip()
         lieu_naissance_pere = request.POST.get('lieu_naissance_pere', '').strip()
         ethnie_pere = request.POST.get('ethnie_pere', '').strip()
+
+
         religion_pere = request.POST.get('religion_pere', '').strip()
+        autre_religion_pere = request.POST.get('autre_religion_pere', '').strip()
+        if religion_pere == "Autre":
+            religion_pere = autre_religion_pere
         nombre_personne_charge_pere = request.POST.get('nombre_personne_charge_pere', '').strip()
         contact_pere = request.POST.get('contact_pere', '').strip()
+
         adresse_pere = request.POST.get('adresse_pere', '').strip()
+        autre_adresse_pere = request.POST.get('autre_adresse_pere', '').strip()
+        if adresse_pere == "Autre":
+            adresse_pere = autre_adresse_pere
+
         profession_pere = request.POST.get('profession_pere', '').strip()
         en_vie_pere = request.POST.get('en_vie_pere', '').strip()
         en_couple_pere = request.POST.get('en_couple_pere', '').strip()
@@ -64,10 +83,18 @@ def enregistrer_pensionnaire_et_pere(request):
         date_naissance_mere = request.POST.get('date_naissance_mere', '').strip()
         lieu_naissance_mere = request.POST.get('lieu_naissance_mere', '').strip()
         ethnie_mere = request.POST.get('ethnie_mere', '').strip()
+
         religion_mere = request.POST.get('religion_mere', '').strip()
+        autre_religion_mere = request.POST.get('autre_religion_mere', '').strip()
+        if religion_mere == "Autre":
+            religion_mere = autre_religion_mere
         nombre_personne_charge_mere = request.POST.get('nombre_personne_charge_mere', '').strip()
         contact_mere = request.POST.get('contact_mere', '').strip()
+
         adresse_mere = request.POST.get('adresse_mere', '').strip()
+        autre_adresse_mere = request.POST.get('autre_adresse_mere', '').strip()
+        if adresse_mere == "Autre":
+            adresse_mere = autre_adresse_mere
         profession_mere = request.POST.get('profession_mere', '').strip()
         en_vie_mere = request.POST.get('en_vie_mere', '').strip()
         en_couple_mere = request.POST.get('en_couple_mere', '').strip()
