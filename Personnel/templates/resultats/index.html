@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
-<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed hold-transition sidebar-closed sidebar-collapse  {% if request.user.dark_mode %}dark-mode{% endif %}">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed hold-transition sidebar-closed sidebar-collapse  {% if request.user.dark_mode %}dark-mode{% endif %}">
 <div class="wrapper">
     {% include 'preload.html' %}
     {% include 'personnel_navbar.html' %}
@@ -541,7 +541,6 @@
     });
 </script>
 <script>
-    // Données du graphique
     var ctx = document.getElementById('barChart').getContext('2d');
     var barChart = new Chart(ctx, {
         type: 'bar',
@@ -556,10 +555,10 @@
                     {{ moyenne_classe|default:0|floatformat:2 }}
                 ],
                 backgroundColor: [
-                    'rgba(255, 159, 64, 0.2)', // Total
-                    'rgba(40, 167, 69, 0.2)',  // Admis
-                    'rgba(220, 53, 69, 0.2)',  // Echec
-                    'rgba(23, 162, 184, 0.2)'  // Moyenne
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(40, 167, 69, 0.2)',
+                    'rgba(220, 53, 69, 0.2)',
+                    'rgba(23, 162, 184, 0.2)'
                 ],
                 borderColor: [
                     'rgba(255, 159, 64, 1)',

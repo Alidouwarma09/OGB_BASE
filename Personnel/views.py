@@ -27,6 +27,7 @@ def enregistrer_pensionnaire_et_pere(request):
         matricule = request.POST.get('matricule', '').strip()
         statue = request.POST.get('statue', '').strip()
         lieu_naissance_enfant = request.POST.get('lieu_naissance_enfant', '').strip()
+
         nationalite_enfant = request.POST.get('nationalite_enfant', '').strip()
         es_scolarise = request.POST.get('es_scolarise', '').strip()
         a_antecdents = request.POST.get('es_scolarise', '').strip()
@@ -35,7 +36,12 @@ def enregistrer_pensionnaire_et_pere(request):
         religion_enfant = request.POST.get('religion_enfant', '').strip()
         type_habitat_enfant = request.POST.get('type_habitat_enfant', '').strip()
         personne_loge_enfant = request.POST.get('personne_loge_enfant', '').strip()
+
         lieu_habitation_enfant = request.POST.get('lieu_habitation_enfant', '').strip()
+        autre_lieu_habitation_enfant = request.POST.get('autre_lieu_habitation_enfant', '').strip()
+        if lieu_habitation_enfant == "Autre":
+            lieu_habitation_enfant = autre_lieu_habitation_enfant
+
         nombre_piece_logement = request.POST.get('nombre_piece_logement', '').strip()
         motif_deplacement_enfant = request.POST.get('motif_deplacement_enfant', '').strip()
         electrifie_enfant = request.POST.get('electrifie_enfant', '').strip()

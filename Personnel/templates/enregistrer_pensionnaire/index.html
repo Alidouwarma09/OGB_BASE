@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+
     <link rel="stylesheet" href="{% static 'plugins/bs-stepper/css/bs-stepper.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/dropzone/min/dropzone.min.css' %}">
     <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
@@ -245,7 +247,7 @@
                                                 </select>
                                                 <div class="autre-field"  id="lieu_habitation_enfant-autre" style="display: none;">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="lieu_habitation_enfant" required placeholder="Préciser le lieu d'habitation">
+                                                        <input type="text" class="form-control" name="autre_lieu_habitation_enfant" required placeholder="Préciser le lieu d'habitation">
                                                     </div>
                                                 </div>
 
@@ -529,21 +531,21 @@
                                             <input type="text" class="form-control" name="lieu_naissance_mere" id="exampleInputEmail1" placeholder="Entrer le lieu de naissance">
                                         </div>
                                         <div class="form-group">
-                                            <label>Quelle est la réligion de la mere ?</label>
+                                            <label>Quelle est la religion de la mère ?</label>
                                             <select class="form-control select-autre" name="religion_mere" data-autre-id="religion_mere-autre">
                                                 <option value="">Choisir ici</option>
-                                                <option value="Chretienne">Chretienne</option>
+                                                <option value="Chretienne">Chrétienne</option>
                                                 <option value="Musulmane">Musulmane</option>
                                                 <option value="Animiste">Animiste</option>
                                                 <option value="Autre">Autre</option>
                                             </select>
-                                            <div class="autre-field"  id="religion_mere-autre"  style="display: none;">
+                                            <div class="autre-field" id="religion_mere-autre" style="display: none;">
                                                 <div class="input-group">
-                                                    <input type="text" name="religion_mere" class="form-control" placeholder="Preciser la religion">
+                                                    <input type="text" name="religion_mere_autre" class="form-control" placeholder="Préciser la religion">
                                                 </div>
                                             </div>
-
                                         </div>
+
 
 
                                         <div class="form-group">
@@ -869,6 +871,7 @@
 <script src="{% static 'plugins/bs-stepper/js/bs-stepper.min.js' %}"></script>
 <script src="{% static 'plugins/dropzone/min/dropzone.min.js' %}"></script>
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+<script src="{% static 'plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}"></script>
 
 <script>
     document.querySelectorAll('.radio-group').forEach(group => {
@@ -888,7 +891,6 @@
 
 </script>
 <script>
-    // Récupérer les éléments nécessaires
     const radioButtons = document.querySelectorAll('input[name="a_antecdents"]');
     const antecedentsDetails = document.getElementById('antecedents-details');
     radioButtons.forEach(radio => {
@@ -903,7 +905,6 @@
 
 </script>
 <script>
-    // Récupérer les éléments nécessaires
     const radioButtons1 = document.querySelectorAll('input[name="es_scolarise"]');
     const antecedentsDetails1 = document.getElementById('es-scolarise');
     radioButtons1.forEach(radio => {
@@ -918,63 +919,48 @@
 
 </script>
 <script>
-    document.querySelectorAll('.select-autre').forEach(select => {
-        const autreFieldId = select.getAttribute('data-autre-id');
-        const autreField = document.getElementById(autreFieldId);
-        const autreInput = autreField.querySelector('input');
+    document.addEventListener('DOMContentLoaded', function () {
+        // Récupérer tous les champs de sélection avec la classe `select-autre`
+        const selects = document.querySelectorAll('.select-autre');
 
-        select.addEventListener('change', function () {
-            if (this.value === "Autre") {
-                autreField.style.display = 'block';
-                autreInput.required = true;
-                autreInput.setAttribute('name', select.getAttribute('name')); // Copier le `name` du select
-                select.removeAttribute('name'); // Supprimer le `name` du select
-            } else {
-                autreField.style.display = 'none';
-                autreInput.value = ''; // Réinitialiser le champ texte
-                autreInput.required = false;
-                autreInput.removeAttribute('name'); // Supprimer le `name` du champ input
-                select.setAttribute('name', autreInput.getAttribute('name')); // Restaurer le `name` du select
-            }
-        });
+        selects.forEach(select => {
+            select.addEventListener('change', function () {
+                // Récupérer l'élément associé à l'option "Autre"
+                const autreFieldId = select.getAttribute('data-autre-id');
+                const autreField = document.getElementById(autreFieldId);
 
-        // Remplacer "Autre" par la valeur saisie lors de la soumission du formulaire
-        document.querySelector('form').addEventListener('submit', function () {
-            if (select.value === "Autre") {
-                select.value = autreInput.value.trim();
-            }
+                if (select.value === "Autre") {
+                    // Afficher le champ de saisie
+                    autreField.style.display = 'block';
+                    autreField.querySelector('input').setAttribute('required', 'true');
+                } else {
+                    // Masquer le champ de saisie
+                    autreField.style.display = 'none';
+                    autreField.querySelector('input').removeAttribute('required');
+                    autreField.querySelector('input').value = ''; // Réinitialiser la valeur
+                }
+            });
         });
     });
-
 </script>
+
 <script>
     $(function () {
-        //Initialize Select2 Elements
         $('.select2').select2()
-
-        //Initialize Select2 Elements
         $('.select2bs4').select2({
             theme: 'bootstrap4'
         })
 
-        //Datemask dd/mm/yyyy
         $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-        //Datemask2 mm/dd/yyyy
         $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-        //Money Euro
         $('[data-mask]').inputmask()
 
-        //Date picker
         $('#reservationdate').datetimepicker({
             format: 'L'
         });
 
-        //Date and time picker
         $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
-
-        //Date range picker
         $('#reservation').daterangepicker()
-        //Date range picker with time picker
         $('#reservationtime').daterangepicker({
             timePicker: true,
             timePickerIncrement: 30,
@@ -982,7 +968,6 @@
                 format: 'MM/DD/YYYY hh:mm A'
             }
         })
-        //Date range as a button
         $('#daterange-btn').daterangepicker(
             {
                 ranges   : {
@@ -1000,18 +985,12 @@
                 $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
             }
         )
-
-        //Timepicker
         $('#timepicker').datetimepicker({
             format: 'LT'
         })
-
-        //Bootstrap Duallistbox
         $('.duallistbox').bootstrapDualListbox()
 
-        //Colorpicker
         $('.my-colorpicker1').colorpicker()
-        //color picker with addon
         $('.my-colorpicker2').colorpicker()
 
         $('.my-colorpicker2').on('colorpickerChange', function(event) {
@@ -1023,63 +1002,48 @@
         })
 
     })
-    // BS-Stepper Init
     document.addEventListener('DOMContentLoaded', function () {
         window.stepper = new Stepper(document.querySelector('.bs-stepper'))
     })
-
-    // DropzoneJS Demo Code Start
     Dropzone.autoDiscover = false
-
-    // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
     var previewNode = document.querySelector("#template")
     previewNode.id = ""
     var previewTemplate = previewNode.parentNode.innerHTML
     previewNode.parentNode.removeChild(previewNode)
 
-    var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-        url: "/target-url", // Set the url
+    var myDropzone = new Dropzone(document.body, {
+        url: "/target-url",
         thumbnailWidth: 80,
         thumbnailHeight: 80,
         parallelUploads: 20,
         previewTemplate: previewTemplate,
-        autoQueue: false, // Make sure the files aren't queued until manually added
-        previewsContainer: "#previews", // Define the container to display the previews
-        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+        autoQueue: false,
+        previewsContainer: "#previews",
+        clickable: ".fileinput-button"
     })
 
     myDropzone.on("addedfile", function(file) {
-        // Hookup the start button
         file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file) }
     })
 
-    // Update the total progress bar
     myDropzone.on("totaluploadprogress", function(progress) {
         document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
     })
 
     myDropzone.on("sending", function(file) {
-        // Show the total progress bar when upload starts
         document.querySelector("#total-progress").style.opacity = "1"
-        // And disable the start button
         file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
     })
 
-    // Hide the total progress bar when nothing's uploading anymore
     myDropzone.on("queuecomplete", function(progress) {
         document.querySelector("#total-progress").style.opacity = "0"
     })
-
-    // Setup the buttons for all transfers
-    // The "add files" button doesn't need to be setup because the config
-    // `clickable` has already been specified.
     document.querySelector("#actions .start").onclick = function() {
         myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
     }
     document.querySelector("#actions .cancel").onclick = function() {
         myDropzone.removeAllFiles(true)
     }
-    // DropzoneJS Demo Code End
 </script>
 
 </body>

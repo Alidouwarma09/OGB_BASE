@@ -39,7 +39,6 @@
 </nav>
 
 <aside class="main-sidebar {% if request.user.dark_mode %}sidebar-dark{% else %}sidebar-light-secondary {% endif %}  elevation-2">
-    <!-- Brand Logo -->
     <a href="{% url 'Personnel:acceuil' %}" class="brand-link">
         <img src="{% static 'img.jpg' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">OGB</span>
@@ -134,48 +133,6 @@
                                 <p>Top Navigation</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Top Navigation + Sidebar</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/boxed.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Boxed</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-sidebar.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Sidebar</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-sidebar-custom.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Sidebar <small>+ Custom Area</small></p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-topnav.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Navbar</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/fixed-footer.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Fixed Footer</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/layout/collapsed-sidebar.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Collapsed Sidebar</p>
-                            </a>
-                        </li>
                     </ul>
                 </li>
                 <hr style="border: 1px solid gray; margin: 10px 0;">
@@ -194,24 +151,6 @@
                             <a href="" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>ChartJS</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Flot</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Inline</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>uPlot</p>
                             </a>
                         </li>
                     </ul>
@@ -294,12 +233,10 @@
         const navElement = document.querySelector('nav');
         const asideElement = document.querySelector('aside');
 
-        // Gestion du changement de mode via le select
         darkModeSelect.addEventListener('change', () => {
             const selectedMode = darkModeSelect.value; // Récupère la valeur sélectionnée ("light" ou "dark")
             const isDarkMode = selectedMode === 'dark';
 
-            // Envoi de la requête pour mettre à jour le mode dans la base de données
             fetch("{% url 'Utilisateur:toggle_dark_mode' %}", {
                 method: 'POST',
                 headers: {
@@ -310,16 +247,18 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        // Mise à jour des classes du navbar en fonction du mode
                         if (isDarkMode) {
                             navElement.classList.add('navbar-dark', 'navbar-dark');
+                            asideElement.classList.add('sidebar-dark', 'sidebar-dark');
                             navElement.classList.remove('navbar-light', 'navbar-light');
+                            asideElement.classList.remove('sidebar-light-secondary', 'sidebar-light-secondary');
                         } else {
                             navElement.classList.add('navbar-light', 'navbar-light');
+                            asideElement.classList.add('sidebar-light-secondary', 'sidebar-light-secondary');
                             navElement.classList.remove('navbar-dark', 'navbar-dark');
+                            asideElement.classList.remove('sidebar-dark', 'sidebar-dark');
                         }
 
-                        // Mise à jour de la classe `dark-mode` pour le body
                         document.body.classList.toggle('dark-mode', isDarkMode);
                     } else {
                         console.error('Erreur lors de la mise à jour du mode sombre.');
