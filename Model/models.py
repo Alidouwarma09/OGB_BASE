@@ -5,6 +5,8 @@ from datetime import date  # Ajoute cette ligne en haut du fichier
 from django.db.models import UniqueConstraint
 
 from decimal import Decimal
+
+
 # Create your models here.
 class MyUserManager(BaseUserManager):
     def create_user(self, username, password=None):
@@ -177,9 +179,6 @@ class Inscription(models.Model):
         return f"{self.pensionnaire.nom_enfant} inscrit en {self.classe.nom_classe} ({self.classe.annee_scolaire})"
 
 
-
-
-
 class Evaluation(models.Model):
     inscription = models.ForeignKey(Inscription, on_delete=models.CASCADE, related_name="evaluations")
     evaluation1 = models.IntegerField(null=True, blank=True)
@@ -255,27 +254,44 @@ class Antecedents(models.Model):
     probleme = models.CharField(blank=True, null=True)
 
 
-class Taille(models.Model):
-    trimestre1 = models.CharField()
-    trimestre2 = models.CharField()
-    trimestre3 = models.CharField()
+class SuiviMedicalTrimestriel(models.Model):
+    pensionnaire = models.ForeignKey(
+        'Pensionnnaire',
+        on_delete=models.CASCADE,
+        related_name='suivis_medicaux'
+    )
+    trimestre = models.PositiveSmallIntegerField()
+    annee = models.PositiveIntegerField()
+    taille_cm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Taille en cm
+    poids_kg = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Poids en kg
+
+    class Meta:
+        unique_together = ('pensionnaire', 'trimestre', 'annee')  # Un suivi par trimestre et par an
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(trimestre__in=[1, 2, 3]),
+                name='valid_trimestre_values'
+            )
+        ]
+
+    def __str__(self):
+        return f"Suivi {self.trimestre}/{self.annee} - {self.pensionnaire.nom_enfant}"
 
 
-class Poids(models.Model):
-    trimestre1 = models.CharField()
-    trimestre2 = models.CharField()
-    trimestre3 = models.CharField()
+    def __str__(self):
+        return f"Suivi {self.trimestre}/{self.annee} - {self.pensionnaire.nom_enfant}"
 
 
-class Suivi_medicale(models.Model):
-    enfant = models.ForeignKey(Pensionnnaire, on_delete=models.SET_NULL, blank=True, null=True)
-    taille = models.ForeignKey(Taille, on_delete=models.SET_NULL, blank=True, null=True)
-    poid = models.ForeignKey(Poids, on_delete=models.SET_NULL, blank=True, null=True)
-    annee_scolaire = models.CharField()
+class ConsultationMedicale(models.Model):
+    pensionnaire = models.ForeignKey(
+        'Pensionnnaire',
+        on_delete=models.CASCADE,
+        related_name='consultations_medicales'
+    )
+    date_consultation = models.DateField()
+    motif_consultation = models.TextField(blank=True, null=True)
+    diagnostic = models.TextField(blank=True, null=True)
+    traitement = models.TextField(blank=True, null=True)
 
-
-class Consultation(models.Model):
-    enfant = models.ForeignKey(Pensionnnaire, on_delete=models.SET_NULL, blank=True, null=True)
-    date_consultation = models.DateField(auto_now=True)
-    motif = models.CharField()
-    cat = models.CharField(blank=True, null=True)
+    def __str__(self):
+        return f"Consultation {self.date_consultation} - {self.pensionnaire.nom_enfant}"

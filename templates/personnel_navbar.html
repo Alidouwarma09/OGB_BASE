@@ -53,8 +53,6 @@
                 <a href="#" class="d-block">{{ request.user.nom }} {{ request.user.prenom }}</a>
             </div>
         </div>
-
-        <!-- SidebarSearch Form -->
         <div class="form-inline">
             <div class="input-group" data-widget="sidebar-search">
                 <input class="form-control form-control-sidebar" type="search" placeholder="Recherche" aria-label="Search">
@@ -69,30 +67,19 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-header">ESPACE INFOS</li>
-
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'liste_pensionnaire'%}active{% endif %} {% if request.resolver_match.url_name == 'enregistrer_pensionnaire'%}active{% endif %}">
+                    <a href="{% url 'Personnel:liste_pensionnaire' %}" class="nav-link {% if request.resolver_match.url_name == 'liste_pensionnaire' %}active{% endif %}">
                         <i class="nav-icon fas fa-user"></i>
-                        <p>
-                            Pensionnaires
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{% url 'Personnel:liste_pensionnaire' %}" class="nav-link {% if request.resolver_match.url_name == 'liste_pensionnaire' %}active{% endif %}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Liste pensionnaires</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'Personnel:enregistrer_pensionnaire' %}" class="nav-link {% if request.resolver_match.url_name == 'enregistrer_pensionnaire' %}active{% endif %}">
-                                <i class="fas fa-user-plus nav-icon"></i>
 
-                                <p>Enregistrer</p>
-                            </a>
-                        </li>
-                    </ul>
+                        <p>Liste pensionnaires</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'Personnel:enregistrer_pensionnaire' %}" class="nav-link {% if request.resolver_match.url_name == 'enregistrer_pensionnaire' %}active{% endif %}">
+                        <i class="fas fa-user-plus nav-icon"></i>
+
+                        <p>Enregistrer</p>
+                    </a>
                 </li>
                 <hr style="border: 1px solid gray; margin: 10px 0;">
                 <li class="nav-header">ESPACE SCOLAIRE
@@ -117,24 +104,22 @@
                     </a>
                 </li>
                 <hr style="border: 1px solid gray; margin: 10px 0;">
+                <li class="nav-header">ESPACE MEDICAL</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            Layout Options
-                            <i class="fas fa-angle-left right"></i>
-                            <span class="badge badge-info right">6</span>
-                        </p>
+                    <a href="{% url 'Personnel:suivi_trimestrielle' %}" class="nav-link {% if request.resolver_match.url_name == 'suivi_trimestrielle' %}active{% endif %}">
+                        <i class="nav-icon fas fa-user"></i>
+
+                        <p>Suivi trimestriel</p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="pages/layout/top-nav.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Top Navigation</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link {% if request.resolver_match.url_name == 'liste_pensionnaire' %}active{% endif %}">
+                        <i class="nav-icon fas fa-user"></i>
+
+                        <p>Consultation</p>
+                    </a>
+                </li>
+
                 <hr style="border: 1px solid gray; margin: 10px 0;">
 
 
