@@ -254,19 +254,20 @@ class Antecedents(models.Model):
     probleme = models.CharField(blank=True, null=True)
 
 
-class SuiviMedicalTrimestriel(models.Model):
+class SuiviMedicalTrimestriele(models.Model):
     pensionnaire = models.ForeignKey(
         'Pensionnnaire',
         on_delete=models.CASCADE,
         related_name='suivis_medicaux'
     )
     trimestre = models.PositiveSmallIntegerField()
-    annee = models.PositiveIntegerField()
-    taille_cm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Taille en cm
-    poids_kg = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Poids en kg
+    annee_scolaire = models.CharField(max_length=9,
+                                      default=f"{date.today().year}-{date.today().year + 1}")
+    taille_cm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    poids_kg = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     class Meta:
-        unique_together = ('pensionnaire', 'trimestre', 'annee')  # Un suivi par trimestre et par an
+        unique_together = ('pensionnaire', 'trimestre', 'annee_scolaire')  # Un suivi par trimestre et par an
         constraints = [
             models.CheckConstraint(
                 check=models.Q(trimestre__in=[1, 2, 3]),
@@ -275,7 +276,7 @@ class SuiviMedicalTrimestriel(models.Model):
         ]
 
     def __str__(self):
-        return f"Suivi {self.trimestre}/{self.annee} - {self.pensionnaire.nom_enfant}"
+        return f"Suivi {self.trimestre}/{self.annee_scolaire} - {self.pensionnaire.nom_enfant}"
 
 
     def __str__(self):

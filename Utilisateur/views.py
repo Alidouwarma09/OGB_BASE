@@ -14,6 +14,17 @@ class Connexion(LoginView):
     template_name = 'connexion.html'
     form_class = ConnexionForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            role = request.user.roles
+            if role == 'ADMIN':
+                return redirect(reverse('Personnel:acceuil'))
+            elif role == 'GESTIONNAIRE':
+                return redirect(reverse('Accueil'))
+            else:
+                return redirect(reverse('Utilisateur:Connexion'))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_success_url(self):
         role = self.request.user.roles
         if role == 'ADMIN':
@@ -22,10 +33,6 @@ class Connexion(LoginView):
             return reverse('Accueil')
         else:
             return reverse('Utilisateur:Connexion')
-
-    def form_invalid(self, form):
-        errors = form.errors
-        return self.render_to_response(self.get_context_data(form=form, errors=errors))
 
 
 def Deconnexion(request):

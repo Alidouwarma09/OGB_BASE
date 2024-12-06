@@ -1,12 +1,14 @@
 from datetime import datetime, date
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction, IntegrityError
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Avg, Count, F
 
-from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe, Evaluation
+from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe, Evaluation, \
+    SuiviMedicalTrimestriele
 from django.contrib import messages
 
 
@@ -452,16 +454,84 @@ def resultats_scolaire(request):
 
 
 def suivi_trimestrielle(request):
+    # Récupération de la date actuelle
     current_date = date.today()
     if current_date.month >= 9:
         annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
     else:
         annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
 
-    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id',
-                                                                                                 flat=True)
-    pensionnaires = Pensionnnaire.objects.exclude(id__in=inscrits_ids)
+    # Liste des pensionnaires inscrits
+    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
+    pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_ids)
+
+    # Ajouter les suivis médicaux pour chaque pensionnaire
+    pensionnaires_data = []
+    for pensionnaire in pensionnaires:
+        suivis = SuiviMedicalTrimestriele.objects.filter(pensionnaire=pensionnaire, annee_scolaire=annee_scolaire)
+        trimestres_suivis = suivis.values_list('trimestre', flat=True)
+        trimestres_non_suivis = [t for t in [1, 2, 3] if t not in trimestres_suivis]
+        pensionnaires_data.append({
+            'pensionnaire': pensionnaire,
+            'trimestres_suivis': trimestres_suivis,
+            'trimestres_non_suivis': trimestres_non_suivis,
+            'suivis': suivis,
+        })
+
+    # Pensionnaires disponibles pour le suivi
+    pensionnaires_choice = pensionnaires.exclude(
+        id__in=[p['pensionnaire'].id for p in pensionnaires_data if len(p['trimestres_suivis']) == 3]
+    )
+
+    # Pour savoir quel pensionnaire a été sélectionné (s'il y en a un)
+    pensionnaire_selected = pensionnaires_choice.first()  # ou passer celui sélectionné en fonction de votre logique
 
     return render(request, 'suivi_trimestrielle/index.html', {
-        'pensionnaires': pensionnaires,
+        'pensionnaires_data': pensionnaires_data,
+        'pensionnaires_choice': pensionnaires_choice,
+        'pensionnaire_selected': pensionnaire_selected,
+        'trimestres': [1, 2, 3],
     })
+
+
+
+
+def create_new_suivi(request):
+    if request.method == "POST":
+        trimestre = request.POST.get('trimestre', '').strip()
+        taille_cm = request.POST.get('taille_cm', '').strip()
+        poids_kg = request.POST.get('poids_kg', '').strip()
+        pensionnaire_id = request.POST.get('pensionnaires_choice_id', '').strip()
+
+        try:
+            if not pensionnaire_id or not trimestre:
+                raise ValueError("Tous les champs sont obligatoires.")
+
+            pensionnaire = Pensionnnaire.objects.get(id=pensionnaire_id)
+
+            current_date = date.today()
+            annee_scolaire = (
+                f"{current_date.year}-{current_date.year + 1}"
+                if current_date.month >= 9
+                else f"{current_date.year - 1}-{current_date.year}"
+            )
+
+            with transaction.atomic():
+                SuiviMedicalTrimestriele.objects.create(
+                    pensionnaire=pensionnaire,
+                    annee_scolaire=annee_scolaire,
+                    trimestre=trimestre,
+                    taille_cm=float(taille_cm),
+                    poids_kg=float(poids_kg),
+                )
+                messages.success(request, "Suivi médical enregistré avec succès.")
+                return redirect('Personnel:suivi_trimestrielle')
+
+        except ValueError as e:
+            messages.error(request, f"Erreur : {e}")
+        except ObjectDoesNotExist:
+            messages.error(request, "Le pensionnaire sélectionné n'existe pas.")
+        except Exception as e:
+            messages.error(request, f"Une erreur inattendue s’est produite : {e}")
+
+        return redirect('Personnel:suivi_trimestrielle')
