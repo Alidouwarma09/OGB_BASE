@@ -32,7 +32,7 @@
                         <h1 class="m-0">Suivi medical {{ annee_scolaire }}</h1>
                     </div>
                     <div class="col-lg-6 col-6">
-                        <button class="btn btn-info animate__animated" id="newSuiviButton"
+                        <button class="btn btn-warning animate__animated" id="newSuiviButton"
                                 style="width: 50%; font-size: 15px; font-family: 'Lucida Grande', Arial, sans-serif; font-weight: bold"
                                 data-toggle="modal" data-target="#modalInscription">
                             <i class="fas fa-user-plus" style="font-size: 20px; margin-right: 5px;"></i>
@@ -116,7 +116,8 @@
                                                     <td>
                                                         {% if trimestre in data.trimestres_suivis %}
                                                             {% with suivi=data.suivis|get_item:forloop.counter0 %}
-                                                                {{ suivi.taille_cm }} m; {{ suivi.poids_kg }} kg
+                                                                <span class="badge badge-primary"> {{ suivi.taille_cm }} m; {{ suivi.poids_kg }} kg</span>
+
                                                             {% endwith %}
                                                         {% else %}
                                                             <span class="badge badge-secondary">Pas encore suivi</span>

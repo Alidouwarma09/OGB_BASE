@@ -396,18 +396,15 @@ def evaluate_pensionnaire(request, pensionnaire_id):
 
         if not inscription:
             return JsonResponse({'success': False, 'message': "L'élève n'est pas inscrit dans une classe."}, status=400)
-
         evaluation, created = Evaluation.objects.get_or_create(inscription=inscription)
         evaluation.evaluation1 = request.POST.get('evaluation1')
         evaluation.evaluation2 = request.POST.get('evaluation2')
         evaluation.evaluation3 = request.POST.get('evaluation3')
         evaluation.moyenne = request.POST.get('moyenne')
         evaluation.save()
-
         return JsonResponse({'success': True, 'message': "Évaluation enregistrée avec succès."})
 def resultats_scolaire(request):
     annee_scolaire = request.GET.get('annee_scolaire', f"{date.today().year}-{date.today().year + 1}")
-
     selected_class = request.GET.get('classe', None)
     if selected_class:
         classes = Classe.objects.filter(annee_scolaire=annee_scolaire, nom_classe=selected_class)
@@ -431,17 +428,12 @@ def resultats_scolaire(request):
         moyenne=Avg(F('evaluation1') + F('evaluation2') + F('evaluation3')),
         admis=Count('id', filter=F('statut_final') == 'Admis')
     )
-
     taux_reussite = Evaluation.objects.filter(inscription__classe__in=classes, statut_final='Admis').count()
     taux_echec = Evaluation.objects.filter(inscription__classe__in=classes, statut_final='Redoublant').count()
     total_evaluations = Evaluation.objects.filter(inscription__classe__in=classes).count()
     taux_reussite_global = (taux_reussite / total_evaluations) * 100 if total_evaluations > 0 else 0
     taux_echec = (taux_echec / total_evaluations) * 100 if total_evaluations > 0 else 0
     moyenne_classe = resultats.aggregate(Avg('moyenne'))['moyenne__avg'] or 0
-    print(f"Moyenne de la classe: {moyenne_classe}")
-
-
-
     context = {
         'classes': classes,
         'resultats': resultats,
@@ -451,17 +443,12 @@ def resultats_scolaire(request):
     }
 
     return render(request, 'resultats/index.html', context)
-
-
 def suivi_trimestrielle(request):
-    # Récupération de la date actuelle
     current_date = date.today()
     if current_date.month >= 9:
         annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
     else:
         annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
-
-    # Liste des pensionnaires inscrits
     inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
     pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_ids)
 
@@ -477,23 +464,16 @@ def suivi_trimestrielle(request):
             'trimestres_non_suivis': trimestres_non_suivis,
             'suivis': suivis,
         })
-
-    # Pensionnaires disponibles pour le suivi
     pensionnaires_choice = pensionnaires.exclude(
         id__in=[p['pensionnaire'].id for p in pensionnaires_data if len(p['trimestres_suivis']) == 3]
     )
-
-    # Pour savoir quel pensionnaire a été sélectionné (s'il y en a un)
-    pensionnaire_selected = pensionnaires_choice.first()  # ou passer celui sélectionné en fonction de votre logique
-
+    pensionnaire_selected = pensionnaires_choice.first()
     return render(request, 'suivi_trimestrielle/index.html', {
         'pensionnaires_data': pensionnaires_data,
         'pensionnaires_choice': pensionnaires_choice,
         'pensionnaire_selected': pensionnaire_selected,
         'trimestres': [1, 2, 3],
     })
-
-
 
 
 def create_new_suivi(request):
@@ -546,13 +526,9 @@ def consultation(request):
         annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
     else:
         annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
-
     inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
     pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_ids)
-
     consultations = ConsultationMedicale.objects.filter(pensionnaire__in=pensionnaires)
-
-    # Ajouter les classes des pensionnaires pour les afficher dans le formulaire
     for pensionnaire in pensionnaires:
         inscription = Inscription.objects.filter(pensionnaire=pensionnaire).first()
         if inscription:
@@ -566,15 +542,12 @@ def consultation(request):
     })
 
 
-
-
 def create_new_consultation(request):
     if request.method == "POST":
         motif_consultation = request.POST.get('motif_consultation', '').strip()
         diagnostic = request.POST.get('diagnostic', '').strip()
-        traitement = request.POST.get('traitement', '').strip()  # Vérifier que 'traitement' est correctement récupéré
+        traitement = request.POST.get('traitement', '').strip()
         pensionnaire_id = request.POST.get('pensionnaires_choicee_id', '').strip()
-
         try:
             if not pensionnaire_id or not motif_consultation or not diagnostic or not traitement:
                 raise ValueError("Tous les champs sont obligatoires.")
@@ -599,13 +572,11 @@ def create_new_consultation(request):
                 )
                 messages.success(request, "La consultation a été enregistrée avec succès.")
                 return redirect('Personnel:consultation')
-
         except ValueError as e:
             messages.error(request, f"Erreur : {e}")
         except ObjectDoesNotExist:
             messages.error(request, "Le pensionnaire sélectionné n'existe pas.")
         except Exception as e:
             messages.error(request, f"Une erreur inattendue s’est produite : {e}")
-
         return redirect('Personnel:consultation')
 
