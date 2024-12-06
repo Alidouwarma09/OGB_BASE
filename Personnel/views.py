@@ -535,3 +535,65 @@ def create_new_suivi(request):
             messages.error(request, f"Une erreur inattendue s’est produite : {e}")
 
         return redirect('Personnel:suivi_trimestrielle')
+
+
+
+
+
+def consultation(request):
+    current_date = date.today()
+    if current_date.month >= 9:
+        annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
+    else:
+        annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
+
+    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
+    pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_ids)
+
+
+    return render(request, 'consultation/index.html', {
+        'pensionnaires': pensionnaires,
+    })
+
+
+
+
+def create_new_consultation(request):
+    if request.method == "POST":
+        trimestre = request.POST.get('trimestre', '').strip()
+        taille_cm = request.POST.get('taille_cm', '').strip()
+        poids_kg = request.POST.get('poids_kg', '').strip()
+        pensionnaire_id = request.POST.get('pensionnaires_choice_id', '').strip()
+
+        try:
+            if not pensionnaire_id or not trimestre:
+                raise ValueError("Tous les champs sont obligatoires.")
+
+            pensionnaire = Pensionnnaire.objects.get(id=pensionnaire_id)
+
+            current_date = date.today()
+            annee_scolaire = (
+                f"{current_date.year}-{current_date.year + 1}"
+                if current_date.month >= 9
+                else f"{current_date.year - 1}-{current_date.year}"
+            )
+
+            with transaction.atomic():
+                SuiviMedicalTrimestriele.objects.create(
+                    pensionnaire=pensionnaire,
+                    annee_scolaire=annee_scolaire,
+                    trimestre=trimestre,
+                    taille_cm=float(taille_cm),
+                    poids_kg=float(poids_kg),
+                )
+                messages.success(request, "Suivi médical enregistré avec succès.")
+                return redirect('Personnel:suivi_trimestrielle')
+
+        except ValueError as e:
+            messages.error(request, f"Erreur : {e}")
+        except ObjectDoesNotExist:
+            messages.error(request, "Le pensionnaire sélectionné n'existe pas.")
+        except Exception as e:
+            messages.error(request, f"Une erreur inattendue s’est produite : {e}")
+
+        return redirect('Personnel:suivi_trimestrielle')

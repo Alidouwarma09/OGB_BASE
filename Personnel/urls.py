@@ -1,7 +1,7 @@
 # Personnel/urls.py
 from django.urls import path
 from . import views
-from .views import details_pensionnaire, suivi_trimestrielle, create_new_suivi
+from .views import details_pensionnaire, suivi_trimestrielle, create_new_suivi, consultation, create_new_consultation
 
 app_name = 'Personnel'
 urlpatterns = [
@@ -9,8 +9,10 @@ urlpatterns = [
     path('enregistrer_pensionnaire/', views.enregistrer_pensionnaire, name='enregistrer_pensionnaire'),
     path('espace_scolaire/', views.espace_scolaire, name='espace_scolaire'),
     path('suivi_trimestrielle/', suivi_trimestrielle, name='suivi_trimestrielle'),
+    path('consultation/', consultation, name='consultation'),
     path('inscription_scolaire/', views.inscription_scolaire, name='inscription_scolaire'),
     path('create_new_suivi/', create_new_suivi, name='create_new_suivi'),
+    path('create_new_consultation/', create_new_consultation, name='create_new_consultation'),
     path('rechercher_pensionnaires/', views.rechercher_pensionnaires, name='rechercher_pensionnaires'),
     path('liste_pensionnaire/', views.liste_pensionnaire, name='liste_pensionnaire'),
     path('resultats_scolaire/', views.resultats_scolaire, name='resultats_scolaire'),

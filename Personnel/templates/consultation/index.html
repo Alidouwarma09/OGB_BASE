@@ -49,7 +49,7 @@
                     <div class="col-md-12">
                         <form method="get" id="filterForm">
                             <div class="row mb-3">
-                                <div class="col-md-6">
+                                <div class="col-md-6"   >
                                     <label for="classeFilter" class="font-weight-bold text-primary">Filtrer par Classe</label>
                                     <select id="classeFilter" name="classe" class="form-control selectpicker border-primary"
                                             data-live-search="true" title="Choisissez une classe">
@@ -80,7 +80,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header border-transparent">Liste des suivi
+                            <div class="card-header border-transparent">Liste des consultation
 
                                 <div class="card-tools">
                                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -98,40 +98,21 @@
                                             <th>Prénom</th>
                                             <th>Matricule</th>
                                             <th>Classe</th>
-                                            <th>Trimestre 1</th>
-                                            <th>Trimestre 2</th>
-                                            <th>Trimestre 3</th>
-                                            <th>Status</th>
-                                        </tr>
+                                            <th>Date consultation</th>
+                                            <th>Motif</th>
                                         </thead>
                                         <tbody>
-                                        {% for data in pensionnaires_data %}
+                                        {% for data in pensionnaires %}
                                             <tr>
                                                 <td>{{ forloop.counter }}</td>
-                                                <td>{{ data.pensionnaire.nom_enfant }}</td>
-                                                <td>{{ data.pensionnaire.prenom_enfant }}</td>
-                                                <td>{{ data.pensionnaire.matricule }}</td>
-                                                <td>{{ data.pensionnaire.inscriptions.first.classe.nom_classe }}</td>
-                                                {% for trimestre in trimestres %}
-                                                    <td>
-                                                        {% if trimestre in data.trimestres_suivis %}
-                                                            {% with suivi=data.suivis|get_item:forloop.counter0 %}
-                                                                {{ suivi.taille_cm }} m; {{ suivi.poids_kg }} kg
-                                                            {% endwith %}
-                                                        {% else %}
-                                                            <span class="badge badge-secondary">Pas encore suivi</span>
-                                                        {% endif %}
-                                                    </td>
-                                                {% endfor %}
+                                                <td>{{ data.nom_enfant }}</td>
+                                                <td>{{ data.prenom_enfant }}</td>
+                                                <td>{{ data.matricule }}</td>
+                                                <td>{{ data.inscriptions.first.classe.nom_classe }}</td>
+                                                <td>ht</td>
+                                                <td>ht</td>
 
 
-                                                <td>
-                                                    {% if data.trimestres_suivis|length == 3 %}
-                                                        <span class="badge badge-success">Suivi complet</span>
-                                                    {% else %}
-                                                        <span class="badge badge-warning">En cours</span>
-                                                    {% endif %}
-                                                </td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -155,7 +136,7 @@
 
 
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalInscriptionLabel">Suivi medical {{ annee_scolaire }}</h5>
+                        <h5 class="modal-title" id="modalInscriptionLabel">Consultaion {{ annee_scolaire }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -192,7 +173,7 @@
                                         {% if pensionnaire_data.pensionnaire.id == pensionnaire_selected.id %}
                                             {% for trimestre in pensionnaire_data.trimestres_non_suivis %}
                                                 <option value="{{ trimestre }}">
-                                                     Trimestre {{ trimestre }}
+                                                    Trimestre {{ trimestre }}
                                                 </option>
                                             {% endfor %}
                                         {% endif %}
