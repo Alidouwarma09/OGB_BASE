@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.db.models import Avg, Count, F
 
 from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe, Evaluation, \
-    SuiviMedicalTrimestriele
+    SuiviMedicalTrimestriele, ConsultationMedicale
 from django.contrib import messages
 
 
@@ -550,9 +550,19 @@ def consultation(request):
     inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
     pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_ids)
 
+    consultations = ConsultationMedicale.objects.filter(pensionnaire__in=pensionnaires)
+
+    # Ajouter les classes des pensionnaires pour les afficher dans le formulaire
+    for pensionnaire in pensionnaires:
+        inscription = Inscription.objects.filter(pensionnaire=pensionnaire).first()
+        if inscription:
+            pensionnaire.classe_nom_classe = inscription.classe.nom_classe
+        else:
+            pensionnaire.classe_nom_classe = "Non assignée"
 
     return render(request, 'consultation/index.html', {
         'pensionnaires': pensionnaires,
+        'consultations': consultations,
     })
 
 
@@ -560,13 +570,13 @@ def consultation(request):
 
 def create_new_consultation(request):
     if request.method == "POST":
-        trimestre = request.POST.get('trimestre', '').strip()
-        taille_cm = request.POST.get('taille_cm', '').strip()
-        poids_kg = request.POST.get('poids_kg', '').strip()
-        pensionnaire_id = request.POST.get('pensionnaires_choice_id', '').strip()
+        motif_consultation = request.POST.get('motif_consultation', '').strip()
+        diagnostic = request.POST.get('diagnostic', '').strip()
+        traitement = request.POST.get('traitement', '').strip()  # Vérifier que 'traitement' est correctement récupéré
+        pensionnaire_id = request.POST.get('pensionnaires_choicee_id', '').strip()
 
         try:
-            if not pensionnaire_id or not trimestre:
+            if not pensionnaire_id or not motif_consultation or not diagnostic or not traitement:
                 raise ValueError("Tous les champs sont obligatoires.")
 
             pensionnaire = Pensionnnaire.objects.get(id=pensionnaire_id)
@@ -579,15 +589,16 @@ def create_new_consultation(request):
             )
 
             with transaction.atomic():
-                SuiviMedicalTrimestriele.objects.create(
+                # Créer une nouvelle consultation médicale
+                ConsultationMedicale.objects.create(
                     pensionnaire=pensionnaire,
                     annee_scolaire=annee_scolaire,
-                    trimestre=trimestre,
-                    taille_cm=float(taille_cm),
-                    poids_kg=float(poids_kg),
+                    diagnostic=diagnostic,
+                    motif_consultation=motif_consultation,
+                    traitement=traitement,
                 )
-                messages.success(request, "Suivi médical enregistré avec succès.")
-                return redirect('Personnel:suivi_trimestrielle')
+                messages.success(request, "La consultation a été enregistrée avec succès.")
+                return redirect('Personnel:consultation')
 
         except ValueError as e:
             messages.error(request, f"Erreur : {e}")
@@ -596,4 +607,5 @@ def create_new_consultation(request):
         except Exception as e:
             messages.error(request, f"Une erreur inattendue s’est produite : {e}")
 
-        return redirect('Personnel:suivi_trimestrielle')
+        return redirect('Personnel:consultation')
+

@@ -261,8 +261,7 @@ class SuiviMedicalTrimestriele(models.Model):
         related_name='suivis_medicaux'
     )
     trimestre = models.PositiveSmallIntegerField()
-    annee_scolaire = models.CharField(max_length=9,
-                                      default=f"{date.today().year}-{date.today().year + 1}")
+    annee_scolaire = models.CharField(max_length=9, default=f"{date.today().year}-{date.today().year + 1}")
     taille_cm = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     poids_kg = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
@@ -289,10 +288,12 @@ class ConsultationMedicale(models.Model):
         on_delete=models.CASCADE,
         related_name='consultations_medicales'
     )
-    date_consultation = models.DateField()
+    date_consultation = models.DateField(auto_now_add=True)
     motif_consultation = models.TextField(blank=True, null=True)
     diagnostic = models.TextField(blank=True, null=True)
     traitement = models.TextField(blank=True, null=True)
+    annee_scolaire = models.CharField(max_length=9, default=f"{date.today().year}-{date.today().year + 1}")
+
 
     def __str__(self):
         return f"Consultation {self.date_consultation} - {self.pensionnaire.nom_enfant}"
