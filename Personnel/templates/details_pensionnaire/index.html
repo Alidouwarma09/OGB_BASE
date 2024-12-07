@@ -93,11 +93,11 @@
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <table id="example1" class="table table-bordered table-striped" style="display: none;">
+                        <table id="example1" class="table table-bordered table-striped" style="display: none">
                             <thead>
                             <tr>
                                 <th>N°</th>
-                                <th>Designation</th>
+                                <th>Désignation</th>
                                 <th>Valeur</th>
                             </tr>
                             </thead>
@@ -137,40 +137,68 @@
                                 <td>Religion</td>
                                 <td>{{ details_pensionnaires.religion_enfant }}</td>
                             </tr>
+                            <tr class="section-header">
+                                <td></td>
+                                <td>Informations du Père</td>
+                                <td></td>
+                            </tr>
+
                             <tr>
                                 <td>8</td>
-                                <td>Statut</td>
-                                <td>{{ details_pensionnaires.statue }}</td>
+                                <td>Nom</td>
+                                <td>{{ details_pensionnaires.pere.nom_pere }}</td>
                             </tr>
                             <tr>
                                 <td>9</td>
-                                <td>Scolarisation</td>
-                                <td>{{ details_pensionnaires.es_scolarise }}</td>
+                                <td>Prénom</td>
+                                <td>{{ details_pensionnaires.pere.prenom_pere }}</td>
                             </tr>
                             <tr>
                                 <td>10</td>
-                                <td>Antécédents médicaux</td>
-                                <td>{{ details_pensionnaires.a_antecdents }}</td>
+                                <td>Date de naissance</td>
+                                <td>{{ details_pensionnaires.pere.date_naissance_pere }}</td>
                             </tr>
                             <tr>
                                 <td>11</td>
-                                <td>Niveau d'étude antérieur</td>
-                                <td>{{ details_pensionnaires.niveau_etude_anterieur }}</td>
+                                <td>Profession</td>
+                                <td>{{ details_pensionnaires.pere.profession_pere }}</td>
                             </tr>
+                            <tr class="section-header">
+                                <td></td>
+                                <td>Informations du Père</td>
+                                <td></td>
+                            </tr>
+
                             <tr>
                                 <td>12</td>
-                                <td>Classe inscrite</td>
-                                <td>{{ details_pensionnaires.classe_inscrit }}</td>
+                                <td>Nom</td>
+                                <td>{{ details_pensionnaires.mere.nom }}</td>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td>Prénom</td>
+                                <td>{{ details_pensionnaires.mere.prenom }}</td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td>Date de naissance</td>
+                                <td>{{ details_pensionnaires.mere.date_naissance }}</td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td>Profession</td>
+                                <td>{{ details_pensionnaires.mere.profession }}</td>
                             </tr>
                             </tbody>
                         </table>
+
                         <div class="card">
-                            <div class="card-header p-2" id="example1" >
+                            <div class="card-header p-2" >
                                 <ul class="nav nav-pills">
                                     <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Informations</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#pere-info" data-toggle="tab">Pere </a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#newTab" data-toggle="tab">Mere</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Repondant</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#mere-info" data-toggle="tab">Mere</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#repondant-info" data-toggle="tab">Repondant</a></li>
                                     <li class="nav-item"><a class="nav-link"  data-toggle="tab"><div style="background-color: red" id="exportButtonContainer"></div></a></li>
                                 </ul>
                             </div><!-- /.card-header -->
@@ -275,102 +303,138 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="newTab">
+                                    <div class="tab-pane" id="mere-info">
                                         <div class="card-body box-profile">
                                             <h1 class="profile-username text-center animated fadeIn" style="border: solid 2px #e7a5a5; border-radius: 10px; font-weight: bold; font-family: 'Lucida Grande', Arial, sans-serif; padding: 10px; background-color: #f9f9f9;">
-                                                Le père de l'enfant
+                                                La mere de l'enfant
                                             </h1>
 
                                             <h3 class="profile-username text-center animated fadeInUp" style="font-size: 1.8rem; font-weight: bold; color: #007bff;">
-                                                {{ details_pensionnaires.pere.nom_pere }} {{ details_pensionnaires.pere.prenom_pere }}
+                                                {{ details_pensionnaires.mere.nom }} {{ details_pensionnaires.mere.prenom }}
                                             </h3>
 
                                             <p class="text-muted text-center animated fadeInUp" style="font-size: 1rem; color: #6c757d;">
-                                                Contact: +225 {{ details_pensionnaires.pere.contact_pere }}
+                                                Contact: +225 {{ details_pensionnaires.mere.contact }}
                                             </p>
 
                                             <ul class="list-group list-group-unbordered mb-3">
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Date de naissance</b>
-                                                    <a class="float-right">{{ details_pensionnaires.date_naissance_enfant }}</a>
+                                                    <a class="float-right">{{ details_pensionnaires.mere.date_naissance }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Lieu de naissance</b>
-                                                    <a class="float-right">{{ details_pensionnaires.lieu_naissance_enfant }}</a>
+                                                    <a class="float-right">{{ details_pensionnaires.mere.lieu_naissance }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Profession</b>
+                                                    <a class="float-right">{{ details_pensionnaires.mere.profession }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Ethnie</b>
+                                                    <a class="float-right">{{ details_pensionnaires.mere.ethnie }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Religion</b>
-                                                    <a class="float-right">{{ details_pensionnaires.religion_enfant }}</a>
+                                                    <a class="float-right">{{ details_pensionnaires.mere.religion }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
-                                                    <b>Nationalité</b>
-                                                    <a class="float-right">{{ details_pensionnaires.nationalite_enfant }}</a>
+                                                    <b>Nombre de persone en charge</b>
+                                                    <a class="float-right">{{ details_pensionnaires.mere.nombre_personne_charge }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
-                                                    <b>Statut</b>
-                                                    <a class="float-right">
-                                                        <button style="cursor: pointer" type="button" class="btn btn-block btn-success btn-sm">
-                                                            {{ details_pensionnaires.statue }}
-                                                        </button>
-                                                    </a>
+                                                    <b>Adresse</b>
+                                                    <a class="float-right">{{ details_pensionnaires.mere.adresse }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Situation matrimoniale</b>
+                                                    <a class="float-right">{% if details_pensionnaires.mere.en_couple %} En couple{% else %} celibataire{% endif %} </a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Situation de vie</b>
+                                                    <a class="float-right">{% if details_pensionnaires.mere.en_vie %} En vie{% else %} Decede{% endif %} </a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="timeline">
+                                    <div class="tab-pane" id="repondant-info">
                                         <div class="card-body box-profile">
                                             <h1 class="profile-username text-center animated fadeIn" style="border: solid 2px #e7a5a5; border-radius: 10px; font-weight: bold; font-family: 'Lucida Grande', Arial, sans-serif; padding: 10px; background-color: #f9f9f9;">
-                                                Le père de l'enfant
+                                                Le repondant de l'enfant
                                             </h1>
 
                                             <h3 class="profile-username text-center animated fadeInUp" style="font-size: 1.8rem; font-weight: bold; color: #007bff;">
-                                                {{ details_pensionnaires.pere.nom_pere }} {{ details_pensionnaires.pere.prenom_pere }}
+                                                {{ details_pensionnaires.repondant.nom }} {{ details_pensionnaires.repondant.prenom }}
                                             </h3>
 
                                             <p class="text-muted text-center animated fadeInUp" style="font-size: 1rem; color: #6c757d;">
-                                                Contact: +225 {{ details_pensionnaires.pere.contact_pere }}
+                                                Contact: +225 {{ details_pensionnaires.repondant.contact }}
                                             </p>
 
                                             <ul class="list-group list-group-unbordered mb-3">
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Date de naissance</b>
-                                                    <a class="float-right">{{ details_pensionnaires.date_naissance_enfant }}</a>
+                                                    <a class="float-right">{{ details_pensionnaires.repondant.date_naissance }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Lieu de naissance</b>
-                                                    <a class="float-right">{{ details_pensionnaires.lieu_naissance_enfant }}</a>
+                                                    <a class="float-right">{{ details_pensionnaires.repondant.lieu_naissance }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Profession</b>
+                                                    <a class="float-right">{{ details_pensionnaires.repondant.profession }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Ethnie</b>
+                                                    <a class="float-right">{{ details_pensionnaires.repondant.ethnie }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Religion</b>
-                                                    <a class="float-right">{{ details_pensionnaires.religion_enfant }}</a>
+                                                    <a class="float-right">{{ details_pensionnaires.repondant.religion }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
-                                                    <b>Nationalité</b>
-                                                    <a class="float-right">{{ details_pensionnaires.nationalite_enfant }}</a>
+                                                    <b>Nombre de persone en charge</b>
+                                                    <a class="float-right">{{ details_pensionnaires.repondant.nombre_personne_charge }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
-                                                    <b>Statut</b>
-                                                    <a class="float-right">
-                                                        <button style="cursor: pointer" type="button" class="btn btn-block btn-success btn-sm">
-                                                            {{ details_pensionnaires.statue }}
-                                                        </button>
-                                                    </a>
+                                                    <b>Adresse</b>
+                                                    <a class="float-right">{{ details_pensionnaires.repondant.adresse }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Situation matrimoniale</b>
+                                                    <a class="float-right">{% if details_pensionnaires.repondant.en_couple %} En couple{% else %} celibataire{% endif %} </a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Situation de vie</b>
+                                                    <a class="float-right">{% if details_pensionnaires.repondant.en_vie %} En vie{% else %} Decede{% endif %} </a>
                                                 </li>
                                             </ul>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div><!-- /.container-fluid -->
+            </div>
         </section>
     </div>
-    <!-- CSS pour les animations -->
     <style>
-        /* Animations de base */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table .section-header {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
         @keyframes fadeInUp {
             0% {
                 opacity: 0;
@@ -450,8 +514,9 @@ z        .btn-success {
             "buttons": [
                 {
                     extend: "pdf",
-                    text: "Exporter les informations du pensionnaire en PDF",
+                    text: "Exporter en PDF",
                     customize: function (doc) {
+                        // Personnalisation du PDF
                         doc.content.splice(0, 1);
                         doc.content.unshift({
                             text: 'Détails du Pensionnaire',
@@ -465,6 +530,7 @@ z        .btn-success {
                 }
             ]
         });
+
         table.buttons().container().appendTo('#exportButtonContainer');
     });
 </script>

@@ -48,7 +48,6 @@ class MyUserManager(BaseUserManager):
 
 
 class Utilisateur(AbstractBaseUser):
-    # mon_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     ROLES_CHOICES = [
         ('ADMIN', 'Administrateur'),
         ('GESTIONNAIRE', 'Gestionnaire'),
