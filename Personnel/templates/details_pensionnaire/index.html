@@ -168,9 +168,9 @@
                             <div class="card-header p-2" id="example1" >
                                 <ul class="nav nav-pills">
                                     <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Informations</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Repondant</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#pere-info" data-toggle="tab">Pere </a></li>
                                     <li class="nav-item"><a class="nav-link" href="#newTab" data-toggle="tab">Mere</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Repondant</a></li>
                                     <li class="nav-item"><a class="nav-link"  data-toggle="tab"><div style="background-color: red" id="exportButtonContainer"></div></a></li>
                                 </ul>
                             </div><!-- /.card-header -->
@@ -187,7 +187,18 @@
                                                     <span class="time"><i class="far fa-clock"></i> 10:00</span>
                                                     <h3 class="timeline-header"><a href="#">Entrée à l'orphelinat</a></h3>
                                                     <div class="timeline-body">
-                                                        Le pensionnaire a été admis à l'orphelinat après avoir été trouvé dans une situation précaire.
+                                                        Le pensionnaire a été admis à l'orphelinat
+                                                        {% if details_pensionnaires.motif_deplacement_enfant == 'Trouble du comportement' %}
+                                                            <strong>en raison de troubles du comportement.</strong>
+                                                        {% elif details_pensionnaires.motif_deplacement_enfant == 'Situation familiale précaire' %}
+                                                            <strong>après avoir vécu dans une situation familiale précaire.</strong>
+                                                        {% elif details_pensionnaires.motif_deplacement_enfant == 'Echec scolaire' %}
+                                                            <strong>suite à un échec scolaire.</strong>
+                                                        {% elif details_pensionnaires.motif_deplacement_enfant %}
+                                                            <strong>pour la raison suivante : {{ details_pensionnaires.motif_deplacement_enfant }}.</strong>
+                                                        {% else %}
+                                                            <strong>pour {{ details_pensionnaires.motif_deplacement_enfant }}</strong>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -210,141 +221,205 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="timeline">
-                                        <div class="timeline timeline-inverse">
-                                            <div class="time-label">
-                        <span class="bg-danger">
-                          10 Feb. 2014
-                        </span>
-                                            </div>
-                                            <!-- /.timeline-label -->
-                                            <!-- timeline item -->
-                                            <div>
-                                                <i class="fas fa-envelope bg-primary"></i>
-
-                                                <div class="timeline-item">
-                                                    <span class="time"><i class="far fa-clock"></i> 12:05</span>
-
-                                                    <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                                                    <div class="timeline-body">
-                                                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                                                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                                                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                                                        quora plaxo ideeli hulu weebly balihoo...
-                                                    </div>
-                                                    <div class="timeline-footer">
-                                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
-                                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <i class="fas fa-user bg-info"></i>
-
-                                                <div class="timeline-item">
-                                                    <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
-
-                                                    <h3 class="timeline-header border-0"><a href="#">Sarah Young</a> accepted your friend request
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <i class="fas fa-comments bg-warning"></i>
-
-                                                <div class="timeline-item">
-                                                    <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
-
-                                                    <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                                                    <div class="timeline-body">
-                                                        Take me to your leader!
-                                                    </div>
-                                                    <div class="timeline-footer">
-                                                        <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="time-label">
-                        <span class="bg-success">
-                          3 Jan. 2014
-                        </span>
-                                            </div>
-                                            <div>
-                                                <i class="fas fa-camera bg-purple"></i>
-
-                                                <div class="timeline-item">
-                                                    <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
-
-                                                    <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                                                    <div class="timeline-body">
-                                                        <img src="https://placehold.it/150x100" alt="...">
-                                                        <img src="https://placehold.it/150x100" alt="...">
-                                                        <img src="https://placehold.it/150x100" alt="...">
-                                                        <img src="https://placehold.it/150x100" alt="...">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <i class="far fa-clock bg-gray"></i>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="tab-pane" id="pere-info">
                                         <div class="card-body box-profile">
+                                            <h1 class="profile-username text-center animated fadeIn" style="border: solid 2px #e7a5a5; border-radius: 10px; font-weight: bold; font-family: 'Lucida Grande', Arial, sans-serif; padding: 10px; background-color: #f9f9f9;">
+                                                Le père de l'enfant
+                                            </h1>
 
-                                            <h1 class="profile-username text-center" style="border: solid 2px #e7a5a5; border-radius: 10px; font-weight: bold; font-family: 'Lucida Grande', Arial, sans-serif">Le pere de l'enfant</h1>
-                                            <h3 class="profile-username text-center">{{ details_pensionnaires.pere.nom_pere }} {{ details_pensionnaires.pere.prenom_pere }}</h3>
+                                            <h3 class="profile-username text-center animated fadeInUp" style="font-size: 1.8rem; font-weight: bold; color: #007bff;">
+                                                {{ details_pensionnaires.pere.nom_pere }} {{ details_pensionnaires.pere.prenom_pere }}
+                                            </h3>
 
-                                            <p class="text-muted text-center">Contact: +225 {{ details_pensionnaires.pere.contact_pere }}</p>
+                                            <p class="text-muted text-center animated fadeInUp" style="font-size: 1rem; color: #6c757d;">
+                                                Contact: +225 {{ details_pensionnaires.pere.contact_pere }}
+                                            </p>
 
                                             <ul class="list-group list-group-unbordered mb-3">
-                                                <li class="list-group-item">
-                                                    <b>Date de naissance</b> <a class="float-right">{{ details_pensionnaires.date_naissance_enfant }}</a>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Date de naissance</b>
+                                                    <a class="float-right">{{ details_pensionnaires.pere.date_naissance_pere }}</a>
                                                 </li>
-                                                <li class="list-group-item">
-                                                    <b>Lieu de naissance</b> <a class="float-right">{{ details_pensionnaires.lieu_naissance_enfant }}</a>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Lieu de naissance</b>
+                                                    <a class="float-right">{{ details_pensionnaires.pere.lieu_naissance_pere }}</a>
                                                 </li>
-                                                <li class="list-group-item">
-                                                    <b>Réligion</b> <a class="float-right">{{ details_pensionnaires.religion_enfant }}</a>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Profession</b>
+                                                    <a class="float-right">{{ details_pensionnaires.pere.profession_pere }}</a>
                                                 </li>
-                                                <li class="list-group-item">
-                                                    <b>Nationalité</b> <a class="float-right">{{ details_pensionnaires.nationalite_enfant }}</a>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Ethnie</b>
+                                                    <a class="float-right">{{ details_pensionnaires.pere.ethnie_pere }}</a>
                                                 </li>
-                                                <li class="list-group-item">
-                                                    <b>Statut</b> <a class="float-right"> <button style="cursor: none" type="button" class="btn btn-block btn-success btn-sm">{{ details_pensionnaires.statue }}</button></a>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Religion</b>
+                                                    <a class="float-right">{{ details_pensionnaires.pere.religion_pere }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Nombre de persone en charge</b>
+                                                    <a class="float-right">{{ details_pensionnaires.pere.nombre_personne_charge_pere }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Adresse</b>
+                                                    <a class="float-right">{{ details_pensionnaires.pere.adresse_pere }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Situation matrimoniale</b>
+                                                    <a class="float-right">{% if details_pensionnaires.pere.en_couple_pere %} En couple{% else %} celibataire{% endif %} </a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Situation de vie</b>
+                                                    <a class="float-right">{% if details_pensionnaires.pere.en_vie_pere %} En vie{% else %} Decede{% endif %} </a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="newTab">
-                                        <h3>Nouveau Contenu</h3>
-                                        <p>Voici le contenu de votre quatrième onglet.</p>
-                                        <form class="form-horizontal">
-                                            <div class="form-group row">
-                                                <label for="newInput" class="col-sm-2 col-form-label">Champ Nouveau</label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="newInput" placeholder="Entrez quelque chose">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="offset-sm-2 col-sm-10">
-                                                    <button type="submit" class="btn btn-primary">Soumettre</button>
-                                                </div>
-                                            </div>
-                                        </form>
+                                        <div class="card-body box-profile">
+                                            <h1 class="profile-username text-center animated fadeIn" style="border: solid 2px #e7a5a5; border-radius: 10px; font-weight: bold; font-family: 'Lucida Grande', Arial, sans-serif; padding: 10px; background-color: #f9f9f9;">
+                                                Le père de l'enfant
+                                            </h1>
+
+                                            <h3 class="profile-username text-center animated fadeInUp" style="font-size: 1.8rem; font-weight: bold; color: #007bff;">
+                                                {{ details_pensionnaires.pere.nom_pere }} {{ details_pensionnaires.pere.prenom_pere }}
+                                            </h3>
+
+                                            <p class="text-muted text-center animated fadeInUp" style="font-size: 1rem; color: #6c757d;">
+                                                Contact: +225 {{ details_pensionnaires.pere.contact_pere }}
+                                            </p>
+
+                                            <ul class="list-group list-group-unbordered mb-3">
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Date de naissance</b>
+                                                    <a class="float-right">{{ details_pensionnaires.date_naissance_enfant }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Lieu de naissance</b>
+                                                    <a class="float-right">{{ details_pensionnaires.lieu_naissance_enfant }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Religion</b>
+                                                    <a class="float-right">{{ details_pensionnaires.religion_enfant }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Nationalité</b>
+                                                    <a class="float-right">{{ details_pensionnaires.nationalite_enfant }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Statut</b>
+                                                    <a class="float-right">
+                                                        <button style="cursor: pointer" type="button" class="btn btn-block btn-success btn-sm">
+                                                            {{ details_pensionnaires.statue }}
+                                                        </button>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="timeline">
+                                        <div class="card-body box-profile">
+                                            <h1 class="profile-username text-center animated fadeIn" style="border: solid 2px #e7a5a5; border-radius: 10px; font-weight: bold; font-family: 'Lucida Grande', Arial, sans-serif; padding: 10px; background-color: #f9f9f9;">
+                                                Le père de l'enfant
+                                            </h1>
+
+                                            <h3 class="profile-username text-center animated fadeInUp" style="font-size: 1.8rem; font-weight: bold; color: #007bff;">
+                                                {{ details_pensionnaires.pere.nom_pere }} {{ details_pensionnaires.pere.prenom_pere }}
+                                            </h3>
+
+                                            <p class="text-muted text-center animated fadeInUp" style="font-size: 1rem; color: #6c757d;">
+                                                Contact: +225 {{ details_pensionnaires.pere.contact_pere }}
+                                            </p>
+
+                                            <ul class="list-group list-group-unbordered mb-3">
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Date de naissance</b>
+                                                    <a class="float-right">{{ details_pensionnaires.date_naissance_enfant }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Lieu de naissance</b>
+                                                    <a class="float-right">{{ details_pensionnaires.lieu_naissance_enfant }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Religion</b>
+                                                    <a class="float-right">{{ details_pensionnaires.religion_enfant }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Nationalité</b>
+                                                    <a class="float-right">{{ details_pensionnaires.nationalite_enfant }}</a>
+                                                </li>
+                                                <li class="list-group-item animated fadeInUp">
+                                                    <b>Statut</b>
+                                                    <a class="float-right">
+                                                        <button style="cursor: pointer" type="button" class="btn btn-block btn-success btn-sm">
+                                                            {{ details_pensionnaires.statue }}
+                                                        </button>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
                                     </div>
                                 </div>
-                            </div><!-- /.card-body -->
+                            </div>
                         </div>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
         </section>
     </div>
-    <aside class="control-sidebar control-sidebar-dark">
-    </aside>
+    <!-- CSS pour les animations -->
+    <style>
+        /* Animations de base */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fadeInUp {
+            animation: fadeInUp 0.5s ease-in-out;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .list-group-item:hover {
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-username {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+z        .btn-success {
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .list-group-item {
+            padding: 15px;
+            font-size: 1rem;
+            color: #333;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .list-group-item:hover {
+            background-color: #f1f1f1;
+            transform: translateX(10px);
+        }
+    </style>
 </div>
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>

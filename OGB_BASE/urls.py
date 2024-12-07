@@ -21,7 +21,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('Personnel/', include('Personnel.urls'), name='Personnel'),
-    path('', include('Utilisateur.urls'), name='Utilisateur'),
-    path('Model/', include('Model.urls'), name='Model')
+    path('', include('Personnel.urls'), name='Personnel'),
+    path('Utilisateur/', include('Utilisateur.urls'), name='Utilisateur'),
+    path('Model/', include('Model.urls'), name='Model'),
+    path('', include('pwa.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

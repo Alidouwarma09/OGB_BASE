@@ -1,5 +1,6 @@
 from datetime import datetime, date
 
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction, IntegrityError
 from django.db.models import Count
@@ -12,6 +13,7 @@ from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, C
 from django.contrib import messages
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def acceuil(request):
     return render(request, 'accueil/index.html')
 
@@ -62,7 +64,6 @@ def enregistrer_pensionnaire_et_pere(request):
         date_naissance_pere = request.POST.get('date_naissance_pere', '').strip()
         lieu_naissance_pere = request.POST.get('lieu_naissance_pere', '').strip()
         ethnie_pere = request.POST.get('ethnie_pere', '').strip()
-
 
         religion_pere = request.POST.get('religion_pere', '').strip()
         autre_religion_pere = request.POST.get('autre_religion_pere', '').strip()
@@ -403,6 +404,8 @@ def evaluate_pensionnaire(request, pensionnaire_id):
         evaluation.moyenne = request.POST.get('moyenne')
         evaluation.save()
         return JsonResponse({'success': True, 'message': "Évaluation enregistrée avec succès."})
+
+
 def resultats_scolaire(request):
     annee_scolaire = request.GET.get('annee_scolaire', f"{date.today().year}-{date.today().year + 1}")
     selected_class = request.GET.get('classe', None)
@@ -443,13 +446,16 @@ def resultats_scolaire(request):
     }
 
     return render(request, 'resultats/index.html', context)
+
+
 def suivi_trimestrielle(request):
     current_date = date.today()
     if current_date.month >= 9:
         annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
     else:
         annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
-    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
+    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id',
+                                                                                                 flat=True)
     pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_ids)
 
     # Ajouter les suivis médicaux pour chaque pensionnaire
@@ -517,16 +523,14 @@ def create_new_suivi(request):
         return redirect('Personnel:suivi_trimestrielle')
 
 
-
-
-
 def consultation(request):
     current_date = date.today()
     if current_date.month >= 9:
         annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
     else:
         annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
-    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
+    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id',
+                                                                                                 flat=True)
     pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_ids)
     consultations = ConsultationMedicale.objects.filter(pensionnaire__in=pensionnaires)
     for pensionnaire in pensionnaires:
@@ -579,4 +583,3 @@ def create_new_consultation(request):
         except Exception as e:
             messages.error(request, f"Une erreur inattendue s’est produite : {e}")
         return redirect('Personnel:consultation')
-

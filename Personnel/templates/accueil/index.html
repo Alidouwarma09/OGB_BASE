@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load pwa %}
+{% progressive_web_app_meta %}
 
 {% block content %}
     <body class="  layout-fixed layout-navbar-fixed   hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse {% if request.user.dark_mode %}dark-mode{% endif %}">

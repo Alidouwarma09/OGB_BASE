@@ -5,7 +5,7 @@ from .views import details_pensionnaire, suivi_trimestrielle, create_new_suivi, 
 
 app_name = 'Personnel'
 urlpatterns = [
-    path('acceuil/', views.acceuil, name='acceuil'),
+    path('', views.acceuil, name='acceuil'),
     path('enregistrer_pensionnaire/', views.enregistrer_pensionnaire, name='enregistrer_pensionnaire'),
     path('espace_scolaire/', views.espace_scolaire, name='espace_scolaire'),
     path('suivi_trimestrielle/', suivi_trimestrielle, name='suivi_trimestrielle'),

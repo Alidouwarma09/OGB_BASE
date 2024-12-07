@@ -6,6 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>OGB</title>
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+
+    <meta name="theme-color" content="#007bff">
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
@@ -74,6 +77,13 @@
 
 
 
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register("{% static 'sw.js' %}")
+            .then(() => console.log("Service Worker enregistré !"))
+            .catch(err => console.error("Erreur lors de l'enregistrement du Service Worker : ", err));
+    }
+</script>
 
 
 

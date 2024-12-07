@@ -1,6 +1,4 @@
-# Utilisateur/urls.py
 from django.urls import path
-from . import views  # Assurez-vous que le fichier views.py existe et contient les vues nécessaires
 from .views import Connexion, Deconnexion, toggle_dark_mode
 
 app_name = 'Utilisateur'

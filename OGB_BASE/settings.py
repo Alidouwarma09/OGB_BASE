@@ -15,7 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static', 'js', 'serviceworker.js')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Personnel',
     'Model',
     'Utilisateur',
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -74,7 +75,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'OGB_BASE.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -112,6 +112,23 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
+PWA_APP_NAME = 'OGB APP'
+PWA_APP_DESCRIPTION = 'Une application progressive pour OGB'
+PWA_APP_THEME_COLOR = '#007bff'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_START_URL = '/Personnel/acceuil/'
+PWA_APP_ICONS = [
+    {
+        'src': '/static/icons/icon-192x192.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': '/static/icons/icon-512x512.png',
+        'sizes': '512x512'
+    }
+]
 
 
 LANGUAGE_CODE = 'fr-FR'
