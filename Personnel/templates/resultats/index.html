@@ -42,7 +42,7 @@
                             <div class="info-box-content">
                                 <span class="info-box-text">Total  </span>
                                 <span class="info-box-number">
-                                    11
+                                    {{ nombre_eleve }}
                                 </span>
                             </div>
                         </div>
@@ -520,7 +520,7 @@
         var table = $('#resultsTable').DataTable({
             dom: 'Bfrtip',
             buttons: [
-                'copy', 'csv', 'excel', {
+                'excel', {
                     extend: 'pdfHtml5',
                     orientation: 'landscape',
                     title: 'Résultats Scolaires',

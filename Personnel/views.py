@@ -116,38 +116,42 @@ def enregistrer_pensionnaire_et_pere(request):
         try:
             date_naissance_enfant = datetime.strptime(date_naissance_enfant, '%Y-%m-%d').date()
             with transaction.atomic():
-                mere = Mere_enfant.objects.create(
-                    prenom=prenom_mere,
-                    nom=nom_mere,
-                    date_naissance=date_naissance_mere,
-                    lieu_naissance=lieu_naissance_mere,
-                    ethnie=ethnie_mere,
-                    religion=religion_mere,
-                    nombre_personne_charge=nombre_personne_charge_mere,
-                    contact=contact_mere,
-                    adresse=adresse_mere,
-                    profession=profession_mere,
-                    en_couple=en_couple_mere,
-                    en_vie=en_vie_mere,
-                )
-                pere = Pere_enfant.objects.create(
-                    nom_pere=nom_pere,
-                    prenom_pere=prenom_pere,
-                    date_naissance_pere=date_naissance_pere,
-                    lieu_naissance_pere=lieu_naissance_pere,
-                    ethnie_pere=ethnie_pere,
-                    religion_pere=religion_pere,
-                    nombre_personne_charge_pere=nombre_personne_charge_pere,
-                    contact_pere=contact_pere,
-                    adresse_pere=adresse_pere,
-                    profession_pere=profession_pere,
-                    en_couple_pere=en_couple_pere,
-                    en_vie_pere=en_vie_pere,
-                )
+                mere = None
+                pere = None
+                if nom_mere:
+                    mere = Mere_enfant.objects.create(
+                        prenom=prenom_mere,
+                        nom=nom_mere,
+                        date_naissance=date_naissance_mere,
+                        lieu_naissance=lieu_naissance_mere,
+                        ethnie=ethnie_mere,
+                        religion=religion_mere,
+                        nombre_personne_charge=nombre_personne_charge_mere,
+                        contact=contact_mere,
+                        adresse=adresse_mere,
+                        profession=profession_mere,
+                        en_couple=en_couple_mere,
+                        en_vie=en_vie_mere,
+                    )
+                    if pere:
+                        pere = Pere_enfant.objects.create(
+                            nom_pere=nom_pere,
+                            prenom_pere=prenom_pere,
+                            date_naissance_pere=date_naissance_pere,
+                            lieu_naissance_pere=lieu_naissance_pere,
+                            ethnie_pere=ethnie_pere,
+                            religion_pere=religion_pere,
+                            nombre_personne_charge_pere=nombre_personne_charge_pere,
+                            contact_pere=contact_pere,
+                            adresse_pere=adresse_pere,
+                            profession_pere=profession_pere,
+                            en_couple_pere=en_couple_pere,
+                            en_vie_pere=en_vie_pere,
+                        )
 
                 Pensionnnaire.objects.create(
-                    pere=pere,
-                    mere=mere,
+                    pere=pere if pere else None,
+                    mere=mere if mere else None,
                     nom_enfant=nom_enfant,
                     prenom_enfant=prenom_enfant,
                     date_ouverture_dossier=date_ouverture_dossier,
@@ -232,19 +236,27 @@ def espace_scolaire(request):
         annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
     classes_college = ['6e', '5e', '4e', '3e', '2nd', '1ere', 'Tle']
 
-    nombre_eleve_college = Classe.objects.filter(
-        nom_classe__in=classes_college, annee_scolaire=annee_scolaire
+    nombre_eleve_college = Inscription.objects.filter(
+        classe__nom_classe__in=classes_college, classe__annee_scolaire=annee_scolaire
     ).count()
-    nombre_eleve_cp1 = Classe.objects.filter(nom_classe='CP1', annee_scolaire=annee_scolaire).count()
-    nombre_eleve_cp2 = Classe.objects.filter(nom_classe='CP2', annee_scolaire=annee_scolaire).count()
-    nombre_eleve_ce1 = Classe.objects.filter(nom_classe='CE1', annee_scolaire=annee_scolaire).count()
-    nombre_eleve_ce2 = Classe.objects.filter(nom_classe='CE2', annee_scolaire=annee_scolaire).count()
-    nombre_eleve_cm1 = Classe.objects.filter(nom_classe='CM1', annee_scolaire=annee_scolaire).count()
-    nombre_eleve_cm2 = Classe.objects.filter(nom_classe='CM2', annee_scolaire=annee_scolaire).count()
-    nombre_eleve = Classe.objects.filter(annee_scolaire=annee_scolaire).count()
 
     inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id',
                                                                                                  flat=True)
+    nombre_eleve = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).count()
+
+    nombre_eleve_cp1 = Inscription.objects.filter(classe__nom_classe='CP1',
+                                                  classe__annee_scolaire=annee_scolaire).count()
+    nombre_eleve_cp2 = Inscription.objects.filter(classe__nom_classe='CP2',
+                                                  classe__annee_scolaire=annee_scolaire).count()
+    nombre_eleve_ce1 = Inscription.objects.filter(classe__nom_classe='CE1',
+                                                  classe__annee_scolaire=annee_scolaire).count()
+    nombre_eleve_ce2 = Inscription.objects.filter(classe__nom_classe='CE2',
+                                                  classe__annee_scolaire=annee_scolaire).count()
+    nombre_eleve_cm1 = Inscription.objects.filter(classe__nom_classe='CM1',
+                                                  classe__annee_scolaire=annee_scolaire).count()
+    nombre_eleve_cm2 = Inscription.objects.filter(classe__nom_classe='CM2',
+                                                  classe__annee_scolaire=annee_scolaire).count()
+
     pensionnaires = Pensionnnaire.objects.exclude(id__in=inscrits_ids)
 
     return render(request, 'espace_scolaire/index.html', {
@@ -309,7 +321,8 @@ def rechercher_pensionnaires(request):
     else:
         annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
 
-    inscrits_ids = Classe.objects.filter(annee_scolaire=annee_scolaire).values_list('pensionnaire_id', flat=True)
+    inscrits_ids = Inscription.objects.filter(classe__annee_scolaire=annee_scolaire).values_list('pensionnaire_id',
+                                                                                                 flat=True)
     query = request.GET.get('q', '')
 
     pensionnaires = Pensionnnaire.objects.exclude(id__in=inscrits_ids)
@@ -415,6 +428,7 @@ def resultats_scolaire(request):
         classes = Classe.objects.filter(annee_scolaire=annee_scolaire)
 
     inscriptions = Inscription.objects.filter(classe__in=classes)
+    nombre_eleve = inscriptions.count()
 
     resultats = Evaluation.objects.filter(inscription__in=inscriptions).values(
         'inscription__pensionnaire__nom_enfant',
@@ -443,6 +457,7 @@ def resultats_scolaire(request):
         'taux_reussite_global': taux_reussite_global,
         'taux_echec': taux_echec,
         'moyenne_classe': moyenne_classe,
+        'nombre_eleve': nombre_eleve,
     }
 
     return render(request, 'resultats/index.html', context)
@@ -458,7 +473,6 @@ def suivi_trimestrielle(request):
                                                                                                  flat=True)
     pensionnaires = Pensionnnaire.objects.filter(id__in=inscrits_ids)
 
-    # Ajouter les suivis médicaux pour chaque pensionnaire
     pensionnaires_data = []
     for pensionnaire in pensionnaires:
         suivis = SuiviMedicalTrimestriele.objects.filter(pensionnaire=pensionnaire, annee_scolaire=annee_scolaire)

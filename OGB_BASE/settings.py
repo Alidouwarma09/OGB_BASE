@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static', 'js', 'serviceworker.js')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -112,24 +111,27 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
-PWA_APP_NAME = 'OGB APP'
-PWA_APP_DESCRIPTION = 'Une application progressive pour OGB'
-PWA_APP_THEME_COLOR = '#007bff'
-PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_NAME = "My PWA App"
+PWA_APP_DESCRIPTION = "A fantastic Progressive Web App"
+PWA_APP_THEME_COLOR = "#007bff"
+PWA_APP_BACKGROUND_COLOR = "#ffffff"
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
-PWA_APP_START_URL = '/Personnel/acceuil/'
+PWA_APP_ORIENTATION = 'portrait'
+PWA_APP_START_URL = '/'
 PWA_APP_ICONS = [
     {
-        'src': '/static/icons/icon-192x192.png',
-        'sizes': '192x192'
-    },
-    {
-        'src': '/static/icons/icon-512x512.png',
-        'sizes': '512x512'
+        'src': '/static/images/icon.png',
+        'sizes': '160x160'
     }
 ]
-
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': '/static/images/apple-icon.png',
+        'sizes': '160x160'
+    }
+]
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
 
 LANGUAGE_CODE = 'fr-FR'
 
@@ -149,7 +151,7 @@ STATICFILES_DIRS = [
 ]
 AUTH_USER_MODEL = 'Model.Utilisateur'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -1,13 +1,12 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
-from datetime import date  # Ajoute cette ligne en haut du fichier
+from datetime import date
 
 from django.db.models import UniqueConstraint
 
 from decimal import Decimal
 
 
-# Create your models here.
 class MyUserManager(BaseUserManager):
     def create_user(self, username, password=None):
         if not username:
@@ -55,11 +54,6 @@ class Utilisateur(AbstractBaseUser):
     ]
     date_mise_a_jour = models.DateTimeField(verbose_name="Date de mise a jour", auto_now=True)
     username = models.CharField(
-        unique=True,
-        max_length=255,
-        blank=False
-    )
-    email = models.EmailField(
         unique=True,
         max_length=255,
         blank=False

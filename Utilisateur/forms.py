@@ -20,7 +20,6 @@ class ConnexionForm(AuthenticationForm):
         })
 
 
-
 class UserRegistrationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(UserRegistrationForm, self).__init__(*args, **kwargs)
@@ -30,20 +29,15 @@ class UserRegistrationForm(UserCreationForm):
             'required': 'Ce champ est obligatoire.'
         }
 
-        self.fields['email'].error_messages = {
-            'unique': 'Cet email existe déjà.',
-            'required': 'Ce champ est obligatoire.'
-        }
-
     class Meta:
         model = Utilisateur
-        fields = 'username', 'email', 'nom', 'prenom'
+        fields = 'username', 'nom', 'prenom'
 
 
 class UserRegistrationForme(UserCreationForm):
     class Meta:
         model = Utilisateur
-        fields = 'username', 'email', 'nom', 'prenom', 'roles'
+        fields = 'username', 'nom', 'prenom', 'roles'
 
     def __init__(self, *args, **kwargs):
         super(UserRegistrationForme, self).__init__(*args, **kwargs)
@@ -53,13 +47,8 @@ class UserRegistrationForme(UserCreationForm):
             'required': 'Ce champ est obligatoire.'
         }
 
-        self.fields['email'].error_messages = {
-            'unique': 'Cet email existe déjà.',
-            'required': 'Ce champ est obligatoire.'
-        }
-
 
 class UserRegistrationFormee(UserChangeForm):
     class Meta:
         model = Utilisateur
-        fields = 'email', 'nom', 'prenom'
+        fields = 'nom', 'prenom'
