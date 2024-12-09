@@ -6,8 +6,8 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ValidationError
@@ -113,3 +113,82 @@ def add_user(request):
         except Exception as e:
             messages.error(request, f"Une erreur inattendue s’est produite : {e}")
             return redirect('Utilisateur:gestion_utilisateur')
+
+
+@csrf_exempt
+def bloque_user(request, user_id):
+    if request.method == 'POST':
+
+        try:
+            utilisateur = get_object_or_404(Utilisateur, id=user_id)
+            utilisateur.is_active = False
+            utilisateur.save()
+            return JsonResponse({
+                'success': True,
+                'message': f"L'utilisateur {utilisateur.nom} a été bloqué."
+            })
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    return JsonResponse({'success': False, 'message': 'Méthode non autorisée'}, status=403)
+
+
+@csrf_exempt
+def debloque_user(request, user_id):
+    if request.method == 'POST':
+        try:
+            utilisateur = get_object_or_404(Utilisateur, id=user_id)
+            utilisateur.is_active = True
+            utilisateur.save()
+            return JsonResponse({
+                'success': True,
+                'message': f"L'utilisateur {utilisateur.nom} a été débloqué."
+            })
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    return JsonResponse({'success': False, 'message': 'Méthode non autorisée'}, status=403)
+
+
+@csrf_exempt
+def delete_user(request, user_id):
+    if request.method == 'POST':
+        try:
+            utilisateur = get_object_or_404(Utilisateur, id=user_id)
+            utilisateur.delete()
+            return JsonResponse({
+                'success': True,
+                'message': f"L'utilisateur {utilisateur.nom} a été débloqué."
+            })
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    return JsonResponse({'success': False, 'message': 'Méthode non autorisée'}, status=403)
+
+@csrf_exempt
+def edit_user(request, user_id):
+    utilisateur = get_object_or_404(Utilisateur, id=user_id)
+
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        nom = request.POST.get('nom', '').strip()
+        prenom = request.POST.get('prenom', '').strip()
+        roles = request.POST.get('roles', '').strip()
+        password = request.POST.get('password', '').strip()
+        password_confirmation = request.POST.get('password_confirmation', '').strip()
+
+        # Mise à jour des autres informations
+        utilisateur.username = username
+        utilisateur.nom = nom
+        utilisateur.prenom = prenom
+        utilisateur.roles = roles
+
+        # Si un mot de passe est soumis et que la confirmation est valide
+        if password:
+            if password == password_confirmation:
+                utilisateur.set_password(password)  # Utiliser set_password pour hasher le mot de passe
+            else:
+                return HttpResponse("Les mots de passe ne correspondent pas", status=400)
+
+        utilisateur.save()
+
+        return redirect('Utilisateur:gestion_utilisateur')
+
+    return HttpResponse("Méthode non autorisée", status=405)

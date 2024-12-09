@@ -47,11 +47,6 @@ class MyUserManager(BaseUserManager):
 
 
 class Utilisateur(AbstractBaseUser):
-    ROLES_CHOICES = [
-        ('ADMIN', 'Administrateur'),
-        ('GESTIONNAIRE', 'Gestionnaire'),
-        ('UTILISATEUR', 'Utilisateur'),
-    ]
     date_mise_a_jour = models.DateTimeField(verbose_name="Date de mise a jour", auto_now=True)
     username = models.CharField(
         unique=True,
@@ -61,10 +56,10 @@ class Utilisateur(AbstractBaseUser):
     nom = models.CharField(max_length=250, verbose_name='nom')
     prenom = models.CharField(max_length=250)
     is_active = models.BooleanField(default=True)
-    dark_mode = models.BooleanField(default=True)
+    dark_mode = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-    roles = models.CharField(max_length=20, choices=ROLES_CHOICES, default='UTILISATEUR')
+    roles = models.CharField(max_length=20, default='Utilisateur')
     image = models.ImageField(upload_to='ImagesGestionnaire/', null=True, blank=True)
     USERNAME_FIELD = 'username'
     objects = MyUserManager()
