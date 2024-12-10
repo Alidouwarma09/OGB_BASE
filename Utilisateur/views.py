@@ -1,10 +1,8 @@
 import json
 
-from django.contrib import messages
-from django.contrib.auth import logout
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth import logout, get_user_model, update_session_auth_hash
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -12,9 +10,15 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
+import random
+from django.core.mail import send_mail
+from django.conf import settings
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+from django.contrib import messages
 
 from Model.models import Utilisateur
-from .forms import ConnexionForm
+from .forms import ConnexionForm, ResetPasswordRequestForm
 
 
 class Connexion(LoginView):
@@ -52,7 +56,7 @@ def toggle_dark_mode(request):
 def gestion_utilisateur(request):
     utilisateur_connecter_id = request.user.id
     utilisateurs = Utilisateur.objects.exclude(id=utilisateur_connecter_id)
-    return render(request, 'gestion_utilisateur/index.html', {'utilisateurs':utilisateurs})
+    return render(request, 'gestion_utilisateur/index.html', {'utilisateurs': utilisateurs})
 
 
 def add_user(request):
@@ -162,6 +166,7 @@ def delete_user(request, user_id):
             return JsonResponse({'success': False, 'error': str(e)}, status=400)
     return JsonResponse({'success': False, 'message': 'Méthode non autorisée'}, status=403)
 
+
 @csrf_exempt
 def edit_user(request, user_id):
     utilisateur = get_object_or_404(Utilisateur, id=user_id)
@@ -192,3 +197,86 @@ def edit_user(request, user_id):
         return redirect('Utilisateur:gestion_utilisateur')
 
     return HttpResponse("Méthode non autorisée", status=405)
+
+
+User = get_user_model()
+
+
+def reset_password_request(request):
+    if request.method == 'POST':
+        form = ResetPasswordRequestForm(request.POST)
+        if form.is_valid():
+            identifiant = form.cleaned_data['email']
+            user = None
+            if '@' in identifiant:
+                try:
+                    user = Utilisateur.objects.get(email=identifiant)
+                except Utilisateur.DoesNotExist:
+                    messages.error(request, 'Utilisateur non trouvé avec cet email.')
+            else:
+                try:
+                    user = Utilisateur.objects.get(telephone=identifiant)
+                except Utilisateur.DoesNotExist:
+                    messages.error(request, 'Utilisateur non trouvé avec ce numéro de téléphone.')
+            if user:
+                if user.is_admin:
+                    code = random.randint(100000, 999999)
+                    if user.email:
+                        subject = 'Code de réinitialisation de mot de passe'
+                        message = f'Votre code de réinitialisation est : {code}'
+                        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+                    if user.telephone:
+                        pass
+
+                    request.session['reset_code'] = code
+                    request.session['user_id'] = user.id
+
+                    return redirect('Utilisateur:reset_password_validate')
+                else:
+                    messages.error(request, 'Cet utilisateur n\'a pas les droits d\'administrateur.')
+            else:
+                print(form.errors)
+        else:
+            messages.error(request, 'Le formulaire contient des erreurs.')
+
+    else:
+        form = ResetPasswordRequestForm()
+
+    return render(request, 'reset_password_request/index.html', {'form': form})
+
+
+
+def reset_password_validate(request):
+    form = None
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        if code == str(request.session.get('reset_code')):
+            return redirect('Utilisateur:reset_password_change')
+        else:
+            messages.error(request, 'Code de validation invalide.')
+    return render(request, 'reset_password_validate/index.html')
+
+
+def reset_password_change(request):
+    user_id = request.session.get('user_id')
+    try:
+        user = Utilisateur.objects.get(id=user_id)
+    except Utilisateur.DoesNotExist:
+        messages.error(request, 'Utilisateur introuvable.')
+        return redirect('Utilisateur:reset_password_request')
+
+    if request.method == 'POST':
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            user.set_password(form.cleaned_data['new_password1'])
+            user.save()
+            messages.success(request, 'Votre mot de passe a été réinitialisé avec succès.')
+            return redirect('Utilisateur:Connexion')
+        else:
+            messages.error(request, 'Formulaire invalide.')
+            print(form.errors)
+    else:
+        form = SetPasswordForm(user)
+
+    return render(request, 'reset_password_confirm/index.html', {'form': form})

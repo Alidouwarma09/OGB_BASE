@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import SetPasswordForm as DjangoSetPasswordForm
 
 from Model.models import Utilisateur
 from django import forms
@@ -52,3 +53,10 @@ class UserRegistrationFormee(UserChangeForm):
     class Meta:
         model = Utilisateur
         fields = 'nom', 'prenom'
+
+
+class ResetPasswordRequestForm(forms.Form):
+    email = forms.CharField(max_length=255, label="Identifiant (Email ou Téléphone)")
+
+
+

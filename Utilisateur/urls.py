@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import Connexion, Deconnexion, toggle_dark_mode, gestion_utilisateur, add_user, bloque_user, debloque_user, \
-    delete_user, edit_user
+    delete_user, edit_user, reset_password_request, reset_password_validate, reset_password_change
 
 app_name = 'Utilisateur'
 urlpatterns = [
@@ -13,4 +13,7 @@ urlpatterns = [
     path('debloque_user/<int:user_id>/', debloque_user, name='debloque_user'),
     path('delete_user/<int:user_id>/', delete_user, name='delete_user'),
     path('edit_user/<int:user_id>/', edit_user, name='edit_user'),
+    path('reset-password/', reset_password_request, name='reset_password_request'),
+    path('reset-password/validate/', reset_password_validate, name='reset_password_validate'),
+    path('reset_password_change/', reset_password_change, name='reset_password_change'),
 ]
