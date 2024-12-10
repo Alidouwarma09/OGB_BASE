@@ -142,6 +142,8 @@ PWA_APP_ICONS_APPLE = [
 ]
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
 
+
+
 LANGUAGE_CODE = 'fr-FR'
 
 TIME_ZONE = 'UTC'
