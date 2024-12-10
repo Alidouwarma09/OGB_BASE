@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, date
 
 from django.contrib.auth.decorators import login_required
@@ -15,7 +16,39 @@ from django.contrib import messages
 
 @login_required(login_url='Utilisateur:Connexion')
 def acceuil(request):
-    return render(request, 'accueil/index.html')
+    current_date = date.today()
+    if current_date.month >= 9:
+        annee_scolaire = f"{current_date.year}-{current_date.year + 1}"
+    else:
+        annee_scolaire = f"{current_date.year - 1}-{current_date.year}"
+
+    today = date.today()
+    stats = {
+        'total_pensionnaires': Pensionnnaire.objects.count(),
+        'consultations_recentes': ConsultationMedicale.objects.filter(annee_scolaire=annee_scolaire, date_consultation__month=today.month).count(),
+        'inscriptions_actuelles': Inscription.objects.filter(classe__nom_classe=annee_scolaire).count(),
+    }
+
+    total_suivis = SuiviMedicalTrimestriele.objects.filter(annee_scolaire=annee_scolaire).count()
+    consultations_data = (
+        ConsultationMedicale.objects.filter(date_consultation__month=today.month)
+        .values('pensionnaire__nom_enfant')
+        .annotate(total=Count('id'))
+    )
+    data_classe = {
+        'labels': [item['pensionnaire__nom_enfant'] for item in consultations_data],
+        'values': [item['total'] for item in consultations_data],
+    }
+
+    return render(
+        request,
+        'accueil/index.html',
+        {
+            'stats': stats,
+            'total_suivis': total_suivis,
+            'data_classe_json': json.dumps(data_classe),
+        }
+    )
 
 
 def enregistrer_pensionnaire(request):
@@ -256,7 +289,8 @@ def espace_scolaire(request):
                                                   classe__annee_scolaire=annee_scolaire).count()
     nombre_eleve_cm2 = Inscription.objects.filter(classe__nom_classe='CM2',
                                                   classe__annee_scolaire=annee_scolaire).count()
-
+    nombre_eleve_specialise = Inscription.objects.filter(classe__nom_classe='Specialise',
+                                                  classe__annee_scolaire=annee_scolaire).count()
     pensionnaires = Pensionnnaire.objects.exclude(id__in=inscrits_ids)
 
     return render(request, 'espace_scolaire/index.html', {
@@ -269,6 +303,7 @@ def espace_scolaire(request):
         'nombre_eleve_cm1': nombre_eleve_cm1,
         'nombre_eleve_cm2': nombre_eleve_cm2,
         'nombre_eleve': nombre_eleve,
+        'nombre_eleve_specialise': nombre_eleve_specialise,
         'nombre_eleve_college': nombre_eleve_college,
     })
 

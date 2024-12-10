@@ -28,43 +28,52 @@
             </div>
             <section class="content">
                 <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Mot du Directeur</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Bienvenue sur la plateforme de gestion de notre orphelinat. Notre mission est de garantir un suivi optimal et un avenir meilleur pour chaque enfant.</p>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-lg-3 col-6">
                             <div class="small-box bg-info">
                                 <div class="inner">
-                                    <h3>150</h3>
+                                    <h3>{{ stats.total_pensionnaires }}</h3>
 
-                                    <p>Membres du personnel</p>
+                                    <p>Pensionnaires</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">Plus d'infos <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{% url 'Personnel:liste_pensionnaire' %}" class="small-box-footer">Plus d'infos <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6">
                             <div class="small-box bg-success">
                                 <div class="inner">
-                                    <h3>53<sup style="font-size: 20px"></sup></h3>
-                                    <p>Enfants</p>
+                                    <h3>{{ stats.inscriptions_actuelles|default:"0" }}<sup style="font-size: 20px"></sup></h3>
+                                    <p>Inscriptions actuelles</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">Plus d'info <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{% url 'Personnel:espace_scolaire' %}" class="small-box-footer">Plus d'infos <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6">
                             <div class="small-box bg-warning">
                                 <div class="inner">
-                                    <h3>44</h3>
+                                    <h3>{{ stats.consultations_recentes|default:"0"  }}</h3>
 
-                                    <p>Dortoire</p>
+                                    <p>Consultations mensuelles</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">Plus d'info<i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{% url 'Personnel:consultation' %}" class="small-box-footer">Plus d'infos <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6">
@@ -72,7 +81,7 @@
                                 <div class="inner">
                                     <h3>65</h3>
 
-                                    <p>Bureau</p>
+                                    <p></p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
@@ -82,7 +91,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <section class="col-lg-7 connectedSortable">
+                        <section class="col-lg-4 connectedSortable">
                             <div class="card bg-gradient-success">
                                 <div class="card-header border-0">
 
@@ -127,6 +136,9 @@
 
                             </div>
                         </section>
+                        <div class="col-lg-8">
+                            <canvas id="consultationsChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -136,6 +148,37 @@
         </aside>
     </div>
     </body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <script>
+        // Récupérer le contexte du canvas
+        const ctx = document.getElementById('consultationsChart').getContext('2d');
+
+        // Récupérer les données du backend
+        const data = {{ data_classe_json|safe }};
+
+        // Initialiser le graphique avec Chart.js
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.labels, // Noms des pensionnaires
+                datasets: [{
+                    label: 'Consultations du mois actuel',
+                    data: data.values, // Nombre de consultations
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 {% endblock %}
 

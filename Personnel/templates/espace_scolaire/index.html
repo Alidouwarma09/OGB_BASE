@@ -165,6 +165,21 @@
                                 </div>
                             </a>
                         </div>
+                        <div class="col-lg-4 col-6">
+                            <a href="{% url 'Personnel:detatil_classe' 'Specialise' %}">
+                                <div class="small-box text-white" style="background-color: #343a40">
+                                    <div class="inner">
+                                        <h3>CLASSE SPECIALISEE</h3>
+
+                                        <p>{{ nombre_eleve_specialise }} inscrit</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-person-add"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
 
                     </div>
                 </div>
@@ -214,6 +229,7 @@
                                     <option value="2nde">2nde</option>
                                     <option value="1ere">1ere</option>
                                     <option value="Tle">Tle</option>
+                                    <option value="Specialise">Classe specialisée</option>
                                 </select>
                             </div>
                             <button style="width: 100%" type="submit" class="btn btn-primary">Inscrire</button>
