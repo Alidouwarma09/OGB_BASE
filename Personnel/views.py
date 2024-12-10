@@ -39,6 +39,8 @@ def acceuil(request):
         'labels': [item['pensionnaire__nom_enfant'] for item in consultations_data],
         'values': [item['total'] for item in consultations_data],
     }
+    if 'messages' in request.session:
+        del request.session['messages']
 
     return render(
         request,
@@ -292,6 +294,8 @@ def espace_scolaire(request):
     nombre_eleve_specialise = Inscription.objects.filter(classe__nom_classe='Specialise',
                                                   classe__annee_scolaire=annee_scolaire).count()
     pensionnaires = Pensionnnaire.objects.exclude(id__in=inscrits_ids)
+    if 'messages' in request.session:
+        del request.session['messages']
 
     return render(request, 'espace_scolaire/index.html', {
         'pensionnaires': pensionnaires,

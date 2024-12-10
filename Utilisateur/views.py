@@ -56,6 +56,8 @@ def toggle_dark_mode(request):
 def gestion_utilisateur(request):
     utilisateur_connecter_id = request.user.id
     utilisateurs = Utilisateur.objects.exclude(id=utilisateur_connecter_id)
+    if 'messages' in request.session:
+        del request.session['messages']
     return render(request, 'gestion_utilisateur/index.html', {'utilisateurs': utilisateurs})
 
 
