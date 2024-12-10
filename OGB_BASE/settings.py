@@ -26,7 +26,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -89,7 +88,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -116,33 +114,57 @@ EMAIL_HOST_USER = 'alidouwrm@gmail.com'
 EMAIL_HOST_PASSWORD = 'ufbi ttmt pznw xofg'
 DEFAULT_FROM_EMAIL = 'alidouwrm@gmail.com'
 
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
-PWA_APP_NAME = "My PWA App"
-PWA_APP_DESCRIPTION = "A fantastic Progressive Web App"
-PWA_APP_THEME_COLOR = "#007bff"
-PWA_APP_BACKGROUND_COLOR = "#ffffff"
+
+PWA_APP_NAME = 'OGB APP'
+PWA_APP_DESCRIPTION = "Application de gestion de l'orphelinat"
+PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
-PWA_APP_ORIENTATION = 'portrait'
+PWA_APP_ORIENTATION = 'any'
 PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_APP_ICONS = [
     {
-        'src': '/static/images/icon.png',
-        'sizes': '160x160'
+        'src': '/static/images/icon-192x192.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': '/static/images/icon-512x512.png',
+        'sizes': '512x512'
     }
 ]
+
 PWA_APP_ICONS_APPLE = [
     {
-        'src': '/static/images/apple-icon.png',
+        'src': '/static/images/img.png',
         'sizes': '160x160'
     }
 ]
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
-
-
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': '/static/images/img.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'fr-FR'
+PWA_APP_SHORTCUTS = [
+    {
+        'name': 'Shortcut',
+        'url': '/target',
+        'description': 'Shortcut to a page in my application'
+    }
+]
+PWA_APP_SCREENSHOTS = [
+    {
+        'src': '/static/images/img.png',
+        'sizes': '750x1334',
+        "type": "image/png"
+    }
+]
 
 LANGUAGE_CODE = 'fr-FR'
 
@@ -152,13 +174,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",  # Chemin du dossier 'static' principal
+    os.path.join(BASE_DIR, 'static'),
 ]
 AUTH_USER_MODEL = 'Model.Utilisateur'
 MEDIA_URL = '/media/'
