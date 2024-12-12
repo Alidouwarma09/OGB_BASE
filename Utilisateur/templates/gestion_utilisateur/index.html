@@ -14,7 +14,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Gestion des utilisateurs</h1>
+                            <h1 class="m-0">Gestion des utilisateurs de l'application</h1>
                             <div id="alertContainer"></div>
                         </div>
                         <div class="col-sm-6 text-right">
@@ -29,7 +29,7 @@
                 <div class="container-fluid">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-users"></i> Liste des utilisateurs</h3>
+                            <h3 class="card-title"><i class="fas fa-users"></i> Liste des utilisateurs </h3>
                             {% if messages %}
                                 <div class="alert alert-danger">
                                     {% for message in messages %}
@@ -68,7 +68,7 @@
                                                 </span>
                                             {% endif %}
                                         </td>
-                                        <td>
+                                        <td style="text-align: center">
                                             {% if user.is_active %}
                                                 <button class="btn btn-dark btn-sm mr-2" data-toggle="modal" data-target="#bloqueUserModal-{{ user.id }}">
                                                     <i class="fas fa-lock" style="color: white;"></i> Bloquer
