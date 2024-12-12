@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
-{% block content %}
-    <body class="  layout-fixed layout-navbar-fixed   hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse {% if request.user.dark_mode %}dark-mode{% endif %}">
+
+{% block content %}import section as section
+<body class="  layout-fixed layout-navbar-fixed   hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse {% if request.user.dark_mode %}dark-mode{% endif %}">
     <div class="wrapper">
         {% include 'preload.html' %}
 
@@ -45,6 +47,7 @@
                                     <th>Nom</th>
                                     <th>Prenom</th>
                                     <th>Rôle</th>
+                                    <th>statut</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
@@ -56,6 +59,15 @@
                                         <td>{{ user.nom }}</td>
                                         <td>{{ user.prenom }}</td>
                                         <td>{{ user.roles }}</td>
+                                        <td>
+                                            {% if user.est_en_ligne %}
+                                                <span class="badge badge-success">En ligne</span>
+                                            {% else %}
+                                                <span class="badge badge-danger">
+                                                    En ligne depuis {{ user.last_activity|timesince }}
+                                                </span>
+                                            {% endif %}
+                                        </td>
                                         <td>
                                             {% if user.is_active %}
                                                 <button class="btn btn-dark btn-sm mr-2" data-toggle="modal" data-target="#bloqueUserModal-{{ user.id }}">
@@ -235,8 +247,8 @@
                                         <div class="form-group">
                                             <label><i class="fas fa-user-tag"></i> Rôle</label>
                                             <select name="roles" class="form-control">
-                                                <option value="UTILISATEUR">Utilisateur</option>
-                                                <option value="ADMIN">Admin</option>
+                                                <option value="UTILISATEUR">UTILISATEUR</option>
+                                                <option value="ADMIN">ADMIN</option>
                                             </select>
                                         </div>
                                         <div class="form-group">

@@ -6,6 +6,8 @@ from django.db.models import UniqueConstraint
 
 from decimal import Decimal
 
+from django.utils import timezone
+
 
 class MyUserManager(BaseUserManager):
     def create_user(self, username, password=None):
@@ -57,17 +59,23 @@ class Utilisateur(AbstractBaseUser):
     prenom = models.CharField(max_length=250)
     email = models.EmailField(max_length=254, null=True, blank=True, verbose_name='Email')
     telephone = models.CharField(max_length=20, null=True, blank=True, verbose_name='Numéro de téléphone')
+    last_activity = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     dark_mode = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-    roles = models.CharField(max_length=20, default='Utilisateur')
+    roles = models.CharField(max_length=20, default='UTILISATEUR')
     image = models.ImageField(upload_to='ImagesGestionnaire/', null=True, blank=True)
     USERNAME_FIELD = 'username'
     objects = MyUserManager()
 
     def __str__(self):
         return f"{self.nom} {self.prenom}"
+
+    def est_en_ligne(self):
+        if (timezone.now() - self.last_activity).seconds > 60:
+            return False
+        return True
 
 
 class Pere_enfant(models.Model):

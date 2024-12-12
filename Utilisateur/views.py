@@ -1,11 +1,11 @@
 import json
 
-from django.contrib.auth import logout, get_user_model, update_session_auth_hash
+from django.contrib.auth import logout
 from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView
 from django.db import transaction
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ValidationError
@@ -31,7 +31,6 @@ class Connexion(LoginView):
         return reverse('Utilisateur:Connexion')
 
     def form_invalid(self, form):
-        # Passer les erreurs au contexte
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -56,6 +55,8 @@ def toggle_dark_mode(request):
 def gestion_utilisateur(request):
     utilisateur_connecter_id = request.user.id
     utilisateurs = Utilisateur.objects.exclude(id=utilisateur_connecter_id)
+    for utilisateur in utilisateurs:
+        utilisateur.est_en_ligne = utilisateur.est_en_ligne()
     if 'messages' in request.session:
         del request.session['messages']
     return render(request, 'gestion_utilisateur/index.html', {'utilisateurs': utilisateurs})
@@ -79,7 +80,7 @@ def add_user(request):
             errors.append("Le prénom est obligatoire.")
         if not password:
             errors.append("Le mot de passe est obligatoire.")
-        if roles not in ['Utilisateur', 'Admin']:
+        if roles not in ['UTILISATEUR', 'ADMIN']:
             errors.append("Le rôle sélectionné est invalide.")
 
         if Utilisateur.objects.filter(username=username).exists():
@@ -102,16 +103,18 @@ def add_user(request):
 
         try:
             with transaction.atomic():
-                utilisateur = Utilisateur.objects.create(
+                utilisateur = Utilisateur(
                     username=username,
                     nom=nom,
                     prenom=prenom,
                     roles=roles,
                 )
-                utilisateur.set_password(password)  # Hachage du mot de passe
+                utilisateur.set_password(password)  # Hachage du mot de passe avant de l'enregistrer
 
                 if image:
                     utilisateur.image.save(image.name, image)
+
+                utilisateur.save()  # Sauvegarde de l'utilisateur après avoir haché le mot de passe
 
                 messages.success(request, "Utilisateur ajouté avec succès.")
                 return redirect('Utilisateur:gestion_utilisateur')
@@ -119,6 +122,7 @@ def add_user(request):
         except Exception as e:
             messages.error(request, f"Une erreur inattendue s’est produite : {e}")
             return redirect('Utilisateur:gestion_utilisateur')
+
 
 
 @csrf_exempt
@@ -187,10 +191,9 @@ def edit_user(request, user_id):
         utilisateur.prenom = prenom
         utilisateur.roles = roles
 
-        # Si un mot de passe est soumis et que la confirmation est valide
         if password:
             if password == password_confirmation:
-                utilisateur.set_password(password)  # Utiliser set_password pour hasher le mot de passe
+                utilisateur.set_password(password)
             else:
                 return HttpResponse("Les mots de passe ne correspondent pas", status=400)
 

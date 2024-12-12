@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'Model',
     'Utilisateur',
     'pwa',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Utilisateur.middleware.LastActivityMiddleware',
 ]
 
 ROOT_URLCONF = 'OGB_BASE.urls'
@@ -119,7 +121,7 @@ DEFAULT_FROM_EMAIL = 'alidouwrm@gmail.com'
 
 PWA_APP_NAME = 'OGB APP'
 PWA_APP_DESCRIPTION = "Application de gestion de l'orphelinat"
-PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_THEME_COLOR = '#343a40'
 PWA_APP_BACKGROUND_COLOR = '#ffffff'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
