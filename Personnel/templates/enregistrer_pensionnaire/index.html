@@ -86,7 +86,7 @@
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Quel est le matricule de l'enfant ?</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Entrer le matricule" name="matricule">
+                                                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Entrer le matricule" required name="matricule">
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Nom et prenom de l'enfant</label>
@@ -95,21 +95,21 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">Nom</span>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="Nom" name="nom_enfant">
+                                                <input required type="text" class="form-control" placeholder="Nom" name="nom_enfant">
                                             </div>
                                             <div class="input-group mb-3">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">Prenom</span>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="Prenom" name="prenom_enfant">
+                                                <input required type="text" class="form-control" placeholder="Prenom" name="prenom_enfant">
                                             </div>
                                             <div class="form-group">
                                                 <label>Date de naissance du pensionnaire</label>
-                                                <input type="date" name="date_naissance_enfant" class="form-control" required />
+                                                <input type="date" name="date_naissance_enfant" class="form-control" />
                                             </div>
                                             <div class="form-group">
                                                 <label>Date d'ouverture du dossier du pensionnaire</label>
-                                                <input type="date" name="date_ouverture_dossier" class="form-control" required />
+                                                <input type="date" name="date_ouverture_dossier" class="form-control" />
                                             </div>
 
                                             <div class="form-group">
@@ -131,7 +131,7 @@
                                                 <label>Quelle est la nationalité de l'enfant ?</label>
                                                 <div class="autre-field"  id="nationalite_enfant-autre">
                                                     <div class="input-group" >
-                                                        <input type="text" name="nationalite_enfant" required class="form-control" placeholder="Préciser la nationalité">
+                                                        <input type="text" name="nationalite_enfant" class="form-control" placeholder="Préciser la nationalité">
                                                     </div>
                                                 </div>
                                             </div>
@@ -241,7 +241,7 @@
                                                 </select>
                                                 <div class="autre-field"  id="lieu_habitation_enfant-autre" style="display: none;">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="autre_lieu_habitation_enfant" required placeholder="Préciser le lieu d'habitation">
+                                                        <input type="text" class="form-control" name="autre_lieu_habitation_enfant" placeholder="Préciser le lieu d'habitation">
                                                     </div>
                                                 </div>
 
@@ -346,7 +346,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn btn-primary" style="width: 100%" onclick="stepper.next()">Suivant</button>
+                                    <button type="button" class="btn btn-primary" style="width: 100%" onclick="stepper.next()">Suivant</button>
                                 </div>
 
                             </div>
@@ -375,7 +375,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Date de naissance du pere</label>
-                                                <input type="date" name="date_naissance_pere" class="form-control" required />
+                                                <input type="date" name="date_naissance_pere" class="form-control" />
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Quel est le lieu de naissance du pere ?</label>
@@ -489,7 +489,7 @@
                                         <button class="btn btn-primary" style="width: 100%;  background-color:  #ff851b" onclick="stepper.previous()">Retour</button>
                                     </div>
                                     <div class="col">
-                                        <button class="btn btn-primary" style="width: 100%" onclick="stepper.next()">Suivant</button>
+                                        <button type="button" class="btn btn-primary" style="width: 100%" onclick="stepper.next()">Suivant</button>
 
                                     </div>
                                 </div>
@@ -632,7 +632,7 @@
                                         <button class="btn btn-primary" style="width: 100%;  background-color:  #ff851b" onclick="stepper.previous()">Retour</button>
                                     </div>
                                     <div class="col">
-                                        <button class="btn btn-primary" style="width: 100%" onclick="stepper.next()">Suivant</button>
+                                        <button type="button" class="btn btn-primary" style="width: 100%" onclick="stepper.next()">Suivant</button>
 
                                     </div>
                                 </div>
@@ -661,31 +661,8 @@
 
                                         </div>
                                         <div class="form-group">
-                                            <label>Date de naissance du repondant</label>
-                                            <input type="date" name="date_naissance_repondant" class="form-control" required />
-                                        </div>
-                                        <div class="form-group">
                                             <label for="exampleInputEmail1">Quel est le lieu de naissance du repondant ?</label>
                                             <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Entrer le lieu de naissance">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Quel est le type de famille du repondant ?</label>
-                                            <select class="form-control select-autre" name="type_famille_repondant" data-autre-id="type_famille_repondant-autre">
-                                                <option value="">Choisir ici</option>
-                                                <option value="Uni">Uni</option>
-                                                <option value="Séparé">Séparé</option>
-                                                <option value="Polygamique">Polygamique</option>
-                                                <option value="Monoparental">Monoparental</option>
-                                                <option value="Recomposé">Recomposé</option>
-                                                <option value="Elargi">Elargi</option>
-                                                <option value="Autre">Autres</option>
-                                            </select>
-                                            <div class="autre-field"  id="type_famille_repondant-autre" style="display: none;">
-                                                <div class="input-group">
-                                                    <input type="text" name="type_famille_repondant" class="form-control" placeholder="Preciser le type de famille">
-                                                </div>
-                                            </div>
-
                                         </div>
                                         <div class="form-group">
                                             <label>Quel est la nationalité du repondant ?</label>
@@ -719,7 +696,7 @@
                                         <div class="form-group">
                                             <label>Quel est la profession du repondant ?</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Entrer la profession">
+                                                <input name="profession_repondant" type="text" class="form-control" placeholder="Entrer la profession">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -729,21 +706,8 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label>Quel est la situation matrimoniale du repondant ?</label>
-                                            <select class="form-control">
-                                                <option>Choisir ici</option>
-                                                <option>Marié</option>
-                                                <option>Celibataire</option>
-                                                <option>Concubinage</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Quel est le nombre de personnes a charge du repondant ?</label>
-                                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Entrer le nombre" min="0">
-                                        </div>
-                                        <div class="form-group">
                                             <label for="exampleInputEmail1">Quel est le contact telephonique du repondant ?</label>
-                                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Ex: 0102030405" min="0">
+                                            <input name="contact_repondant" type="number" class="form-control" id="exampleInputEmail1" placeholder="Ex: 0102030405" min="0">
                                         </div>
                                         <div class="card-header" style="text-align: center; background-color: gray; color: #fff">
                                             <h1 style="text-align: center" class="card-title">CARACTERISTIQUES DE LOGEMENT DU REPONDANT</h1>
@@ -779,7 +743,7 @@
 
                                         <div class="form-group">
                                             <label>Quel est le type d'habitat du repondant ?</label>
-                                            <select class="form-control">
+                                            <select class="form-control" name="type_habitat_repondant">
                                                 <option>Choisir ici</option>
                                                 <option>Villa</option>
                                                 <option>Appartement</option>
@@ -789,7 +753,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Quel est le nombre de pieces de l'habitation du repondant ?</label>
-                                            <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Entrer le nombre" min="0">
+                                            <input name="nombre_piece_repondant" type="number" class="form-control" id="exampleInputEmail1" placeholder="Entrer le nombre" min="0">
                                         </div>
                                         <div class="form-group">
                                             <label>Quelle est la source d'approvisionnement en eau du domicile du repondant ?</label>
@@ -822,16 +786,16 @@
                                             <p id="selection-message-electrifie_repondant" class="mt-2 text-info" style="font-weight: bold;"></p>
                                         </div>
                                         <div class="form-group">
-                                            <label for="revenu_mensuel">Le repondant a t-il un revenu mensuel ?</label>
+                                            <label for="revenu_mensuel_repondant">Le repondant a t-il un revenu mensuel ?</label>
                                             <div class="btn-group btn-group-toggle radio-group" data-message-id="selection-message-revenu_mensuel" data-toggle="buttons">
                                                 <label class="btn btn-primary">
-                                                    <input type="radio" name="revenu_mensuel" value="True" autocomplete="off"> Oui
+                                                    <input type="radio" name="revenu_mensuel_repondant" value="True" autocomplete="off"> Oui
                                                 </label>
                                                 <label class="btn btn-danger">
-                                                    <input type="radio" name="revenu_mensuel" value="False" autocomplete="off"> Non
+                                                    <input type="radio" name="revenu_mensuel_repondant" value="False" autocomplete="off"> Non
                                                 </label>
                                             </div>
-                                            <p id="selection-message-revenu_mensuel" class="mt-2 text-info" style="font-weight: bold;"></p>
+                                            <p id="selection-message-revenu_mensuel_repondant" class="mt-2 text-info" style="font-weight: bold;"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -914,24 +878,20 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Récupérer tous les champs de sélection avec la classe `select-autre`
         const selects = document.querySelectorAll('.select-autre');
 
         selects.forEach(select => {
             select.addEventListener('change', function () {
-                // Récupérer l'élément associé à l'option "Autre"
                 const autreFieldId = select.getAttribute('data-autre-id');
                 const autreField = document.getElementById(autreFieldId);
 
                 if (select.value === "Autre") {
-                    // Afficher le champ de saisie
                     autreField.style.display = 'block';
                     autreField.querySelector('input').setAttribute('required', 'true');
                 } else {
-                    // Masquer le champ de saisie
                     autreField.style.display = 'none';
                     autreField.querySelector('input').removeAttribute('required');
-                    autreField.querySelector('input').value = ''; // Réinitialiser la valeur
+                    autreField.querySelector('input').value = '';
                 }
             });
         });
@@ -939,63 +899,6 @@
 </script>
 
 <script>
-    $(function () {
-        $('.select2').select2()
-        $('.select2bs4').select2({
-            theme: 'bootstrap4'
-        })
-
-        $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-        $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-        $('[data-mask]').inputmask()
-
-        $('#reservationdate').datetimepicker({
-            format: 'L'
-        });
-
-        $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
-        $('#reservation').daterangepicker()
-        $('#reservationtime').daterangepicker({
-            timePicker: true,
-            timePickerIncrement: 30,
-            locale: {
-                format: 'MM/DD/YYYY hh:mm A'
-            }
-        })
-        $('#daterange-btn').daterangepicker(
-            {
-                ranges   : {
-                    'Today'       : [moment(), moment()],
-                    'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                },
-                startDate: moment().subtract(29, 'days'),
-                endDate  : moment()
-            },
-            function (start, end) {
-                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-            }
-        )
-        $('#timepicker').datetimepicker({
-            format: 'LT'
-        })
-        $('.duallistbox').bootstrapDualListbox()
-
-        $('.my-colorpicker1').colorpicker()
-        $('.my-colorpicker2').colorpicker()
-
-        $('.my-colorpicker2').on('colorpickerChange', function(event) {
-            $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
-        })
-
-        $("input[data-bootstrap-switch]").each(function(){
-            $(this).bootstrapSwitch('state', $(this).prop('checked'));
-        })
-
-    })
     document.addEventListener('DOMContentLoaded', function () {
         window.stepper = new Stepper(document.querySelector('.bs-stepper'))
     })
@@ -1039,6 +942,21 @@
         myDropzone.removeAllFiles(true)
     }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const suivantButton = document.querySelector('button[onclick="stepper.next()"]');
+        suivantButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            stepper.next();
+        });
+
+        const enregistrerButton = document.querySelector('button[type="submit"]');
+        enregistrerButton.addEventListener('click', function(event) {
+            document.querySelector('form').submit();
+        });
+    });
+</script>
+
 
 </body>
 </html>

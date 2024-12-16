@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.db.models import Avg, Count, F
 
 from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe, Evaluation, \
-    SuiviMedicalTrimestriele, ConsultationMedicale, Antecedents
+    SuiviMedicalTrimestriele, ConsultationMedicale, Antecedents, Repondant
 from django.contrib import messages
 
 
@@ -118,6 +118,7 @@ def enregistrer_pensionnaire_et_pere(request):
         en_couple_pere = request.POST.get('en_couple_pere', '').strip()
 
         nom_mere = request.POST.get('nom_mere', '').strip()
+        nom_repondant = request.POST.get('nom_repondant', '').strip()
         prenom_mere = request.POST.get('prenom_mere', '').strip()
         date_naissance_mere = request.POST.get('date_naissance_mere', '').strip()
         lieu_naissance_mere = request.POST.get('lieu_naissance_mere', '').strip()
@@ -137,11 +138,17 @@ def enregistrer_pensionnaire_et_pere(request):
         profession_mere = request.POST.get('profession_mere', '').strip()
         en_vie_mere = request.POST.get('en_vie_mere', '').strip()
         en_couple_mere = request.POST.get('en_couple_mere', '').strip()
+        en_couple_repondant = request.POST.get('en_couple_repondant', '').strip()
+        revenu_mensuel_repondant = request.POST.get('revenu_mensuel_repondant', '').strip()
+        electrifie_repondant = request.POST.get('electrifie_repondant', '').strip()
 
         es_scolarise = True if es_scolarise == "True" else False
         a_antecdents = True if a_antecdents == "True" else False
         en_couple_pere = True if en_couple_pere == "True" else False
         en_couple_mere = True if en_couple_mere == "True" else False
+        en_couple_repondant = True if en_couple_repondant == "True" else False
+        revenu_mensuel_repondant = True if revenu_mensuel_repondant == "True" else False
+        electrifie_repondant = True if electrifie_repondant == "True" else False
         en_vie_mere = True if en_vie_mere == "True" else False
         en_vie_pere = True if en_vie_pere == "True" else False
 
@@ -154,6 +161,7 @@ def enregistrer_pensionnaire_et_pere(request):
             with transaction.atomic():
                 mere = None
                 pere = None
+                repondant = None
                 if nom_mere:
                     mere = Mere_enfant.objects.create(
                         prenom=prenom_mere,
@@ -168,6 +176,25 @@ def enregistrer_pensionnaire_et_pere(request):
                         profession=profession_mere,
                         en_couple=en_couple_mere,
                         en_vie=en_vie_mere,
+                    )
+
+                if nom_repondant:
+                    repondant = Repondant.objects.create(
+                        nom=nom_repondant,
+                        prenom=request.POST.get('prenom_repondant', '').strip(),
+                        nationalite=request.POST.get('nationalite_repondant', '').strip(),
+                        profession=request.POST.get('profession_repondant', '').strip(),
+                        ethnie=request.POST.get('ethnie_repondant', '').strip(),
+                        religion=request.POST.get('religion_repondant', '').strip(),
+                        contact=request.POST.get('contact_repondant', '').strip(),
+                        adresse=request.POST.get('adresse_repondant', '').strip(),
+                        nombre_piece=request.POST.get('nombre_piece_repondant', '').strip(),
+                        type_eau=request.POST.get('type_eau_repondant', '').strip(),
+                        lien_parente=request.POST.get('lien_parente', '').strip(),
+                        type_habitat=request.POST.get('type_habitat_repondant', '').strip(),
+                        en_couple=en_couple_repondant,
+                        revenu_mensuel=revenu_mensuel_repondant,
+                        electrifie=electrifie_repondant,
                     )
                     if nom_pere:
                         pere = Pere_enfant.objects.create(
@@ -188,6 +215,7 @@ def enregistrer_pensionnaire_et_pere(request):
                 enfant = Pensionnnaire.objects.create(
                     pere=pere if pere else None,
                     mere=mere if mere else None,
+                    repondant=repondant if repondant else None,
                     nom_enfant=nom_enfant,
                     prenom_enfant=prenom_enfant,
                     date_ouverture_dossier=date_ouverture_dossier,
