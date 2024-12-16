@@ -10,15 +10,16 @@ from django.utils import timezone
 
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, username, password=None):
+    def create_user(self, username, password=None, **extra_fields):
         if not username:
             raise ValueError("Vous devez entrer un nom d'utilisateur")
 
         user = self.model(
-            username=username
+            username=username,
+            **extra_fields  # Ajout des champs supplémentaires
         )
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, username, password=None):

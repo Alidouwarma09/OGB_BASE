@@ -30,13 +30,6 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title"><i class="fas fa-users"></i> Liste des utilisateurs </h3>
-                            {% if messages %}
-                                <div class="alert alert-danger">
-                                    {% for message in messages %}
-                                        <p>{{ message }}</p>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
                         </div>
                         <div class="card-body">
                             <table id="userTable" class="table table-bordered table-striped">
