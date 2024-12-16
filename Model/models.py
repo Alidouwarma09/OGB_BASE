@@ -147,12 +147,24 @@ class Pensionnnaire(models.Model):
     niveau_etude_anterieur = models.CharField(blank=True, null=True)
     classe_inscrit = models.CharField(blank=True, null=True)
     religion_enfant = models.CharField(blank=True, null=True)
+    taille = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Taille (en cm)")
+    poids = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Poids (en kg)")
     pere = models.ForeignKey(Pere_enfant, on_delete=models.CASCADE, related_name="pensionnaires_pere", null=True,
                              blank=True)
     mere = models.ForeignKey(Mere_enfant, on_delete=models.CASCADE, related_name="pensionnaires_mere", null=True,
                              blank=True)
     repondant = models.ForeignKey(Repondant, on_delete=models.CASCADE, related_name="pensionnaires_repondant",
                                   null=True, blank=True)
+
+
+class Dossier(models.Model):
+    pensionnaire = models.ForeignKey(Pensionnnaire, on_delete=models.CASCADE, related_name="dossiers")
+    fichier = models.FileField(upload_to="pensionnaires/dossiers/")
+    description = models.CharField(max_length=255, blank=True, null=True)
+    date_ajout = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Dossier {self.id} pour {self.pensionnaire.nom_enfant}"
 
 
 class Classe(models.Model):
@@ -233,22 +245,8 @@ class Parrain(models.Model):
 
 
 class Antecedents(models.Model):
-    ENTECEDENTS_CHOICES = (
-        ('epilesie', 'epilesie'),
-        ('diabete', 'diabete'),
-        ('seroposivite', 'seroposivite'),
-        ('hypertension', 'hypertension'),
-        ('psychopathologie', 'psychopathologie'),
-        ('trouble_digestifs', 'trouble digestifs'),
-        ('dermatoses', 'dermatoses'),
-        ('antecedents_operation', 'antecedents operation'),
-        ('anemie', 'anemie'),
-        ('hernie_ombidicale', 'hernie ombidicale'),
-        ('carie_dentaire', 'carie dentaire'),
-        ('handicap_physique', 'handicap physique'),
-    )
     enfant = models.ForeignKey(Pensionnnaire, on_delete=models.SET_NULL, blank=True, null=True)
-    designation = models.CharField(choices=ENTECEDENTS_CHOICES)
+    designation = models.CharField(blank=True, null=True)
     psychopathologie = models.CharField(blank=True, null=True)
     probleme = models.CharField(blank=True, null=True)
 

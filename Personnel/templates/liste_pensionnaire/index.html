@@ -117,6 +117,7 @@
                                     <table id="example2" class="table table-bordered table-hover">
                                         <thead>
                                         <tr>
+                                            <th>N°</th>
                                             <th>Nom</th>
                                             <th>Prenom</th>
                                             <th>Matricule</th>
@@ -128,6 +129,7 @@
                                         <tbody id="pensionnaires-list">
                                         {% for pensionnaire in pensionnaires %}
                                         <tr>
+                                            <td>{{ forloop.counter }}</td>
                                             <td>{{ pensionnaire.nom_enfant }}</td>
                                             <td>{{ pensionnaire.prenom_enfant }}</td>
                                             <td>{{ pensionnaire.matricule }}</td>

@@ -61,18 +61,12 @@
                             <div class="card-header">
                                 <h3 class="card-title">Liste de tout les pensionnaire</h3>
                             </div>
-                            {% if messages %}
-                                <div class="alert alert-success" role="alert">
-                                    {% for message in messages %}
-                                        {{ message }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
 
                             <div class="card-body">
                                 <table class="table table-bordered table-striped" >
                                     <thead>
                                     <tr>
+                                        <th>N°</th>
                                         <th>Nom</th>
                                         <th>Prenom</th>
                                         <th>Matricule</th>
@@ -84,6 +78,7 @@
                                     <tbody>
                                     {% for pensionnaire in pensionnaires %}
                                         <tr>
+                                            <td>{{ forloop.counter }}</td>
                                             <td>{{ pensionnaire.nom_enfant }}</td>
                                             <td>{{ pensionnaire.prenom_enfant }}</td>
                                             <td>{{ pensionnaire.matricule }}</td>

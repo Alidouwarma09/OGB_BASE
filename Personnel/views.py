@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.db.models import Avg, Count, F
 
 from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe, Evaluation, \
-    SuiviMedicalTrimestriele, ConsultationMedicale
+    SuiviMedicalTrimestriele, ConsultationMedicale, Antecedents
 from django.contrib import messages
 
 
@@ -25,7 +25,8 @@ def acceuil(request):
     today = date.today()
     stats = {
         'total_pensionnaires': Pensionnnaire.objects.count(),
-        'consultations_recentes': ConsultationMedicale.objects.filter(annee_scolaire=annee_scolaire, date_consultation__month=today.month).count(),
+        'consultations_recentes': ConsultationMedicale.objects.filter(annee_scolaire=annee_scolaire,
+                                                                      date_consultation__month=today.month).count(),
         'inscriptions_actuelles': Inscription.objects.filter(classe__nom_classe=annee_scolaire).count(),
     }
 
@@ -69,7 +70,7 @@ def enregistrer_pensionnaire_et_pere(request):
 
         nationalite_enfant = request.POST.get('nationalite_enfant', '').strip()
         es_scolarise = request.POST.get('es_scolarise', '').strip()
-        a_antecdents = request.POST.get('es_scolarise', '').strip()
+        a_antecdents = request.POST.get('a_antecdents', '').strip()
         niveau_etude_anterieur = request.POST.get('niveau_etude_anterieur', '').strip()
         classe_inscrit = request.POST.get('classe_inscrit', '').strip()
 
@@ -168,7 +169,7 @@ def enregistrer_pensionnaire_et_pere(request):
                         en_couple=en_couple_mere,
                         en_vie=en_vie_mere,
                     )
-                    if pere:
+                    if nom_pere:
                         pere = Pere_enfant.objects.create(
                             nom_pere=nom_pere,
                             prenom_pere=prenom_pere,
@@ -184,7 +185,7 @@ def enregistrer_pensionnaire_et_pere(request):
                             en_vie_pere=en_vie_pere,
                         )
 
-                Pensionnnaire.objects.create(
+                enfant = Pensionnnaire.objects.create(
                     pere=pere if pere else None,
                     mere=mere if mere else None,
                     nom_enfant=nom_enfant,
@@ -207,7 +208,14 @@ def enregistrer_pensionnaire_et_pere(request):
                     personne_loge_enfant=personne_loge_enfant,
                     motif_deplacement_enfant=motif_deplacement_enfant,
                 )
-            messages.success(request, "Enregistrement réussi.")
+                if a_antecdents:
+                    Antecedents.objects.create(
+                        enfant=enfant,
+                        designation=request.POST.get('designation', '').strip(),
+                        psychopathologie=request.POST.get('psychopathologie', '').strip(),
+                        probleme=request.POST.get('probleme', '').strip(),
+                    )
+
             return redirect('Personnel:enregistrer_pensionnaire')
             print({ve})
         except ValueError as ve:
@@ -292,7 +300,7 @@ def espace_scolaire(request):
     nombre_eleve_cm2 = Inscription.objects.filter(classe__nom_classe='CM2',
                                                   classe__annee_scolaire=annee_scolaire).count()
     nombre_eleve_specialise = Inscription.objects.filter(classe__nom_classe='Specialise',
-                                                  classe__annee_scolaire=annee_scolaire).count()
+                                                         classe__annee_scolaire=annee_scolaire).count()
     pensionnaires = Pensionnnaire.objects.exclude(id__in=inscrits_ids)
     if 'messages' in request.session:
         del request.session['messages']
