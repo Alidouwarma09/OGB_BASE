@@ -98,6 +98,7 @@
                                             <th>Prénom</th>
                                             <th>Matricule</th>
                                             <th>Classe</th>
+                                            <th>Poids et taille au debut</th>
                                             <th>Trimestre 1</th>
                                             <th>Trimestre 2</th>
                                             <th>Trimestre 3</th>
@@ -112,6 +113,10 @@
                                                 <td>{{ data.pensionnaire.prenom_enfant }}</td>
                                                 <td>{{ data.pensionnaire.matricule }}</td>
                                                 <td>{{ data.pensionnaire.inscriptions.first.classe.nom_classe }}</td>
+                                                <td>
+                                                    <span class="badge badge-primary"> {{ data.pensionnaire.taille }} m; {{ data.pensionnaire.poids }} kg</span>
+
+                                                </td>
                                                 {% for trimestre in trimestres %}
                                                     <td>
                                                         {% if trimestre in data.trimestres_suivis %}
@@ -216,18 +221,18 @@
 </div>
 <style>
     #newSuiviButton:hover {
-        background-color: #007bff; /* Changer la couleur au survol */
-        color: white; /* Couleur du texte */
-        transform: scale(1.05); /* Agrandir légèrement */
-        transition: all 0.3s ease; /* Transition douce */
+        background-color: #007bff;
+        color: white;
+        transform: scale(1.05);
+        transition: all 0.3s ease;}
 
     #classeFilter {
-        border: 2px solid #007bff; /* Bordure bleue */
-        border-radius: 8px; /* Bordure arrondie */
-        padding: 8px; /* Espacement interne */
-        font-size: 14px; /* Taille de la police */
-        color: #495057; /* Couleur de texte */
-        background-color: #f8f9fa; /* Fond clair */
+        border: 2px solid #007bff;
+        border-radius: 8px;
+        padding: 8px;
+        font-size: 14px;
+        color: #495057;
+        background-color: #f8f9fa;
     }
 
 </style>
@@ -269,8 +274,8 @@
 <script>
     document.getElementById("newSuiviButton").addEventListener("click", function() {
         const button = this;
-        button.classList.add("animate__pulse"); // Animation de pulsation
-        setTimeout(() => button.classList.remove("animate__pulse"), 1000); // Retirer l'animation après 1 seconde
+        button.classList.add("animate__pulse");
+        setTimeout(() => button.classList.remove("animate__pulse"), 1000);
     });
 
 </script>

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-closed sidebar-collapse layout-navbar-fixed {% if request.user.dark_mode %}dark-mode{% endif %}">
+    <div class="wrapper">
+        {% include 'preload.html' %}
+        {% include 'personnel_navbar.html' %}
+
+        <div class="content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="profile-img mb-4">
+                            <img src="{{ user.image.url}}" alt="Image de Profil" class="rounded-circle img-fluid border border-primary" />
+                            <div class="mt-2">
+                                <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="file" name="image" class="form-control mb-2" />
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">Enregistrer l'image</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h2>{{ user.nom }} {{ user.prenom }}</h2>
+                        <p class="text-muted">{{ user.username }}</p>
+                    </div>
+                </div>
+                <!-- Reste du formulaire pour modifier d'autres informations -->
+                <div class="card mt-11 shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="fas fa-info-circle"></i> Informations personnelles</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_prenom">Prénom</label>
+                                    <input type="text" value="{{ user.prenom }}" name="prenom" class="form-control" id="id_prenom" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_nom">Nom</label>
+                                    <input type="text" name="nom" value="{{ user.nom }}" class="form-control" id="id_nom" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_email">Email</label>
+                                    <input type="email" name="email" value="{{ user.email }}" class="form-control" id="id_email" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_username">Nom d'utilisateur</label>
+                                    <input type="text" name="username" value="{{ user.username }}" class="form-control" id="id_username" />
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Sauvegarder les modifications</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aside class="control-sidebar control-sidebar-dark">
+        </aside>
+    </div>
+    </body>
+{% endblock %}

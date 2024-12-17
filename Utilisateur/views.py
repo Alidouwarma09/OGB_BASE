@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.views import LoginView
 from django.db import transaction
@@ -18,7 +19,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 
 from Model.models import Utilisateur
-from .forms import ConnexionForm, ResetPasswordRequestForm
+from .forms import ConnexionForm, ResetPasswordRequestForm, ProfileForm
 
 
 class Connexion(LoginView):
@@ -37,7 +38,18 @@ class Connexion(LoginView):
 def Deconnexion(request):
     logout(request)
     return redirect(reverse('Utilisateur:Connexion'))
+@login_required
+def profil(request):
+    user = request.user
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('Utilisateur:profil')
+    else:
+        form = ProfileForm(instance=user)
 
+    return render(request, 'profil/index.html', {'form': form})
 
 @csrf_exempt
 def toggle_dark_mode(request):
