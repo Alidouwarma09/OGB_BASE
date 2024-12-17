@@ -238,6 +238,8 @@ def enregistrer_pensionnaire_et_pere(request):
                     electrifie_enfant=electrifie_enfant,
                     personne_loge_enfant=personne_loge_enfant,
                     motif_deplacement_enfant=motif_deplacement_enfant,
+                    taille=request.POST.get('taille', '').strip(),
+                    poids=request.POST.get('poids', '').strip(),
                 )
                 if a_antecdents:
                     Antecedents.objects.create(
@@ -376,6 +378,7 @@ def ajouter_document(request, pensionnaire_id):
 def inscription_scolaire(request):
     if request.method == "POST":
         classe_name = request.POST.get('classe_name', '').strip()
+        ecole = request.POST.get('ecole', '').strip()
         pensionnaire_id = request.POST.get('pensionnaire_id', '').strip()
         pensionnaire = get_object_or_404(Pensionnnaire, id=pensionnaire_id)
         try:
@@ -400,6 +403,7 @@ def inscription_scolaire(request):
                 Inscription.objects.create(
                     pensionnaire=pensionnaire,
                     classe=classe,
+                    ecole=ecole,
                 )
 
             messages.success(request, "Enregistrement réussi.")

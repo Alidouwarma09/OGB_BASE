@@ -55,41 +55,15 @@
                                     <li class="list-group-item">
                                         <b>Statut</b> <a class="float-right"> <button style="cursor: none" type="button" class="btn btn-block btn-success btn-sm">{{ details_pensionnaires.statue }}</button></a>
                                     </li>
+                                    <li class="list-group-item">
+                                        <b>Taille</b> <a class="float-right"> <button style="cursor: none" type="button" class="btn btn-block btn-dark btn-sm">{{ details_pensionnaires.taille }} m</button></a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Poids</b> <a class="float-right"> <button style="cursor: none" type="button" class="btn btn-block btn-dark btn-sm">{{ details_pensionnaires.poids }} Kg</button></a>
+                                    </li>
                                 </ul>
                             </div>
                             <!-- /.card-body -->
-                        </div>
-                        <div class="card card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title">Suplementaire</h3>
-                            </div>
-                            <div class="card-body">
-                                <strong><i class="fas fa-book mr-1"></i> Ouverture du dossier</strong>
-
-                                <p class="text-muted">
-                                    Est a l'orphelinat depuis le <span style="font-weight: bold">{{ details_pensionnaires.date_ouverture_dossier }}</span>
-                                </p>
-
-                                <hr>
-
-                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Lieu d'habitation</strong>
-
-                                <p class="text-muted">{% if  details_pensionnaires.lieu_habitation_enfant  %} {{ details_pensionnaires.lieu_habitation_enfant }}{% else %}Non mentionné{% endif %}</p>
-
-                                <hr>
-
-                                <strong><i class="fas fa-pencil-alt mr-1"></i> Motif du deplacement</strong>
-
-                                <p class="text-muted">
-                                    {% if  details_pensionnaires.motif_deplacement_enfant  %} {{ details_pensionnaires.motif_deplacement_enfant }}{% else %}Le motif n'a pas été  mentionné{% endif %}
-                                </p>
-
-                                <hr>
-
-                                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
-
-                                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
-                            </div>
                         </div>
                     </div>
                     <div class="col-md-9">
@@ -206,47 +180,50 @@
                             <div class="card-body">
                                 <div class="tab-content">
                                     <div class="active tab-pane" id="activity">
-                                        <div class="timeline timeline-inverse">
-                                            <div class="time-label">
-                                                <span class="bg-danger">{{ details_pensionnaires.date_ouverture_dossier }}</span>
+                                        <div class="card card-primary">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Suplementaire</h3>
                                             </div>
-                                            <div>
-                                                <i class="fas fa-user bg-info"></i>
-                                                <div class="timeline-item">
-                                                    <span class="time"><i class="far fa-clock"></i> 10:00</span>
-                                                    <h3 class="timeline-header"><a href="#">Entrée à l'orphelinat</a></h3>
-                                                    <div class="timeline-body">
-                                                        Le pensionnaire a été admis à l'orphelinat
-                                                        {% if details_pensionnaires.motif_deplacement_enfant == 'Trouble du comportement' %}
-                                                            <strong>en raison de troubles du comportement.</strong>
-                                                        {% elif details_pensionnaires.motif_deplacement_enfant == 'Situation familiale précaire' %}
-                                                            <strong>après avoir vécu dans une situation familiale précaire.</strong>
-                                                        {% elif details_pensionnaires.motif_deplacement_enfant == 'Echec scolaire' %}
-                                                            <strong>suite à un échec scolaire.</strong>
-                                                        {% elif details_pensionnaires.motif_deplacement_enfant %}
-                                                            <strong>pour la raison suivante : {{ details_pensionnaires.motif_deplacement_enfant }}.</strong>
-                                                        {% else %}
-                                                            <strong>pour {{ details_pensionnaires.motif_deplacement_enfant }}</strong>
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="time-label">
-                                                <span class="bg-danger">15 Mar. 2020</span>
-                                            </div>
-                                            <div>
-                                                <i class="fas fa-book bg-primary"></i>
-                                                <div class="timeline-item">
-                                                    <span class="time"><i class="far fa-clock"></i> 14:30</span>
-                                                    <h3 class="timeline-header"><a href="#">Inscription à l'école</a></h3>
-                                                    <div class="timeline-body">
-                                                        Le pensionnaire a été inscrit à l'école primaire pour commencer son éducation.
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div class="card-body">
+                                                <strong><i class="fas fa-book mr-1"></i> Ouverture du dossier</strong>
 
-                                            <div>
-                                                <i class="far fa-clock bg-gray"></i>
+                                                <p class="text-muted">
+                                                    Est a l'orphelinat depuis le <span style="font-weight: bold">{{ details_pensionnaires.date_ouverture_dossier }}</span>
+                                                </p>
+
+                                                <hr>
+
+                                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Lieu d'habitation</strong>
+
+                                                <p class="text-muted">{% if  details_pensionnaires.lieu_habitation_enfant  %} {{ details_pensionnaires.lieu_habitation_enfant }}{% else %}Non mentionné{% endif %}</p>
+
+                                                <hr>
+
+                                                <strong><i class="fas fa-pencil-alt mr-1"></i> Motif du deplacement</strong>
+
+                                                <p class="text-muted">
+                                                les pensionnaires est admis a l'orphelinat pour:
+                                                    {% if details_pensionnaires.motif_deplacement_enfant == 'Trouble du comportement' %}
+                                                        <strong> raison de troubles du comportement.</strong>
+                                                    {% elif details_pensionnaires.motif_deplacement_enfant == 'Situation familiale précaire' %}
+                                                        <strong> avoir vécu dans une situation familiale précaire.</strong>
+                                                    {% elif details_pensionnaires.motif_deplacement_enfant == 'Echec scolaire' %}
+                                                        <strong>suite à un échec scolaire.</strong>
+                                                    {% elif details_pensionnaires.motif_deplacement_enfant %}
+                                                        <strong> la raison suivante : {{ details_pensionnaires.motif_deplacement_enfant }}.</strong>
+                                                    {% else %}
+                                                        <strong> {{ details_pensionnaires.motif_deplacement_enfant }}</strong>
+                                                    {% endif %}
+                                                </p>
+
+                                                <hr>
+
+                                                <strong><i class="far fa-file-alt mr-1"></i> Responsable</strong>
+
+
+                                                <p class="text-muted">Le pensionnaire loge chez:
+                                                    <strong> {{ details_pensionnaires.personne_loge_enfant }}</strong>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -426,10 +403,8 @@
                                                             <small>Ajouté le {{ dossier.date_ajout|date:"d M Y" }}</small>
                                                         </div>
                                                         {% if dossier.fichier.url|lower|slice:'-4:' == '.jpg' or dossier.fichier.url|lower|slice:'-4:' == '.png' %}
-                                                            <!-- Afficher l'image -->
                                                             <img src="{{ dossier.fichier.url }}" alt="Document Image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;">
                                                         {% elif dossier.fichier.url|lower|slice:'-4:' == '.pdf' %}
-                                                            <!-- Afficher l'icône PDF -->
                                                             <a  class="btn btn-danger btn-sm" target="_blank">
                                                                 <i class="fas fa-file-pdf" style="font-size: 100px"></i>
                                                             </a>

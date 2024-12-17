@@ -151,6 +151,37 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
+                                                <label>Quelle est la taille de l'enfant ?</label>
+                                                <div class="autre-field" id="taille-autre">
+                                                    <div class="input-group">
+                                                        <input type="number"
+                                                               name="taille"
+                                                               class="form-control"
+                                                               min="0"
+                                                               max="3"
+                                                               step="0.01"
+                                                               placeholder="Entrer la taille"
+                                                               oninput="if (this.value > 3) this.value = 3;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quelle est le poids de l'enfant ?</label>
+                                                <div class="autre-field" id="taille-autre">
+                                                    <div class="input-group">
+                                                        <input type="number"
+                                                               name="poids"
+                                                               class="form-control"
+                                                               min="0"
+                                                               max="200"
+                                                               step="0.01"
+                                                               placeholder="Entrer le poids"
+                                                               oninput="if (this.value > 200) this.value = 200;">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
                                                 <label for="es_scolarise">L'enfant est-il scolarisé ?</label>
                                                 <div class="btn-group btn-group-toggle radio-group" data-message-id="selection-message-scolarise" data-toggle="buttons">
                                                     <label class="btn btn-primary">

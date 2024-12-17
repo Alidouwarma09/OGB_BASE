@@ -179,6 +179,7 @@ class Classe(models.Model):
 class Inscription(models.Model):
     pensionnaire = models.ForeignKey(Pensionnnaire, on_delete=models.CASCADE, related_name="inscriptions")
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, related_name="inscriptions")
+    ecole = models.CharField(blank=True, null=True, default="OGB")
     date_inscription = models.DateField(auto_now_add=True)
 
     class Meta:

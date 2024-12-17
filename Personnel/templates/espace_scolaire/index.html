@@ -21,9 +21,12 @@
                                 <li class="breadcrumb-item"><a href="#">Espace scolaire</a></li>
                             </ol>
                         </div>
-                        <div class="col-lg-6 col-6">
-                            <button class="btn btn-info" style="width: 50%; font-size: 15px; font-family: 'Lucida Grande', Arial, sans-serif; font-weight: bold" data-toggle="modal" data-target="#modalInscription">
-                                <i class="ion ion-person-add" style="font-size: 40px"></i> Inscrire {{ annee_scolaire }}
+                        <div class="col-lg-6 col-6" style="text-align: right;">
+                            <button class="btn btn-info custom-btn"
+                                    data-toggle="modal"
+                                    data-target="#modalInscription">
+                                <i class="ion ion-person-add custom-icon"></i>
+                                Inscrire {{ annee_scolaire }}
                             </button>
                         </div>
 
@@ -181,8 +184,6 @@
         <div class="modal fade" id="modalInscription" tabindex="-1" role="dialog" aria-labelledby="modalInscriptionLabel" aria-hidden="true" >
             <div class="modal-dialog" role="document" >
                 <div class="modal-content" style="border-radius: 15px; border: 1px red">
-
-
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalInscriptionLabel">Inscription d'un pensionnaire {{ annee_scolaire }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -224,6 +225,10 @@
                                     <option value="Specialise">Classe specialisée</option>
                                 </select>
                             </div>
+                            <div class="form-group" id="ecole-field" style="display: none;">
+                                <label for="ecole">Nom de l'école</label>
+                                <input type="text" class="form-control" id="ecole" name="ecole" placeholder="Entrer le nom de l'école">
+                            </div>
                             <button style="width: 100%" type="submit" class="btn btn-primary">Inscrire</button>
                         </form>
                     </div>
@@ -235,25 +240,33 @@
     </body>
     <style>
 
-        .alert {
-            display: flex;
-            align-items: center;
-            background-color: #28a745;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            animation: slideIn 0.5s ease-out, fadeOut 3s 4s forwards;
-        }
-
-        .alert-icon {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-
-        .alert-text {
+        .custom-btn {
             font-size: 16px;
-            font-weight: 600;
+            font-family: 'Lucida Grande', Arial, sans-serif;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #1e90ff, #007bff);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .custom-icon {
+            font-size: 28px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .custom-btn:hover {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            transform: scale(1.05);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        .custom-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         @keyframes slideIn {
@@ -276,11 +289,8 @@
                 transform: translateX(100%);
             }
         }
-
-        .alert-success {
-            background-color: #28a745;
-        }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -306,6 +316,34 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            // Détecter le changement dans le select de la classe
+            $('#classe_inscrit').change(function() {
+                var classeSelectionnee = $(this).val();
+                console.log("Classe sélectionnée : " + classeSelectionnee);  // Vérifiez si la classe est correctement récupérée
+
+                var classesCollege = ['6e', '5e', '4e', '3e', '2nde', '1ere', 'Tle'];
+
+                var ecoleField = $('#ecole-field');
+
+                // Vérifiez si la classe sélectionnée fait partie des classes spécifiques
+                if (classesCollege.includes(classeSelectionnee)) {
+                    ecoleField.show(); // Afficher le champ 'école'
+                    $('#ecole').prop('required', true); // Rendre le champ 'école' requis
+                } else {
+                    ecoleField.hide(); // Cacher le champ 'école'
+                    $('#ecole').prop('required', false); // Supprimer la nécessité du champ 'école'
+                    $('#ecole').val(''); // Réinitialiser la valeur
+                }
+            });
+
+            // Initialiser l'affichage au chargement de la page
+            $('#classe_inscrit').trigger('change');
+        });
+
+
+    </script>
 
 
 {% endblock %}
