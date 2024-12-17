@@ -19,7 +19,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 
 from Model.models import Utilisateur
-from .forms import ConnexionForm, ResetPasswordRequestForm, ProfileForm
+from .forms import ConnexionForm, ResetPasswordRequestForm, ProfileForm, ProfileImageForm
 
 
 class Connexion(LoginView):
@@ -38,18 +38,32 @@ class Connexion(LoginView):
 def Deconnexion(request):
     logout(request)
     return redirect(reverse('Utilisateur:Connexion'))
+
+
 @login_required
 def profil(request):
     user = request.user
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('Utilisateur:profil')
-    else:
-        form = ProfileForm(instance=user)
 
-    return render(request, 'profil/index.html', {'form': form})
+    profile_form = ProfileForm(instance=user)
+    image_form = ProfileImageForm(instance=user)
+
+    if request.method == 'POST':
+        if 'image' in request.FILES:
+            image_form = ProfileImageForm(request.POST, request.FILES, instance=user)
+            if image_form.is_valid():
+                image_form.save()
+                return redirect('Utilisateur:profil')
+        else:
+            profile_form = ProfileForm(request.POST, instance=user)
+            if profile_form.is_valid():
+                profile_form.save()
+                return redirect('Utilisateur:profil')
+
+    return render(request, 'profil/index.html', {
+        'profile_form': profile_form,
+        'image_form': image_form,
+    })
+
 
 @csrf_exempt
 def toggle_dark_mode(request):
@@ -132,7 +146,6 @@ def add_user(request):
         except Exception as e:
             messages.error(request, f"Une erreur inattendue s’est produite : {e}")
             return redirect('Utilisateur:gestion_utilisateur')
-
 
 
 @csrf_exempt
@@ -258,7 +271,6 @@ def reset_password_request(request):
         form = ResetPasswordRequestForm()
 
     return render(request, 'reset_password_request/index.html', {'form': form})
-
 
 
 def reset_password_validate(request):

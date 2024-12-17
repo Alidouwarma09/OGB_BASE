@@ -64,3 +64,9 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Utilisateur
         fields = ['username', 'nom', 'prenom', 'email', 'image']
+
+
+class ProfileImageForm(forms.ModelForm):
+    class Meta:
+        model = Utilisateur
+        fields = ['image']
