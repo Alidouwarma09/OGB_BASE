@@ -80,8 +80,6 @@ def add_user(request):
             errors.append("Le prénom est obligatoire.")
         if not password:
             errors.append("Le mot de passe est obligatoire.")
-        if roles not in ['UTILISATEUR', 'ADMIN']:
-            errors.append("Le rôle sélectionné est invalide.")
 
         if Utilisateur.objects.filter(username=username).exists():
             errors.append("L'identifiant existe déjà.")

@@ -183,7 +183,7 @@
                             <span class="info-box-icon"><i class="fas fa-calculator"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Moyenne de la classe</span>
-                                <span class="info-box-number">{{ moyenne_classe|default:0|floatformat:2 }}</span>
+                                <span class="info-box-number">{{ moyenne_classe }}</span>
 
                             </div>
                         </div>
@@ -229,12 +229,6 @@
 
 <script>
     $(function () {
-        /*
-         * Flot Interactive Chart
-         * -----------------------
-         */
-        // We use an inline data source in the example, usually data would
-        // be fetched from a server
         var data        = [],
             totalPoints = 100
 
@@ -243,8 +237,6 @@
             if (data.length > 0) {
                 data = data.slice(1)
             }
-
-            // Do a random walk
             while (data.length < totalPoints) {
 
                 var prev = data.length > 0 ? data[data.length - 1] : 50,
@@ -258,8 +250,6 @@
 
                 data.push(y)
             }
-
-            // Zip the generated y values with the x values
             var res = []
             for (var i = 0; i < data.length; ++i) {
                 res.push([i, data[i]])
@@ -298,20 +288,16 @@
             }
         )
 
-        var updateInterval = 500 //Fetch data ever x milliseconds
-        var realtime       = 'on' //If == to on then fetch data every x seconds. else stop fetching
+        var updateInterval = 500
+        var realtime       = 'on'
         function update() {
 
             interactive_plot.setData([getRandomData()])
-
-            // Since the axes don't change, we don't need to call plot.setupGrid()
             interactive_plot.draw()
             if (realtime === 'on') {
                 setTimeout(update, updateInterval)
             }
         }
-
-        //INITIALIZE REALTIME DATA FETCHING
         if (realtime === 'on') {
             update()
         }
@@ -325,16 +311,6 @@
             }
             update()
         })
-        /*
-         * END INTERACTIVE CHART
-         */
-
-
-        /*
-         * LINE CHART
-         * ----------
-         */
-        //LINE randomly generated data
 
         var sin = [],
             cos = []
@@ -377,7 +353,6 @@
                 show: true
             }
         })
-        //Initialize tooltip on hover
         $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
             position: 'absolute',
             display : 'none',
@@ -400,12 +375,6 @@
             }
 
         })
-        /* END LINE CHART */
-
-        /*
-         * FULL WIDTH STATIC AREA CHART
-         * -----------------
-         */
         var areaData = [[2, 88.0], [3, 93.3], [4, 102.0], [5, 108.5], [6, 115.7], [7, 115.6],
             [8, 124.6], [9, 130.3], [10, 134.3], [11, 141.4], [12, 146.5], [13, 151.7], [14, 159.9],
             [15, 165.4], [16, 167.8], [17, 168.7], [18, 169.5], [19, 168.0]]
@@ -414,10 +383,10 @@
                 borderWidth: 0
             },
             series: {
-                shadowSize: 0, // Drawing is faster without shadows
+                shadowSize: 0,
                 color     : '#00c0ef',
                 lines : {
-                    fill: true //Converts the line chart to area chart
+                    fill: true
                 },
             },
             yaxis : {
@@ -427,14 +396,6 @@
                 show: false
             }
         })
-
-        /* END AREA CHART */
-
-        /*
-         * BAR CHART
-         * ---------
-         */
-
         var bar_data = {
             data : [[1,10], [2,8], [3,4], [4,13], [5,17], [6,9]],
             bars: { show: true }
@@ -455,12 +416,6 @@
                 ticks: [[1,'January'], [2,'February'], [3,'March'], [4,'April'], [5,'May'], [6,'June']]
             }
         })
-        /* END BAR CHART */
-
-        /*
-         * DONUT CHART
-         * -----------
-         */
 
         var donutData = [
             {
@@ -498,16 +453,8 @@
                 show: false
             }
         })
-        /*
-         * END DONUT CHART
-         */
-
     })
 
-    /*
-     * Custom Label formatter
-     * ----------------------
-     */
     function labelFormatter(label, series) {
         return '<div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">'
             + label

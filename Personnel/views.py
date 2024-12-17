@@ -5,12 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction, IntegrityError
 from django.db.models import Count
+from django.db.models.functions import Round
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Avg, Count, F
 
 from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe, Evaluation, \
-    SuiviMedicalTrimestriele, ConsultationMedicale, Antecedents, Repondant
+    SuiviMedicalTrimestriele, ConsultationMedicale, Antecedents, Repondant, Dossier
 from django.contrib import messages
 
 
@@ -54,10 +55,12 @@ def acceuil(request):
     )
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def enregistrer_pensionnaire(request):
     return render(request, 'enregistrer_pensionnaire/index.html')
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def enregistrer_pensionnaire_et_pere(request):
     if request.method == "POST":
         date_naissance_enfant = request.POST.get('date_naissance_enfant', '').strip()
@@ -254,6 +257,7 @@ def enregistrer_pensionnaire_et_pere(request):
         return redirect('Personnel:enregistrer_pensionnaire')
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def liste_pensionnaire(request):
     nombre_total = Pensionnnaire.objects.count()
     oc_count = Pensionnnaire.objects.filter(statue='OC').count()
@@ -294,11 +298,16 @@ def liste_pensionnaire(request):
     })
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def details_pensionnaire(request, pensionnaire_id):
     details_pensionnaires = get_object_or_404(Pensionnnaire, id=pensionnaire_id)
-    return render(request, 'details_pensionnaire/index.html', {'details_pensionnaires': details_pensionnaires})
+    dossier_pensionnaire = Dossier.objects.filter(pensionnaire_id=pensionnaire_id)
+    return render(request, 'details_pensionnaire/index.html', {'details_pensionnaires': details_pensionnaires,
+                                                               'dossier_pensionnaire': dossier_pensionnaire,
+                                                               })
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def espace_scolaire(request):
     current_date = date.today()
     if current_date.month >= 9:
@@ -348,6 +357,22 @@ def espace_scolaire(request):
     })
 
 
+def ajouter_document(request, pensionnaire_id):
+    if request.method == "POST":
+        pensionnaire = Pensionnnaire.objects.get(pk=pensionnaire_id)
+        fichier = request.FILES.get("fichier")
+        description = request.POST.get("description")
+
+        if fichier:
+            Dossier.objects.create(
+                pensionnaire=pensionnaire,
+                fichier=fichier,
+                description=description
+            )
+        return redirect("Personnel:details_pensionnaires", pensionnaire_id)
+
+
+@login_required(login_url='Utilisateur:Connexion')
 def inscription_scolaire(request):
     if request.method == "POST":
         classe_name = request.POST.get('classe_name', '').strip()
@@ -389,6 +414,7 @@ def inscription_scolaire(request):
         return redirect('Personnel:espace_scolaire')
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def rechercher_pensionnaires(request):
     current_date = date.today()
     if current_date.month >= 9:
@@ -413,6 +439,7 @@ def rechercher_pensionnaires(request):
     return JsonResponse(data)
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def detatil_classe(request, classe=None):
     classe_nam = classe
     current_date = date.today()
@@ -478,6 +505,7 @@ def detatil_classe(request, classe=None):
     })
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def evaluate_pensionnaire(request, pensionnaire_id):
     if request.method == 'POST':
         pensionnaire = get_object_or_404(Pensionnnaire, id=pensionnaire_id)
@@ -494,6 +522,7 @@ def evaluate_pensionnaire(request, pensionnaire_id):
         return JsonResponse({'success': True, 'message': "Évaluation enregistrée avec succès."})
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def resultats_scolaire(request):
     annee_scolaire = request.GET.get('annee_scolaire', f"{date.today().year}-{date.today().year + 1}")
     selected_class = request.GET.get('classe', None)
@@ -517,7 +546,7 @@ def resultats_scolaire(request):
         'inscription__pensionnaire__religion_enfant',
         'statut_final'
     ).annotate(
-        moyenne=Avg(F('evaluation1') + F('evaluation2') + F('evaluation3')),
+        moyenne=Round(Avg('moyenne'), 2),
         admis=Count('id', filter=F('statut_final') == 'Admis')
     )
     taux_reussite = Evaluation.objects.filter(inscription__classe__in=classes, statut_final='Admis').count()
@@ -538,6 +567,7 @@ def resultats_scolaire(request):
     return render(request, 'resultats/index.html', context)
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def suivi_trimestrielle(request):
     current_date = date.today()
     if current_date.month >= 9:
@@ -571,6 +601,7 @@ def suivi_trimestrielle(request):
     })
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def create_new_suivi(request):
     if request.method == "POST":
         trimestre = request.POST.get('trimestre', '').strip()
@@ -612,6 +643,7 @@ def create_new_suivi(request):
         return redirect('Personnel:suivi_trimestrielle')
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def consultation(request):
     current_date = date.today()
     if current_date.month >= 9:
@@ -635,6 +667,7 @@ def consultation(request):
     })
 
 
+@login_required(login_url='Utilisateur:Connexion')
 def create_new_consultation(request):
     if request.method == "POST":
         motif_consultation = request.POST.get('motif_consultation', '').strip()

@@ -105,6 +105,8 @@
                                                             <label>Rôle</label>
                                                             <select name="roles" class="form-control">
                                                                 <option value="UTILISATEUR" {% if user.roles == 'UTILISATEUR' %}selected{% endif %}>Utilisateur</option>
+                                                                <option value="EDUCATIF" {% if user.roles == 'EDUCATIF' %}selected{% endif %}>EDUCATIF</option>
+                                                                <option value="MEDICAL" {% if user.roles == 'MEDICAL' %}selected{% endif %}>MEDICAL</option>
                                                                 <option value="ADMIN" {% if user.roles == 'ADMIN' %}selected{% endif %}>Admin</option>
                                                             </select>
                                                         </div>
@@ -240,7 +242,8 @@
                                         <div class="form-group">
                                             <label><i class="fas fa-user-tag"></i> Rôle</label>
                                             <select name="roles" class="form-control">
-                                                <option value="UTILISATEUR">UTILISATEUR</option>
+                                                <option value="EDUCATIF">EDUCATIF</option>
+                                                <option value="MEDICAL">MEDICAL</option>
                                                 <option value="ADMIN">ADMIN</option>
                                             </select>
                                         </div>

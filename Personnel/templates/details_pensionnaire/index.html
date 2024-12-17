@@ -194,7 +194,7 @@
 
                         <div class="card">
                             <div class="card-header p-2" >
-                                <ul class="nav nav-pills">
+                                <ul class="nav ">
                                     <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Informations</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#pere-info" data-toggle="tab">Pere </a></li>
                                     <li class="nav-item"><a class="nav-link" href="#mere-info" data-toggle="tab">Mere</a></li>
@@ -202,7 +202,7 @@
                                     <li class="nav-item"><a class="nav-link" href="#documents-info" data-toggle="tab">Documents</a></li>
                                     <li class="nav-item"><a class="nav-link"  data-toggle="tab"><div style="background-color: red" id="exportButtonContainer"></div></a></li>
                                 </ul>
-                            </div><!-- /.card-header -->
+                            </div>
                             <div class="card-body">
                                 <div class="tab-content">
                                     <div class="active tab-pane" id="activity">
@@ -413,10 +413,73 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="documents-info">
-                                        <div class="card-body box-profile">
+                                        <div class="card-body">
+                                            <button class="btn btn-success" data-toggle="modal" data-target="#addDocumentModal">
+                                                <i class="fas fa-plus"></i> Ajouter un document
+                                            </button>
+                                            <h5 class="mb-3">Liste des documents du pensionnaire</h5>
+                                            <ul class="list-group mb-3" id="document-list">
+                                                {% for dossier in dossier_pensionnaire %}
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <strong>{{ dossier.description }}</strong><br>
+                                                            <small>Ajouté le {{ dossier.date_ajout|date:"d M Y" }}</small>
+                                                        </div>
+                                                        {% if dossier.fichier.url|lower|slice:'-4:' == '.jpg' or dossier.fichier.url|lower|slice:'-4:' == '.png' %}
+                                                            <!-- Afficher l'image -->
+                                                            <img src="{{ dossier.fichier.url }}" alt="Document Image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;">
+                                                        {% elif dossier.fichier.url|lower|slice:'-4:' == '.pdf' %}
+                                                            <!-- Afficher l'icône PDF -->
+                                                            <a  class="btn btn-danger btn-sm" target="_blank">
+                                                                <i class="fas fa-file-pdf" style="font-size: 100px"></i>
+                                                            </a>
+                                                        {% else %}
+                                                            <span class="badge badge-secondary">Format non pris en charge</span>
+                                                        {% endif %}
+                                                        <a href="{{ dossier.fichier.url }}" class="btn btn-primary btn-sm" download>
+                                                            <i class="fas fa-download"></i> Télécharger
+                                                        </a>
+                                                    </li>
+                                                {% empty %}
+                                                    <li class="list-group-item">Aucun document disponible.</li>
+                                                {% endfor %}
+                                            </ul>
+
 
                                         </div>
                                     </div>
+                                    <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="addDocumentModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="addDocumentModalLabel">Ajouter un Document {{ details_pensionnaires }}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="documentForm" method="POST" enctype="multipart/form-data" action="{% url 'Personnel:ajouter_document' details_pensionnaires.id %}">
+                                                        {% csrf_token %}
+                                                        <div class="form-group">
+                                                            <label for="fichier">Sélectionner un fichier</label>
+                                                            <input type="file" class="form-control-file" id="fichier" name="fichier" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="description">Description</label>
+                                                            <input type="text" class="form-control" id="description" name="description" placeholder="Entrez une description du document">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer row" style="display: flex">
+                                                    <button type="button" style="width: 100%" class="btn col btn-secondary" data-dismiss="modal">Fermer</button>
+                                                    <button type="submit" style="width: 100%" form="documentForm" class="btn col btn-primary">
+                                                        <i class="fas fa-upload"></i> Enregistrer
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -426,6 +489,31 @@
         </section>
     </div>
     <style>
+        .img-thumbnail {
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .btn-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border: none;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+        }
+
+        .list-group-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;

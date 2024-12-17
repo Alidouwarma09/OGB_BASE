@@ -9,6 +9,7 @@ urlpatterns = [
     path('enregistrer_pensionnaire/', views.enregistrer_pensionnaire, name='enregistrer_pensionnaire'),
     path('espace_scolaire/', views.espace_scolaire, name='espace_scolaire'),
     path('suivi_trimestrielle/', suivi_trimestrielle, name='suivi_trimestrielle'),
+    path('ajouter-document/<int:pensionnaire_id>/', views.ajouter_document, name='ajouter_document'),
     path('consultation/', consultation, name='consultation'),
     path('inscription_scolaire/', views.inscription_scolaire, name='inscription_scolaire'),
     path('create_new_suivi/', create_new_suivi, name='create_new_suivi'),
