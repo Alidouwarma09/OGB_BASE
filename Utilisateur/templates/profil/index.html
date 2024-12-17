@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
     <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-closed sidebar-collapse layout-navbar-fixed {% if request.user.dark_mode %}dark-mode{% endif %}">
     <div class="wrapper">
         {% include 'preload.html' %}
         {% include 'personnel_navbar.html' %}
-
         <div class="content-wrapper">
             <div class="container-fluid">
                 <div class="row">
@@ -71,7 +69,7 @@
 
     <script>
         function previewImage(event) {
-            var output = document.getElementById('imagePreview');
+            const output = document.getElementById('imagePreview');
             output.src = URL.createObjectURL(event.target.files[0]);
             output.onload = function() {
                 URL.revokeObjectURL(output.src)
