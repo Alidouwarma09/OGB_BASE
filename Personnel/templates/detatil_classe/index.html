@@ -71,6 +71,7 @@
                                         <th>Prenom</th>
                                         <th>Matricule</th>
                                         <th>Classe</th>
+                                        <th>Ecole</th>
                                         <th>Statut</th>
                                         <th>Dossier</th>
                                     </tr>
@@ -83,6 +84,7 @@
                                             <td>{{ pensionnaire.prenom_enfant }}</td>
                                             <td>{{ pensionnaire.matricule }}</td>
                                             <td>{{ pensionnaire.classe }}</td>
+                                            <td>{{ pensionnaire.ecole }}</td>
                                             <td>
                                                 <a style="color:#D2CFCFFF; background-color: {% if pensionnaire.statue == 'OP' %} #007bff {% elif pensionnaire.statue == 'OM' %} #ff851b {% else %} #dc3545 {% endif %}; width: 60px" class="btn  btn-block">{{ pensionnaire.statue }}</a>
                                             </td>
@@ -115,6 +117,7 @@
                                             <th>Prenom</th>
                                             <th>Date de naissance</th>
                                             <th>Classe</th>
+                                            <th>Ecole</th>
                                             <th>Statut</th>
                                         </tr>
                                     </thead>
@@ -127,6 +130,7 @@
                                             <td>{{ pensionnaire.prenom_enfant }}</td>
                                             <td>{{ pensionnaire.date_naissance_enfant }}</td>
                                             <td>{{ pensionnaire.classe }}</td>
+                                            <td>{{ pensionnaire.ecole }}</td>
                                             <td>{{ pensionnaire.statue }}</td>
                                         </tr>
                                     {% endfor %}

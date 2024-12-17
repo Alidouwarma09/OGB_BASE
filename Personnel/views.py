@@ -403,7 +403,7 @@ def inscription_scolaire(request):
                 Inscription.objects.create(
                     pensionnaire=pensionnaire,
                     classe=classe,
-                    ecole=ecole,
+                    ecole=ecole if ecole != '' else 'OGB'
                 )
 
             messages.success(request, "Enregistrement réussi.")
@@ -481,6 +481,7 @@ def detatil_classe(request, classe=None):
         if inscription:
             classe_enfant = inscription.classe.nom_classe
             evaluation_exist = Evaluation.objects.filter(inscription=inscription).exists()
+            ecole = inscription.ecole
         else:
             classe_enfant = None
             evaluation_exist = False
@@ -495,6 +496,7 @@ def detatil_classe(request, classe=None):
             'id': pensionnaire.id,
             'classe': classe_enfant,
             'evaluation_exist': evaluation_exist,
+            'ecole': ecole,
         })
 
     nombre_total = len(pensionnaires_details)
