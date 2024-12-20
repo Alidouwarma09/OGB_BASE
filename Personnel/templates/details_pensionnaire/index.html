@@ -44,22 +44,28 @@
                                         <b>Date de naissance</b> <a class="float-right">{{ details_pensionnaires.date_naissance_enfant }}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Lieu de naissance</b> <a class="float-right">{{ details_pensionnaires.lieu_naissance_enfant }}</a>
+                                        <b>Lieu de naissance</b> <a data-field="lieu_naissance_enfant" contenteditable="false" class="editable  float-right">{{ details_pensionnaires.lieu_naissance_enfant }}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Réligion</b> <a class="float-right">{{ details_pensionnaires.religion_enfant }}</a>
+                                        <b>Réligion</b> <a data-field="religion_enfant" contenteditable="false"  class="editable float-right">{{ details_pensionnaires.religion_enfant }}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Nationalité</b> <a class="float-right">{{ details_pensionnaires.nationalite_enfant }}</a>
+                                        <b>Nationalité</b> <a data-field="nationalite_enfant" contenteditable="false"  class="editable float-right">{{ details_pensionnaires.nationalite_enfant }}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Statut</b> <a class="float-right"> <button style="cursor: none" type="button" class="btn btn-block btn-success btn-sm">{{ details_pensionnaires.statue }}</button></a>
+                                        <b>Statut</b> <a   class="editable float-right"> <span style="cursor: none" data-field="statue" contenteditable="false" class="editable btn btn-block btn-success btn-sm">{{ details_pensionnaires.statue }}</span></a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Taille</b> <a class="float-right"> <button style="cursor: none" type="button" class="btn btn-block btn-dark btn-sm">{{ details_pensionnaires.taille }} m</button></a>
+                                        <b>Taille</b>
+                                        <span style="display: flex; gap: 5px">
+                                        <a data-field="taille" contenteditable="false"  class="float-right editable  "> {{ details_pensionnaires.taille }} </a>m
+                                         </span>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Poids</b> <a class="float-right"> <button style="cursor: none" type="button" class="btn btn-block btn-dark btn-sm">{{ details_pensionnaires.poids }} Kg</button></a>
+                                        <b>Poids</b>
+                                         <span style="display: flex; gap: 5px">
+                                        <a data-field="poids" contenteditable="false"  class="float-right editable  "> {{ details_pensionnaires.poids }} </a>Kg
+                                         </span>
                                     </li>
                                 </ul>
                             </div>
@@ -79,7 +85,7 @@
                             <tr>
                                 <td>1</td>
                                 <td>Nom</td>
-                                <td>{{ details_pensionnaires.nom_enfant }}</td>
+                                <td >{{ details_pensionnaires.nom_enfant }}</td>
                             </tr>
                             <tr>
                                 <td>2</td>
@@ -224,10 +230,16 @@
                                                 <p class="text-muted">Le pensionnaire loge chez:
                                                     <strong> {{ details_pensionnaires.personne_loge_enfant }}</strong>
                                                 </p>
+                                            <p>
+                                                <button id="save-enfant-button" class="btn btn-primary" style="display: none;">Sauvegarder</button>
+
+                                            </p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="pere-info">
+                                        <input type="hidden" id="pensionnaire-id" value="{{ details_pensionnaires.id }}">
+
                                         <div class="card-body box-profile">
                                             <h1 class="profile-username text-center animated fadeIn" style="border: solid 2px #e7a5a5; border-radius: 10px; font-weight: bold; font-family: 'Lucida Grande', Arial, sans-serif; padding: 10px; background-color: #f9f9f9;">
                                                 Le père de l'enfant
@@ -242,49 +254,52 @@
                                             </p>
 
                                             <ul class="list-group list-group-unbordered mb-3">
-                                                <li class="list-group-item animated fadeInUp">
+                                                <li class="list-group-item">
                                                     <b>Date de naissance</b>
-                                                    <a class="float-right">{{ details_pensionnaires.pere.date_naissance_pere }}</a>
+                                                    <a id="date-naissance-pere"  class="float-right">
+                                                        {{ details_pensionnaires.pere.date_naissance_pere }}
+                                                    </a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Lieu de naissance</b>
-                                                    <a class="float-right">{{ details_pensionnaires.pere.lieu_naissance_pere }}</a>
+                                                    <a data-field="lieu_naissance_pere" contenteditable="false" class="editable float-right">{{ details_pensionnaires.pere.lieu_naissance_pere }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Profession</b>
-                                                    <a class="float-right">{{ details_pensionnaires.pere.profession_pere }}</a>
+                                                    <a data-field="profession_pere" contenteditable="false" class="editable float-right">{{ details_pensionnaires.pere.profession_pere }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Ethnie</b>
-                                                    <a class="float-right">{{ details_pensionnaires.pere.ethnie_pere }}</a>
+                                                    <a data-field="ethnie_pere" contenteditable="false" class="editable float-right">{{ details_pensionnaires.pere.ethnie_pere }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Religion</b>
-                                                    <a class="float-right">{{ details_pensionnaires.pere.religion_pere }}</a>
+                                                    <a data-field="religion_pere" contenteditable="false" class="editable float-right">{{ details_pensionnaires.pere.religion_pere }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Nombre de persone en charge</b>
-                                                    <a class="float-right">{{ details_pensionnaires.pere.nombre_personne_charge_pere }}</a>
+                                                    <a data-field="nombre_personne_charge_pere" contenteditable="false" class="editable float-right">{{ details_pensionnaires.pere.nombre_personne_charge_pere }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Adresse</b>
-                                                    <a class="float-right">{{ details_pensionnaires.pere.adresse_pere }}</a>
+                                                    <a data-field="adresse_pere" contenteditable="false" class="editable float-right">{{ details_pensionnaires.pere.adresse_pere }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Situation matrimoniale</b>
-                                                    <a class="float-right">{% if details_pensionnaires.pere.en_couple_pere %} En couple{% else %} celibataire{% endif %} </a>
+                                                    <a   class=" float-right">{% if details_pensionnaires.pere.en_couple_pere %} En couple{% else %} celibataire{% endif %} </a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Situation de vie</b>
-                                                    <a class="float-right">{% if details_pensionnaires.pere.en_vie_pere %} En vie{% else %} Decede{% endif %} </a>
+                                                    <a  class=" float-right">{% if details_pensionnaires.pere.en_vie_pere %} En vie{% else %} Decede{% endif %} </a>
                                                 </li>
                                             </ul>
+                                            <button id="save-button" class="btn btn-primary" style="display: none;">Sauvegarder</button>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="mere-info">
                                         <div class="card-body box-profile">
                                             <h1 class="profile-username text-center animated fadeIn" style="border: solid 2px #e7a5a5; border-radius: 10px; font-weight: bold; font-family: 'Lucida Grande', Arial, sans-serif; padding: 10px; background-color: #f9f9f9;">
-                                                La mere de l'enfant
+                                                La mère de l'enfant
                                             </h1>
 
                                             <h3 class="profile-username text-center animated fadeInUp" style="font-size: 1.8rem; font-weight: bold; color: #007bff;">
@@ -296,43 +311,46 @@
                                             </p>
 
                                             <ul class="list-group list-group-unbordered mb-3">
-                                                <li class="list-group-item animated fadeInUp">
+                                                <li class="list-group-item">
                                                     <b>Date de naissance</b>
-                                                    <a class="float-right">{{ details_pensionnaires.mere.date_naissance }}</a>
+                                                    <a id="date-naissance-pere"  class="float-right">
+                                                        {{ details_pensionnaires.mere.date_naissance }}
+                                                    </a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Lieu de naissance</b>
-                                                    <a class="float-right">{{ details_pensionnaires.mere.lieu_naissance }}</a>
+                                                    <a data-field="lieu_naissance" contenteditable="false" class="editable float-right">{{ details_pensionnaires.mere.lieu_naissance }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Profession</b>
-                                                    <a class="float-right">{{ details_pensionnaires.mere.profession }}</a>
+                                                    <a data-field="profession" contenteditable="false" class="editable float-right">{{ details_pensionnaires.mere.profession}}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Ethnie</b>
-                                                    <a class="float-right">{{ details_pensionnaires.mere.ethnie }}</a>
+                                                    <a data-field="ethnie" contenteditable="false" class="editable float-right">{{ details_pensionnaires.mere.ethnie }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Religion</b>
-                                                    <a class="float-right">{{ details_pensionnaires.mere.religion }}</a>
+                                                    <a data-field="religion" contenteditable="false" class="editable float-right">{{ details_pensionnaires.mere.religion }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Nombre de persone en charge</b>
-                                                    <a class="float-right">{{ details_pensionnaires.mere.nombre_personne_charge }}</a>
+                                                    <a data-field="nombre_personne_charge" contenteditable="false" class="editable float-right">{{ details_pensionnaires.mere.nombre_personne_charge}}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Adresse</b>
-                                                    <a class="float-right">{{ details_pensionnaires.mere.adresse }}</a>
+                                                    <a data-field="adresse" contenteditable="false" class="editable float-right">{{ details_pensionnaires.mere.adresse }}</a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Situation matrimoniale</b>
-                                                    <a class="float-right">{% if details_pensionnaires.mere.en_couple %} En couple{% else %} celibataire{% endif %} </a>
+                                                    <a   class=" float-right">{% if details_pensionnaires.mere.en_couple %} En couple{% else %} celibataire{% endif %} </a>
                                                 </li>
                                                 <li class="list-group-item animated fadeInUp">
                                                     <b>Situation de vie</b>
-                                                    <a class="float-right">{% if details_pensionnaires.mere.en_vie %} En vie{% else %} Decede{% endif %} </a>
+                                                    <a  class=" float-right">{% if details_pensionnaires.mere.en_vie %} En vie{% else %} Decede{% endif %} </a>
                                                 </li>
                                             </ul>
+                                            <button id="save-mere-button" class="btn btn-primary" style="display: none;">Sauvegarder</button>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="repondant-info">
@@ -462,8 +480,74 @@
                 </div>
             </div>
         </section>
+        <div id="custom-alert" class="custom-alert">
+            <div class="alert-content">
+                <span id="alert-message"></span>
+                <button id="close-alert" class="close-alert">Fermer</button>
+            </div>
+        </div>
+
     </div>
     <style>
+        .custom-alert {
+            display: none;  /* Par défaut, l'alerte est cachée */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .alert-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        #alert-message {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .close-alert {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .close-alert:hover {
+            background-color: #0056b3;
+        }
+
+        .editable {
+            cursor: pointer;
+            transition: background-color 0.3s, border 0.3s;
+        }
+
+        .editable.editing {
+            background-color: #e6f7ff;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            padding: 5px;
+            font-style: italic;
+            outline: none;
+            width: 100px;
+        }
+
+        .editable:focus {
+            outline: none;
+        }
+
         .img-thumbnail {
             border: 2px solid #ddd;
             border-radius: 5px;
@@ -603,5 +687,276 @@ z        .btn-success {
         table.buttons().container().appendTo('#exportButtonContainer');
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const saveButton = document.getElementById('save-button');
+        let currentEditable = null;
+        document.querySelectorAll('.editable').forEach((element) => {
+            if (element.getAttribute('data-field') === 'nombre_personne_charge_pere') {
+                element.addEventListener('input', (e) => {
+                    // Supprimer les chiffres si l'utilisateur en saisit
+                    e.target.textContent = e.target.textContent.replace(/[^0-9]/g, '');
+                });
+            }
+            element.addEventListener('click', () => {
+                if (currentEditable) currentEditable.classList.remove('editing');
+                element.classList.add('editing');
+                element.setAttribute('contenteditable', 'true');
+                currentEditable = element;
+                saveButton.style.display = 'inline-block';
+            });
+        });
+        function showAlert(message) {
+            const alertModal = document.getElementById('custom-alert');
+            const alertMessage = document.getElementById('alert-message');
+            const closeButton = document.getElementById('close-alert');
+
+            alertMessage.textContent = message;
+            alertModal.style.display = 'block';
+
+            closeButton.addEventListener('click', () => {
+                alertModal.style.display = 'none';
+            });
+        }
+        saveButton.addEventListener('click', () => {
+            const updates = {};
+            document.querySelectorAll('.editable').forEach((element) => {
+                const field = element.getAttribute('data-field');
+                let value = element.textContent.trim();
+                if (field === 'en_vie_pere' || field === 'en_couple_pere') {
+                    value = value === "En vie" || value === "En couple" ? true : false;
+                }
+
+                updates[field] = value;
+            });
+            updates['pensionnaire_id'] = document.getElementById('pensionnaire-id').value;
+
+            fetch('{% url "Personnel:update_pere_info" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                body: JSON.stringify(updates),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        showAlert('Informations mises à jour avec succès');
+                        saveButton.style.display = 'none';
+                        document.querySelectorAll('.editable').forEach((element) => {
+                            element.classList.remove('editing');
+                            element.removeAttribute('contenteditable');
+                        });
+                    } else {
+                        alert(`Erreur : ${data.error}`);
+                    }
+                })
+                .catch((error) => {
+                    alert('Erreur de communication avec le serveur');
+                    console.error(error);
+                });
+        });
+        document.addEventListener('click', (e) => {
+            if (currentEditable && !e.target.classList.contains('editable') && e.target !== saveButton) {
+                currentEditable.classList.remove('editing');
+                currentEditable.removeAttribute('contenteditable');
+                currentEditable = null;
+            }
+        });
+    });
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const saveButton = document.getElementById('save-mere-button');
+        let currentEditable = null;
+
+        document.querySelectorAll('.editable').forEach((element) => {
+            // Ajout de la validation pour "nombre_personne_charge"
+            if (element.getAttribute('data-field') === 'nombre_personne_charge') {
+                element.addEventListener('input', (e) => {
+                    // Supprimer les chiffres si l'utilisateur en saisit
+                    e.target.textContent = e.target.textContent.replace(/[^0-9]/g, '');
+                });
+            }
+
+            element.addEventListener('click', () => {
+                if (currentEditable) currentEditable.classList.remove('editing');
+                element.classList.add('editing');
+                element.setAttribute('contenteditable', 'true');
+                currentEditable = element;
+                saveButton.style.display = 'inline-block';
+            });
+        });
+
+        function showAlert(message) {
+            const alertModal = document.getElementById('custom-alert');
+            const alertMessage = document.getElementById('alert-message');
+            const closeButton = document.getElementById('close-alert');
+
+            alertMessage.textContent = message;
+            alertModal.style.display = 'block';
+
+            closeButton.addEventListener('click', () => {
+                alertModal.style.display = 'none';
+            });
+        }
+
+        saveButton.addEventListener('click', () => {
+            const updates = {};
+            document.querySelectorAll('.editable').forEach((element) => {
+                const field = element.getAttribute('data-field');
+                let value = element.textContent.trim();
+                if (field === 'en_vie' || field === 'en_couple') {
+                    value = value === "En vie" || value === "En couple" ? true : false;
+                }
+
+                updates[field] = value;
+            });
+            updates['pensionnaire_id'] = document.getElementById('pensionnaire-id').value;
+
+            fetch('{% url "Personnel:update_mere_info" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                body: JSON.stringify(updates),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        showAlert('Informations mises à jour avec succès');
+                        saveButton.style.display = 'none';
+                        document.querySelectorAll('.editable').forEach((element) => {
+                            element.classList.remove('editing');
+                            element.removeAttribute('contenteditable');
+                        });
+                    } else {
+                        alert(`Erreur : ${data.error}`);
+                    }
+                })
+                .catch((error) => {
+                    alert('Erreur de communication avec le serveur');
+                    console.error(error);
+                });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (currentEditable && !e.target.classList.contains('editable') && e.target !== saveButton) {
+                currentEditable.classList.remove('editing');
+                currentEditable.removeAttribute('contenteditable');
+                currentEditable = null;
+            }
+        });
+    });
+
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const saveButton = document.getElementById('save-enfant-button');
+        let currentEditable = null;
+
+        document.querySelectorAll('.editable').forEach((element) => {
+            if (element.getAttribute('data-field') === 'poids') {
+                element.addEventListener('input', (e) => {
+                    let value = e.target.textContent.replace(/[^0-9.]/g, '');
+                    if (!/^\d*(\.\d{0,200})?$/.test(value)) {
+                        value = value.slice(0, -1);
+                    }
+                    if (parseFloat(value) > 200) {
+                        value = '200';
+                    }
+
+                    e.target.textContent = value;
+                });
+            }
+            if (element.getAttribute('data-field') === 'taille') {
+                element.addEventListener('input', (e) => {
+                    let value = e.target.textContent.replace(/[^0-9.]/g, '');
+
+                    if (!/^\d*(\.\d{0,2})?$/.test(value)) {
+                        value = value.slice(0, -1);
+                    }
+                    if (parseFloat(value) > 3) {
+                        value = '3';
+                    }
+                    e.target.textContent = value;
+                });
+            }
+
+            element.addEventListener('click', () => {
+                if (currentEditable) currentEditable.classList.remove('editing');
+                element.classList.add('editing');
+                element.setAttribute('contenteditable', 'true');
+                currentEditable = element;
+                saveButton.style.display = 'inline-block';
+            });
+        });
+
+        function showAlert(message) {
+            const alertModal = document.getElementById('custom-alert');
+            const alertMessage = document.getElementById('alert-message');
+            const closeButton = document.getElementById('close-alert');
+
+            alertMessage.textContent = message;
+            alertModal.style.display = 'block';
+
+            closeButton.addEventListener('click', () => {
+                alertModal.style.display = 'none';
+            });
+        }
+
+        saveButton.addEventListener('click', () => {
+            const updates = {};
+            document.querySelectorAll('.editable').forEach((element) => {
+                const field = element.getAttribute('data-field');
+                let value = element.textContent.trim();
+
+                updates[field] = value;
+            });
+            updates['pensionnaire_id'] = document.getElementById('pensionnaire-id').value;
+
+            fetch('{% url "Personnel:update_enfant_info" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                body: JSON.stringify(updates),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        showAlert('Informations mises à jour avec succès');
+                        saveButton.style.display = 'none';
+                        document.querySelectorAll('.editable').forEach((element) => {
+                            element.classList.remove('editing');
+                            element.removeAttribute('contenteditable');
+                        });
+                    } else {
+                        alert(`Erreur : ${data.error}`);
+                    }
+                })
+                .catch((error) => {
+                    alert('Erreur de communication avec le serveur');
+                    console.error(error);
+                });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (currentEditable && !e.target.classList.contains('editable') && e.target !== saveButton) {
+                currentEditable.classList.remove('editing');
+                currentEditable.removeAttribute('contenteditable');
+                currentEditable = null;
+            }
+        });
+    });
+
+
+</script>
+
 </body>
 </html>
