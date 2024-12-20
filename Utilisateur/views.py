@@ -35,6 +35,10 @@ class Connexion(LoginView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
+def page_blocage(request):
+    return render(request, 'blocage/index.html')
+
+
 def Deconnexion(request):
     logout(request)
     return redirect(reverse('Utilisateur:Connexion'))

@@ -49,6 +49,22 @@ class MyUserManager(BaseUserManager):
         return user
 
 
+class Parametre(models.Model):
+    info = models.CharField(default="Bienvenue")
+    blocage_global = models.BooleanField(default=False, verbose_name="Bloquer l'application")
+    titre = models.CharField(default="Information", max_length=100)
+    is_afficher = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='OGB_Image/', null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk and Parametre.objects.exists():
+            raise ValueError("Il ne peut y avoir qu'une seule instance de Parametre.")
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.info} {self.titre}"
+
+
 class Utilisateur(AbstractBaseUser):
     date_mise_a_jour = models.DateTimeField(verbose_name="Date de mise a jour", auto_now=True)
     username = models.CharField(
@@ -65,7 +81,7 @@ class Utilisateur(AbstractBaseUser):
     dark_mode = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-    roles = models.CharField(max_length=20, default='UTILISATEUR')
+    roles = models.CharField(max_length=20, default='EDUCATIF')
     image = models.ImageField(upload_to='ImagesGestionnaire/', null=True, blank=True)
     USERNAME_FIELD = 'username'
     objects = MyUserManager()
@@ -275,7 +291,6 @@ class SuiviMedicalTrimestriele(models.Model):
     def __str__(self):
         return f"Suivi {self.trimestre}/{self.annee_scolaire} - {self.pensionnaire.nom_enfant}"
 
-
     def __str__(self):
         return f"Suivi {self.trimestre}/{self.annee} - {self.pensionnaire.nom_enfant}"
 
@@ -291,7 +306,6 @@ class ConsultationMedicale(models.Model):
     diagnostic = models.TextField(blank=True, null=True)
     traitement = models.TextField(blank=True, null=True)
     annee_scolaire = models.CharField(max_length=9, default=f"{date.today().year}-{date.today().year + 1}")
-
 
     def __str__(self):
         return f"Consultation {self.date_consultation} - {self.pensionnaire.nom_enfant}"

@@ -9,6 +9,7 @@ from django.db.models.functions import Round
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Avg, Count, F
+from django.views.decorators.csrf import csrf_exempt
 
 from Model.models import Pensionnnaire, Pere_enfant, Mere_enfant, Inscription, Classe, Evaluation, \
     SuiviMedicalTrimestriele, ConsultationMedicale, Antecedents, Repondant, Dossier
@@ -257,6 +258,84 @@ def enregistrer_pensionnaire_et_pere(request):
         except Exception as e:
             messages.error(request, "Une erreur inattendue s’est produite.")
         return redirect('Personnel:enregistrer_pensionnaire')
+
+
+@csrf_exempt
+def update_pere_info(request):
+    if request.method == 'POST':
+        try:
+            # Charger les données envoyées par le frontend
+            data = json.loads(request.body)
+
+            # Récupérer l'ID du pensionnaire ou du père depuis les données reçues
+            pensionnaire_id = data.get('pensionnaire_id')
+            if not pensionnaire_id:
+                return JsonResponse({'success': False, 'error': 'ID du pensionnaire manquant'})
+
+            # Vérifier si le pensionnaire existe
+            pensionnaire = Pensionnnaire.objects.select_related('pere').filter(id=pensionnaire_id).first()
+            if not pensionnaire or not pensionnaire.pere:
+                return JsonResponse({'success': False, 'error': 'Pensionnaire ou père introuvable'})
+
+            # Mettre à jour les champs du père
+            pere = pensionnaire.pere
+            for field, value in data.items():
+                if hasattr(pere, field):
+                    setattr(pere, field, value)
+            pere.save()
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Requête invalide'})
+
+
+def update_mere_info(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            pensionnaire_id = data.get('pensionnaire_id')
+            if not pensionnaire_id:
+                return JsonResponse({'success': False, 'error': 'ID du pensionnaire manquant'})
+            pensionnaire = Pensionnnaire.objects.select_related('mere').filter(id=pensionnaire_id).first()
+            if not pensionnaire or not pensionnaire.pere:
+                return JsonResponse({'success': False, 'error': 'Pensionnaire ou père introuvable'})
+            mere = pensionnaire.mere
+            for field, value in data.items():
+                if hasattr(mere, field):
+                    setattr(mere, field, value)
+            mere.save()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Requête invalide'})
+
+
+@csrf_exempt
+def update_enfant_info(request):
+    if request.method == 'POST':
+        try:
+            # Charger les données envoyées par le frontend
+            data = json.loads(request.body)
+
+            # Récupérer l'ID du pensionnaire ou du père depuis les données reçues
+            pensionnaire_id = data.get('pensionnaire_id')
+            if not pensionnaire_id:
+                return JsonResponse({'success': False, 'error': 'ID du pensionnaire manquant'})
+
+            # Vérifier si le pensionnaire existe
+            pensionnaire = Pensionnnaire.objects.filter(id=pensionnaire_id).first()
+            if not pensionnaire:
+                return JsonResponse({'success': False, 'error': 'Pensionnaire ou père introuvable'})
+            for field, value in data.items():
+                if hasattr(pensionnaire, field):
+                    setattr(pensionnaire, field, value)
+            pensionnaire.save()
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Requête invalide'})
 
 
 @login_required(login_url='Utilisateur:Connexion')
