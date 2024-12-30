@@ -22,13 +22,12 @@ def create_default_admin(sender, **kwargs):
 
 @receiver(post_migrate)
 def create_default_parametre(sender, **kwargs):
-    # Vérifie si la table existe dans la base de données
     if 'Model_parametre' in connection.introspection.table_names():
-        # Vérifie si une instance existe déjà
         if not Parametre.objects.filter(id=1).exists():
             Parametre.objects.create(
                 id=1,
                 info='Bienvenue',
                 titre='Information',
+                image='OGB_Image/img.png'
             )
             print("Parametre créé avec succès !")

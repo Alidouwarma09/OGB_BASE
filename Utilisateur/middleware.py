@@ -28,20 +28,14 @@ class BlocageMiddleware(MiddlewareMixin):
         self.get_response = get_response
 
     def __call__(self, request):
-        # URLs à exclure du blocage (comme la connexion et la page de blocage)
         urls_exclues = [
             reverse('Utilisateur:Connexion'),
             reverse('Utilisateur:page_blocage'),
         ]
-
-        # Vérifier si l'URL de la requête actuelle est exclue
         if any(request.path.startswith(url) for url in urls_exclues):
             return self.get_response(request)
-
-        # Vérifier si l'application est en mode blocage
         parametre = Parametre.objects.first()
         if parametre and parametre.blocage_global:
-            # Si l'utilisateur n'est pas connecté
             if request.user.is_authenticated:
                 if request.user.roles != "ADMIN":
                     return redirect(reverse('Utilisateur:page_blocage'))

@@ -41,18 +41,22 @@
         <li class="nav-item">
             <div class="btn-group">
                 <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <!-- Icône cogs -->
-                    <i class="fas fa-cogs"></i>
+                    <i class="fas fa-bars"></i>
                 </button>
                 <div class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="{% url 'Utilisateur:profil' %}" role="button">
-                        <i class="fas fa-user-circle"></i> Mon Profil
+                        <i class="fas fa-user-circle" style="color: rgba(229,16,225,0.71)"></i> Mon Profil
                     </a>
                     {% if request.user.roles == 'ADMIN' %}
                         <a class="dropdown-item" href="{% url 'Utilisateur:gestion_utilisateur' %}" role="button">
-                            <i class="fas fa-users-cog"></i> Gerer les utilisateurs
+                            <i class="fas fa-users-cog" style="color: blue"></i> Gerer les utilisateurs
+                        </a>
+                        <a class="dropdown-item" href="{% url 'Utilisateur:parametre' %}" role="button">
+                            <i class="fas fa-cogs" style="color: yellowgreen"></i>
+                            Parametre
                         </a>
                     {% endif %}
+
                     <a class="dropdown-item btn btn-logout" style="background-color: red; color: white" href="{% url 'Utilisateur:Deconnexion' %}" role="button">
                         <i class="fas fa-sign-out-alt"></i> Deconnexion
                     </a>
@@ -64,7 +68,7 @@
 
 <aside class="main-sidebar {% if request.user.dark_mode %}sidebar-dark{% else %}sidebar-light-secondary {% endif %} elevation-2">
     <a href="{% url 'Personnel:acceuil' %}" class="brand-link">
-        <img src="{% static 'img.jpg' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="{% if parametre.image %}{{ parametre.image.url }}{% else %}{% static 'img.jpg' %}{% endif %} " alt="AdminLTE Logo" class=" img-circle elevation-3" style="opacity: .8; border-radius: 15px; width: 70px">
         <span class="brand-text font-weight-light">OGB</span>
     </a>
 
@@ -73,8 +77,7 @@
             <div class="image position-relative">
                 {% if request.user.image %}
                     <img src="{{ request.user.image.url }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                {% else %}
-                    <i class="fas fa-user img-circle elevation-2" style="font-size: 40px"></i>
+                {% else %}                    <i class="fas fa-user img-circle elevation-2" style="font-size: 40px"></i>
                 {% endif %}
                 <span class="status-indicator"></span>
             </div>

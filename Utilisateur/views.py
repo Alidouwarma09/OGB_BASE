@@ -18,7 +18,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 
-from Model.models import Utilisateur
+from Model.models import Utilisateur, Parametre
 from .forms import ConnexionForm, ResetPasswordRequestForm, ProfileForm, ProfileImageForm
 
 
@@ -167,6 +167,23 @@ def bloque_user(request, user_id):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=400)
     return JsonResponse({'success': False, 'message': 'Méthode non autorisée'}, status=403)
+
+
+@csrf_exempt
+def parametre(request):
+    parametre = Parametre.objects.first()
+    if not parametre:
+        parametre = Parametre.objects.create()
+    if request.method == 'POST':
+        parametre.blocage_global = 'blocage_global' in request.POST
+        parametre.is_afficher = 'is_afficher' in request.POST
+        parametre.titre = request.POST.get('titre', parametre.titre)
+        parametre.info = request.POST.get('info', parametre.info)
+        if 'image' in request.FILES:
+            parametre.image = request.FILES['image']
+        parametre.save()
+        return redirect('Utilisateur:parametre')
+    return render(request, 'parametre/index.html', {'parametre': parametre})
 
 
 @csrf_exempt

@@ -6,7 +6,7 @@
     <div class="login-box">
         <style>
             body {
-                background-image: url("{% static 'img.png' %}");
+                background-image: url("{% if parametre.image %}{{ parametre.image.url }}{% else %}{% static 'img.jpg' %}{% endif %} ");
                 background-size: cover;
                 background-repeat: no-repeat;
                 background-position: center;

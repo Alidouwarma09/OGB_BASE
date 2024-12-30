@@ -14,9 +14,14 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-image: url("{% static 'img.png' %}");
+            background-image: url("{% if parametre.image %}{{ parametre.image.url }}{% else %}{% static 'img.jpg' %}{% endif %} ");
+
             color: #ffffff;
             overflow: hidden;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+
         }
         .body {
             font-family: 'Arial', sans-serif;
@@ -39,8 +44,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             animation: fadeIn 1s ease-in-out;
         }
-
-        /* Animation */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -51,12 +54,10 @@
                 transform: translateY(0);
             }
         }
-
-        /* Icône principale */
         .icon {
             font-size: 50px;
             margin-bottom: 20px;
-            color: #ffcccc;
+            color: #9f3838;
             animation: pulse 1.5s infinite;
         }
 
@@ -111,7 +112,7 @@
         <i class="fas fa-lock icon"></i>
         <h1>Application Bloquée</h1>
         <p>Veuillez contacter l'administrateur pour plus d'informations.</p>
-        <a href="{% url 'Personnel:acceuil' %}" class="btn">
+        <a href="{% url 'Utilisateur:Connexion' %}" class="btn">
             <i class="fas fa-arrow-left"></i> Retour à la page de connexion
         </a>
     </div>
