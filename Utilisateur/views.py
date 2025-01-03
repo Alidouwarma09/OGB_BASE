@@ -22,6 +22,10 @@ from Model.models import Utilisateur, Parametre
 from .forms import ConnexionForm, ResetPasswordRequestForm, ProfileForm, ProfileImageForm
 
 
+def page_non_trouve(request):
+    return render(request, 'page_non_trouve/index.html')
+
+
 class Connexion(LoginView):
     template_name = 'connexion.html'
     form_class = ConnexionForm

@@ -17,5 +17,5 @@ def parametre_context(request):
     try:
         parametre = Parametre.objects.first()
     except Parametre.DoesNotExist:
-        parametre = None  # Si aucun paramètre n'existe
+        parametre = None
     return {'parametre': parametre}

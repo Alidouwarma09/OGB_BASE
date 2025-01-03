@@ -3,8 +3,17 @@
 {% load humanize %}
 
 
-{% block content %}import section as section
-<body class="  layout-fixed layout-navbar-fixed   hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse {% if request.user.dark_mode %}dark-mode{% endif %}">
+{% block content %}
+    <style>
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+
+    <body class="  layout-fixed layout-navbar-fixed   hold-transition sidebar-mini  layout-navbar-fixed sidebar-closed sidebar-collapse {% if request.user.dark_mode %}dark-mode{% endif %}">
     <div class="wrapper">
         {% include 'preload.html' %}
 
@@ -51,7 +60,13 @@
                                         <td>{{ user.username }}</td>
                                         <td>{{ user.nom }}</td>
                                         <td>{{ user.prenom }}</td>
-                                        <td>{{ user.roles }}</td>
+                                        <td>{% if user.roles == "ADMIN" %}
+                                            <i class="fas fa-user-shield text-primary"></i>
+                                            ADMINISTRATEUR
+                                            {% else %}
+                                            {{ user.roles }}
+                                        {% endif %}
+                                        </td>
                                         <td>
                                             {% if user.est_en_ligne %}
                                                 <span class="badge badge-success">En ligne</span>

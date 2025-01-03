@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'Utilisateur.middleware.LastActivityMiddleware',
     'Utilisateur.middleware.BlocageMiddleware',
+    'Utilisateur.middleware.RedirectOn404Middleware',
 ]
 
 ROOT_URLCONF = 'OGB_BASE.urls'

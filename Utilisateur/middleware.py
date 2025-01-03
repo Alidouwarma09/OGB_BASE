@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.http import Http404
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -43,3 +44,17 @@ class BlocageMiddleware(MiddlewareMixin):
                 return redirect(reverse('Utilisateur:Connexion'))
 
         return self.get_response(request)
+
+
+class RedirectOn404Middleware(MiddlewareMixin):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        try:
+            response = self.get_response(request)
+            if response.status_code == 404:
+                return redirect(reverse('Utilisateur:page_non_trouve'))
+        except Http404:
+            return redirect(reverse('Utilisateur:page_non_trouve'))
+        return response

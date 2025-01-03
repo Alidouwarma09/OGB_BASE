@@ -1,11 +1,13 @@
 from django.urls import path
 from .views import Connexion, Deconnexion, toggle_dark_mode, gestion_utilisateur, add_user, bloque_user, debloque_user, \
-    delete_user, edit_user, reset_password_request, reset_password_validate, reset_password_change, profil, page_blocage,parametre
+    delete_user, edit_user, reset_password_request, reset_password_validate, reset_password_change, profil, \
+    page_blocage, parametre, page_non_trouve
 
 app_name = 'Utilisateur'
 urlpatterns = [
     path('', Connexion.as_view(), name='Connexion'),
     path('Deconnexion/', Deconnexion, name='Deconnexion'),
+    path('page404/', page_non_trouve, name='page_non_trouve'),
     path('add_user/', add_user, name='add_user'),
     path('parametre/', parametre, name='parametre'),
     path('maintenance/', page_blocage, name='page_blocage'),
